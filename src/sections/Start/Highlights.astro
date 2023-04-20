@@ -1,0 +1,40 @@
+---
+import HighlightCard from "components/Cards/Highlight.astro";
+import HighlightIcon from "components/Icons/Highlights/HighlightsIcon.astro";
+---
+
+<section class="default-section">
+  <HighlightCard
+    title="Local"
+    description="Unleash the power of any machine rocking a modern browser"
+  >
+    <HighlightIcon slot="icon" name="local" />
+  </HighlightCard>
+  <HighlightCard
+    title="Resolution"
+    description="Experience high fidelity motion graphics like never before"
+  >
+    <HighlightIcon slot="icon" name="resolution" />
+  </HighlightCard>
+  <HighlightCard
+    title="Smooth"
+    description="Our Animations range from 24-60FPS"
+  >
+    <HighlightIcon slot="icon" name="smooth" />
+  </HighlightCard>
+</section>
+
+<style>
+  section {
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
+    justify-content: space-around;
+  }
+
+  @screen l {
+    section {
+      flex-direction: row;
+    }
+  }
+</style>

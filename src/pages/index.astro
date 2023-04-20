@@ -1,0 +1,78 @@
+---
+import Layout from "layouts/Layout.astro";
+import SectionHighlights from "sections/Start/Highlights.astro";
+---
+
+<Layout title="play by tempblade">
+  <main>
+    <section class="default-section" id="header">
+      <div class="heading-container">
+        <h1 class="my-4 font-bold">
+          Motion Graphics made easy, <br /> for free!
+        </h1>
+        <p>
+          Thats right! Create an intro, outro or other motion graphic elements
+          right in your browser for free. How is this possible? Through the
+          power of open source software!
+        </p>
+      </div>
+      <div class="illustration-container">
+        <svg viewBox="0 0 1000 1000">
+          <circle cx="500" cy="500" r="300"></circle>
+        </svg>
+      </div>
+    </section>
+    <SectionHighlights />
+  </main>
+  <script>
+    import { animate, stagger } from "motion";
+    import { ease } from "@unom/style";
+
+    const headingContainer = document.querySelectorAll(
+      "#header .heading-container"
+    )[0];
+
+    console.log(headingContainer);
+
+    animate(
+      headingContainer.children as any,
+      { y: [50, 0], opacity: [0, 1] },
+      { ...ease.quart(0.6).out, delay: stagger(0.1) }
+    );
+    window.sessionStorage.setItem("did_animation_run", "1");
+  </script>
+
+  <style>
+    #header {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+
+      & .heading-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      & .illustration-container {
+        width: 100%;
+        height: 100%;
+
+        & svg {
+          width: 100%;
+          height: 100%;
+        }
+      }
+    }
+
+    @screen 2xl {
+      #header {
+        flex-direction: row;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 1fr;
+      }
+    }
+  </style>
+</Layout>

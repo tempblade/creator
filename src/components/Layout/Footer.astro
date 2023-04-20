@@ -1,0 +1,70 @@
+---
+type NavigationItem = {
+  path: string;
+  label: string;
+};
+
+type NavigationGroup = {
+  title: string;
+  items: Array<NavigationItem>;
+};
+
+const tree: Array<NavigationGroup> = [
+  {
+    title: "Overview",
+    items: [
+      {
+        path: "/",
+        label: "Landing",
+      },
+      {
+        path: "/blog",
+        label: "Blog",
+      },
+      {
+        path: "/contact",
+        label: "Contact",
+      },
+    ],
+  },
+  {
+    title: "Legal",
+    items: [
+      { path: "/legal/imprint", label: "Imprint" },
+      {
+        path: "/legal/privacy-policy",
+        label: "Privacy Policy",
+      },
+    ],
+  },
+];
+---
+
+<footer class="py-4">
+  <div class="m-auto flex flex-row flex-wrap gap-12 inner-container">
+    {
+      tree.map((group) => (
+        <div>
+          <h3 class="mb-2">{group.title}</h3>
+          <div class="flex flex-col">
+            {group.items.map((item) => (
+              <a href={item.path}>{item.label}</a>
+            ))}
+          </div>
+        </div>
+      ))
+    }
+  </div>
+</footer>
+
+<style>
+  footer {
+    background-color: var(--color-neutral-accent);
+
+    & .inner-container {
+      max-width: var(--content-max-width);
+      margin: auto;
+      padding: var(--padding-main);
+    }
+  }
+</style>
