@@ -1,0 +1,137 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  h1 {
+    @apply text-2xl;
+  }
+  h2 {
+    @apply text-xl;
+  }
+  h3 {
+    @apply text-lg;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  a,
+  label {
+    @apply dark:text-white;
+  }
+
+  a {
+    @apply text-blue-600 underline;
+  }
+
+  select,
+  input {
+    @apply box-border bg-gray-900 shadow-indigo-100 hover:shadow-indigo-400 
+    focus:shadow-indigo-600 selection:bg-indigo-400 selection:text-black 
+    outline-none px-3 py-2 rounded-md shadow-[0_0_0_1px];
+  }
+
+  input {
+    @apply appearance-none items-center justify-center 
+     w-full  text-base leading-none
+   text-white transition-all;
+  }
+
+  select {
+    @apply appearance-none;
+  }
+}
+
+.label {
+  @apply mb-1;
+}
+
+label {
+  @apply mb-2;
+}
+
+:root {
+  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 400;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+.SliderRoot {
+  position: relative;
+  display: flex;
+  align-items: center;
+  user-select: none;
+  touch-action: none;
+  width: 200px;
+  height: 20px;
+}
+
+.SliderTrack {
+  background-color: var(--black);
+  position: relative;
+  flex-grow: 1;
+  border-radius: 9999px;
+  height: 3px;
+}
+
+.SliderRange {
+  position: absolute;
+  background-color: #ddd;
+  border-radius: 9999px;
+  height: 100%;
+}
+
+.SliderThumb {
+  position: relative;
+  z-index: 100;
+  transition: opacity 0.1s linear, filter 0.1s linear;
+}
+
+.SliderThumb:hover {
+  filter: drop-shadow(0px 10px 10px white);
+}
+
+.SliderThumb::before {
+  content: "";
+  background-color: var(--indigo-400);
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  left: -8.5px;
+  top: -10px;
+  clip-path: polygon(100% 0, 0 0, 50% 75%);
+  display: block;
+
+  @apply bg-indigo-300;
+}
+
+.SliderThumb::after {
+  content: "";
+  position: absolute;
+  top: 0;
+
+  width: 3px;
+  height: 1000px;
+  z-index: 200;
+  opacity: 1;
+
+  @apply bg-indigo-300;
+}
