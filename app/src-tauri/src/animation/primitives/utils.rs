@@ -1,5 +1,5 @@
 use super::{
-    entities::AnimationData,
+    entities::common::AnimationData,
     keyframe::{Keyframe, RenderedKeyframe},
 };
 

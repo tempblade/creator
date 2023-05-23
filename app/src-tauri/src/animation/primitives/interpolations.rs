@@ -8,20 +8,20 @@ use simple_easing::{
     quint_in_out, quint_out,
 };
 
-#[derive(Debug, Clone, Copy, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq)]
 pub struct SpringProperties {
     pub mass: f32,
     pub damping: f32,
     pub stiffness: f32,
 }
 
-#[derive(Debug, Clone, Copy, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq)]
 pub struct SpringState {
     pub velocity: f32,
     pub last_val: f32,
 }
 
-#[derive(Debug, Clone, Copy, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq)]
 #[serde(tag = "easing_function")]
 pub enum EasingFunction {
     QuintOut,
@@ -69,7 +69,7 @@ impl EasingFunction {
     }
 }
 
-#[derive(Debug, Clone, Copy, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq)]
 #[serde(tag = "type")]
 pub enum InterpolationType {
     Linear,

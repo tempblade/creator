@@ -1,5 +1,4 @@
 use crate::animation::primitives::{
-    entities::{AnimatedBoxEntity, AnimatedEntity, AnimatedTextEntity, AnimationData},
     interpolations::{EasingFunction, InterpolationType, SpringProperties},
     keyframe::{Keyframe, Keyframes},
 };
@@ -7,7 +6,11 @@ use rayon::prelude::*;
 use serde::{Deserialize, Serialize};
 
 use super::primitives::{
-    entities::Entity,
+    entities::{
+        common::{AnimatedEntity, AnimationData, Entity},
+        rect::AnimatedRectEntity,
+        text::AnimatedTextEntity,
+    },
     paint::{Color, FillStyle, Paint, PaintStyle, StrokeStyle, TextAlign, TextPaint},
     values::{AnimatedFloat, AnimatedFloatVec2},
 };
@@ -47,14 +50,15 @@ impl Timeline {
     }
 }
 
-fn build_bg(offset: f32, paint: Paint, size: (i32, i32)) -> AnimatedBoxEntity {
-    let bg_box = AnimatedBoxEntity {
+fn build_bg(offset: f32, paint: Paint, size: (i32, i32)) -> AnimatedRectEntity {
+    let bg_box = AnimatedRectEntity {
         paint,
         animation_data: AnimationData {
             offset: 0.0 + offset,
             duration: 5.0,
             visible: true,
         },
+        transform: None,
         origin: AnimatedFloatVec2::new(1280.0 / 2.0, 720.0 / 2.0),
         position: AnimatedFloatVec2 {
             keyframes: (
@@ -123,19 +127,19 @@ pub fn test_timeline_entities_at_frame(
     size: (i32, i32),
     input: Input,
 ) -> Vec<Entity> {
-    let box1_paint = Paint {
+    let rect1_paint = Paint {
         style: PaintStyle::Fill(FillStyle {
             color: Color::new(34, 189, 58, 1.0),
         }),
     };
 
-    let box2_paint = Paint {
+    let rect2_paint = Paint {
         style: PaintStyle::Fill(FillStyle {
             color: Color::new(23, 178, 28, 1.0),
         }),
     };
 
-    let box3_paint = Paint {
+    let rect3_paint = Paint {
         style: PaintStyle::Fill(FillStyle {
             color: Color::new(43, 128, 98, 1.0),
         }),
@@ -163,9 +167,9 @@ pub fn test_timeline_entities_at_frame(
         duration: 5.0,
         size,
         entities: vec![
-            AnimatedEntity::Box(build_bg(0.0, box1_paint, size)),
-            AnimatedEntity::Box(build_bg(0.5, box2_paint, size)),
-            AnimatedEntity::Box(build_bg(1.0, box3_paint, size)),
+            AnimatedEntity::Rect(build_bg(0.0, rect1_paint, size)),
+            AnimatedEntity::Rect(build_bg(0.5, rect2_paint, size)),
+            AnimatedEntity::Rect(build_bg(1.0, rect3_paint, size)),
             AnimatedEntity::Text(AnimatedTextEntity {
                 paint: title_paint,
                 text: input.title,
@@ -174,6 +178,7 @@ pub fn test_timeline_entities_at_frame(
                     duration: 6.0,
                     visible: true,
                 },
+                transform: None,
                 origin: AnimatedFloatVec2 {
                     keyframes: (
                         AnimatedFloat {
@@ -218,6 +223,7 @@ pub fn test_timeline_entities_at_frame(
                     duration: 6.0,
                     visible: true,
                 },
+                transform: None,
                 origin: AnimatedFloatVec2 {
                     keyframes: (
                         AnimatedFloat {

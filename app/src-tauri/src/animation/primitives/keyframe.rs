@@ -3,12 +3,12 @@ use std::cmp::Ordering;
 use serde::{Deserialize, Serialize};
 
 use super::{
-    entities::AnimationData,
+    entities::common::AnimationData,
     interpolations::{interpolate_rendered_keyframes, InterpolationType},
     utils::render_keyframe,
 };
 
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
 pub struct Keyframe {
     pub value: f32,
     pub offset: f32,
@@ -24,7 +24,7 @@ pub struct RenderedKeyframe {
     pub abs_distance_from_curr: i32,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct Keyframes {
     pub values: Vec<Keyframe>,
 }

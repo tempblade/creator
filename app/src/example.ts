@@ -4,12 +4,12 @@ import { Timeline } from "primitives/Timeline";
 import { staticAnimatedNumber, staticAnimatedVec2 } from "primitives/Values";
 import { z } from "zod";
 
-function buildBox1(
+function buildRect1(
   offset: number,
   color: z.infer<typeof Color>
 ): z.input<typeof AnimatedEntity> {
   return {
-    type: "Box",
+    type: "Rect",
     paint: {
       style: {
         type: "Stroke",
@@ -52,58 +52,64 @@ function buildBox1(
   };
 }
 
-function buildBox(
+function buildRect(
   offset: number,
   color: z.infer<typeof Color>
 ): z.input<typeof AnimatedEntity> {
   return {
-    type: "Box",
+    type: "Rect",
     paint: {
       style: {
         type: "Fill",
         color,
       },
     },
-    size: {
-      keyframes: [
-        {
-          keyframes: {
-            values: [
-              {
-                interpolation: {
-                  type: "Linear",
-                },
-                value: 1280.0,
-                offset: 0.0,
-              },
-            ],
-          },
-        },
-        {
-          keyframes: {
-            values: [
-              {
-                interpolation: {
-                  type: "EasingFunction",
-                  easing_function: "CircOut",
-                },
-                value: 0.0,
-                offset: 0.0,
-              },
-              {
-                interpolation: {
-                  type: "Linear",
-                },
-                value: 720.0,
-                offset: 4.0,
-              },
-            ],
-          },
-        },
-      ],
-    },
+    size: staticAnimatedVec2(1280, 720),
     origin: staticAnimatedVec2(0, -720),
     position: staticAnimatedVec2(1280 / 2, 720 / 2),
+    transform: {
+      translate: staticAnimatedVec2(0, 0),
+      rotate: staticAnimatedVec2(0, 0),
+      skew: staticAnimatedVec2(0, 0),
+      scale: {
+        keyframes: [
+          {
+            keyframes: {
+              values: [
+                {
+                  interpolation: {
+                    type: "Linear",
+                  },
+                  value: 1.0,
+                  offset: 0.0,
+                },
+              ],
+            },
+          },
+          {
+            keyframes: {
+              values: [
+                {
+                  interpolation: {
+                    type: "EasingFunction",
+                    easing_function: "CircOut",
+                  },
+                  value: 0.0,
+                  offset: 0.0,
+                },
+                {
+                  interpolation: {
+                    type: "Linear",
+                  },
+                  value: 1.0,
+                  offset: 4.0,
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
     animation_data: {
       offset,
       duration: 10.0,
@@ -165,17 +171,99 @@ function buildText(
   };
 }
 
+function buildStaggeredText(
+  text: string,
+  offset: number,
+  color: z.input<typeof Color>
+): z.input<typeof AnimatedEntity> {
+  return {
+    type: "StaggeredText",
+    text,
+    transform: {
+      translate: staticAnimatedVec2(0, 0),
+      rotate: staticAnimatedVec2(0, 0),
+      skew: staticAnimatedVec2(0, 0),
+      scale: staticAnimatedVec2(1, 1),
+    },
+    animation_data: {
+      offset: 0,
+      duration: 2,
+    },
+    stagger: 2.0,
+    letter: {
+      paint: {
+        style: {
+          type: "Fill",
+          color,
+        },
+        size: 30,
+        align: "Center",
+      },
+      transform: {
+        translate: staticAnimatedVec2(0, 0),
+        rotate: staticAnimatedVec2(0, 0),
+        skew: staticAnimatedVec2(0, 0),
+        scale: {
+          keyframes: [
+            {
+              keyframes: {
+                values: [
+                  {
+                    interpolation: {
+                      type: "Linear",
+                    },
+                    value: 1.0,
+                    offset: 0.0,
+                  },
+                ],
+              },
+            },
+            {
+              keyframes: {
+                values: [
+                  {
+                    interpolation: {
+                      type: "EasingFunction",
+                      easing_function: "CircOut",
+                    },
+                    value: 0.0,
+                    offset: 0.0,
+                  },
+                  {
+                    interpolation: {
+                      type: "Linear",
+                    },
+                    value: 1.0,
+                    offset: 4.0,
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      },
+    },
+  };
+}
+
 export const EXAMPLE_ANIMATED_ENTITIES: Array<z.input<typeof AnimatedEntity>> =
   [
-    buildText("Kleine Dumpfkopf!", 1.0, 80, -30, {
-      value: [255, 255, 255, 1.0],
-    }),
-    buildText("Wie gehts?", 1.5, 40, 30, { value: [255, 255, 255, 1.0] }),
-    buildBox(0.6, { value: [30, 30, 30, 1.0] }),
-    buildBox(0.4, { value: [20, 20, 20, 1.0] }),
-    buildBox(0.2, { value: [10, 10, 10, 1.0] }),
-    buildBox(0, { value: [0, 0, 0, 1.0] }),
+    buildStaggeredText("Hallo", 0.0, { value: [30, 30, 30, 1.0] }),
+    buildRect(0, { value: [0, 0, 0, 1.0] }),
   ];
+
+export const EXAMPLE_ANIMATED_ENTITIES_2: Array<
+  z.input<typeof AnimatedEntity>
+> = [
+  buildText("Kleine Dumpfkopf!", 1.0, 80, -30, {
+    value: [255, 255, 255, 1.0],
+  }),
+  buildText("Wie gehts?", 1.5, 40, 30, { value: [255, 255, 255, 1.0] }),
+  buildRect(0.6, { value: [30, 30, 30, 1.0] }),
+  buildRect(0.4, { value: [20, 20, 20, 1.0] }),
+  buildRect(0.2, { value: [10, 10, 10, 1.0] }),
+  buildRect(0, { value: [0, 0, 0, 1.0] }),
+];
 
 const ExampleTimeline: z.input<typeof Timeline> = {
   size: [1920, 1080],

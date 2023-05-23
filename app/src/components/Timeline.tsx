@@ -37,7 +37,7 @@ const KeyframeIndicator: FC<{
       style={{
         clipPath: "polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)",
       }}
-      className="bg-indigo-300 absolute w-2 h-2 z-30 top-[39%]"
+      className="bg-indigo-300 absolute w-2 h-2 z-30 top-[39%] select-none"
     ></motion.div>
   );
 };
@@ -70,7 +70,7 @@ const Track: FC<TrackProps> = ({ keyframes, animationData, index, name }) => {
       </div>
       <div
         style={{ width: "1000px" }}
-        className="flex w-full h-full flex-row relative bg-gray-900"
+        className="flex w-full h-full flex-row relative bg-gray-900 select-none"
       >
         {keyframes.map((keyframe, index) => (
           <KeyframeIndicator
@@ -113,7 +113,7 @@ const Track: FC<TrackProps> = ({ keyframes, animationData, index, name }) => {
               },
             });
           }}
-          className="z-10 w-4 bg-slate-500 h-full absolute rounded-md"
+          className="z-10 w-4 bg-slate-500 h-full absolute rounded-md select-none"
         />
         <motion.div
           drag="x"
@@ -142,7 +142,7 @@ const Track: FC<TrackProps> = ({ keyframes, animationData, index, name }) => {
               },
             });
           }}
-          className="z-10 w-4 bg-slate-500 h-full absolute rounded-md"
+          className="z-10 w-4 bg-slate-500 h-full absolute rounded-md select-none"
         />
         <motion.div
           drag="x"
@@ -173,7 +173,7 @@ const Track: FC<TrackProps> = ({ keyframes, animationData, index, name }) => {
               },
             });
           }}
-          className="z-5 h-full absolute rounded-md transition-colors bg-gray-700 hover:bg-gray-600"
+          className="z-5 h-full absolute rounded-md transition-colors bg-gray-700 hover:bg-gray-600 select-none"
         ></motion.div>
       </div>
     </div>

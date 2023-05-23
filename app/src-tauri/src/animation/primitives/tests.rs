@@ -1,6 +1,6 @@
 #[cfg(test)]
 use crate::animation::primitives::{
-    entities::AnimationData,
+    entities::common::AnimationData,
     interpolations::{calculate_spring_value, SpringProperties},
     keyframe::{Keyframe, Keyframes},
     utils::timestamp_to_frame,

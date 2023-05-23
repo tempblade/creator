@@ -13,9 +13,13 @@ export default function drawEllipse(
 
   buildPaintStyle(CanvasKit, paint, entity.paint);
 
+  const mappedPosition = entity.position.map(
+    (val, index) => val - entity.radius[index] * 0.5
+  );
+
   const rect = CanvasKit.XYWHRect(
-    entity.position[0],
-    entity.position[1],
+    mappedPosition[0],
+    mappedPosition[1],
     entity.radius[0],
     entity.radius[1]
   );

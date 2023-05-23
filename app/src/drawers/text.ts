@@ -6,7 +6,7 @@ import { z } from "zod";
 export default function drawText(
   CanvasKit: CanvasKit,
   canvas: Canvas,
-  entity: z.infer<typeof TextEntity>,
+  entity: z.output<typeof TextEntity>,
   fontData: ArrayBuffer
 ) {
   const fontMgr = CanvasKit.FontMgr.FromData(fontData);
@@ -38,5 +38,6 @@ export default function drawText(
   p.layout(900);
   const height = p.getHeight() / 2;
   const width = p.getMaxWidth() / 2;
+
   canvas.drawParagraph(p, entity.origin[0] - width, entity.origin[1] - height);
 }

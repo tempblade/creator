@@ -56,7 +56,7 @@ const CanvasComponent: FC<CanvasProps> = () => {
   }, []);
 
   useEffect(() => {
-    // console.time("calculation");
+    console.time("calculation");
     const parsedEntities = AnimatedEntities.parse(entities);
 
     invoke("calculate_timeline_entities_at_frame", {
@@ -68,11 +68,11 @@ const CanvasComponent: FC<CanvasProps> = () => {
         duration,
       },
     }).then((data) => {
-      // console.timeEnd("calculation");
+      console.timeEnd("calculation");
       // console.log(data);
 
       const entitiesResult = Entities.safeParse(data);
-      //console.time("draw");
+      console.time("draw");
 
       if (canvasKit && canvas.current && surface.current && fontData) {
         surface.current.flush();
@@ -101,7 +101,7 @@ const CanvasComponent: FC<CanvasProps> = () => {
           }
         });
       }
-      //  console.timeEnd("draw");
+      console.timeEnd("draw");
     });
   });
 
