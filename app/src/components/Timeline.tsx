@@ -7,7 +7,7 @@ import { shallow } from "zustand/shallow";
 import { useEntitiesStore } from "stores/entities.store";
 import { ease } from "@unom/style";
 import Timestamp from "./Timestamp";
-import { Keyframe, Keyframes } from "primitives/Keyframe";
+import { Keyframe } from "primitives/Keyframe";
 import { flattenedKeyframesByEntity } from "utils";
 
 export type AnimationEntity = {
@@ -37,8 +37,8 @@ const KeyframeIndicator: FC<{
       style={{
         clipPath: "polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)",
       }}
-      className="bg-indigo-300 absolute w-2 h-2 z-30 top-[39%] select-none"
-    ></motion.div>
+      className="bg-indigo-300 absolute w-2 h-2 z-30 top-[39%] select-none pointer-events-none"
+    />
   );
 };
 
@@ -55,7 +55,7 @@ const Track: FC<TrackProps> = ({ keyframes, animationData, index, name }) => {
     );
 
   return (
-    <div className="h-8 w-100 flex flex-row gap-1">
+    <div className="h-8 w-100 flex flex-row gap-1 select-none">
       <div
         onClick={() =>
           selectedEntity !== undefined && selectedEntity === index
@@ -90,6 +90,7 @@ const Track: FC<TrackProps> = ({ keyframes, animationData, index, name }) => {
           whileTap={{
             scale: 0.9,
           }}
+          onMouseDown={(e) => e.preventDefault()}
           transition={ease.circ(0.6).out}
           dragElastic={false}
           dragConstraints={{ left: 0, right: 900 }}
@@ -113,9 +114,10 @@ const Track: FC<TrackProps> = ({ keyframes, animationData, index, name }) => {
               },
             });
           }}
-          className="z-10 w-4 bg-slate-500 h-full absolute rounded-md select-none"
+          className="z-10 w-4 bg-slate-500 h-full absolute rounded-md select-none cursor-w-resize"
         />
         <motion.div
+          onMouseDown={(e) => e.preventDefault()}
           drag="x"
           animate={{
             x: (animationData.duration + animationData.offset) * 100 - 16,
@@ -142,7 +144,7 @@ const Track: FC<TrackProps> = ({ keyframes, animationData, index, name }) => {
               },
             });
           }}
-          className="z-10 w-4 bg-slate-500 h-full absolute rounded-md select-none"
+          className="z-10 w-4 bg-slate-500 h-full absolute rounded-md select-none cursor-e-resize"
         />
         <motion.div
           drag="x"
@@ -156,16 +158,12 @@ const Track: FC<TrackProps> = ({ keyframes, animationData, index, name }) => {
             left: 0,
             right: 900,
           }}
+          onMouseDown={(e) => e.preventDefault()}
           transition={ease.circ(0.8).out}
-          onDragEnd={(e, info) => {
+          onDragEnd={(_e, info) => {
             let offset = info.offset.x;
-
             offset *= 0.01;
-
             offset += animationData.offset;
-
-            console.log(offset);
-
             updateEntity(index, {
               animation_data: {
                 ...animationData,
@@ -173,7 +171,7 @@ const Track: FC<TrackProps> = ({ keyframes, animationData, index, name }) => {
               },
             });
           }}
-          className="z-5 h-full absolute rounded-md transition-colors bg-gray-700 hover:bg-gray-600 select-none"
+          className="z-5 h-full absolute rounded-md transition-colors bg-gray-700 hover:bg-gray-600 select-none cursor-grab"
         ></motion.div>
       </div>
     </div>

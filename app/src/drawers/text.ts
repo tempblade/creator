@@ -9,6 +9,7 @@ export default function drawText(
   entity: z.output<typeof TextEntity>,
   fontData: ArrayBuffer
 ) {
+  canvas.save();
   const fontMgr = CanvasKit.FontMgr.FromData(fontData);
 
   if (!fontMgr) {
@@ -25,7 +26,7 @@ export default function drawText(
   const pStyle = new CanvasKit.ParagraphStyle({
     textStyle: {
       color: color,
-      fontFamilies: ["Roboto"],
+      fontFamilies: ["Helvetica"],
       fontSize: entity.paint.size,
     },
     textDirection: CanvasKit.TextDirection.LTR,
@@ -40,4 +41,8 @@ export default function drawText(
   const width = p.getMaxWidth() / 2;
 
   canvas.drawParagraph(p, entity.origin[0] - width, entity.origin[1] - height);
+
+  paint.delete();
+
+  canvas.restore();
 }

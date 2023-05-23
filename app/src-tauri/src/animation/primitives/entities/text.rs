@@ -8,10 +8,12 @@ use crate::animation::{
 };
 use serde::{Deserialize, Serialize};
 
-use super::common::{Animateable, AnimationData, Drawable, Entity};
+use super::common::{Animateable, AnimationData, Cache, Drawable, Entity};
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct TextEntity {
+    pub id: String,
+    pub cache: Cache,
     pub text: String,
     pub origin: (f32, f32),
     pub paint: TextPaint,
@@ -20,6 +22,8 @@ pub struct TextEntity {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct AnimatedTextEntity {
+    pub id: String,
+    pub cache: Cache,
     pub text: String,
     pub origin: AnimatedFloatVec2,
     pub paint: TextPaint,
@@ -45,6 +49,8 @@ impl AnimatedTextEntity {
         };
 
         TextEntity {
+            id: self.id.clone(),
+            cache: self.cache.clone(),
             transform,
             text: self.text.clone(),
             origin,

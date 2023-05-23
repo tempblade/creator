@@ -2,7 +2,12 @@ import { FC, ReactNode } from "react";
 import { useEntitiesStore } from "stores/entities.store";
 
 import { shallow } from "zustand/shallow";
-import { BoxProperties, EllipseProperties, TextProperties } from "./Primitives";
+import {
+  RectProperties,
+  EllipseProperties,
+  TextProperties,
+  StaggeredTextProperties,
+} from "./Primitives";
 
 const PropertiesContainer: FC<{ children: ReactNode }> = ({ children }) => {
   return (
@@ -26,6 +31,15 @@ const Properties = () => {
 
   if (entity) {
     switch (entity.type) {
+      case "StaggeredText":
+        return (
+          <StaggeredTextProperties
+            key={selectedEntity}
+            onUpdate={(entity) => updateEntity(selectedEntity, entity)}
+            entity={entity}
+          />
+        );
+
       case "Text":
         return (
           <TextProperties
@@ -35,9 +49,9 @@ const Properties = () => {
           />
         );
 
-      case "Box":
+      case "Rect":
         return (
-          <BoxProperties
+          <RectProperties
             key={selectedEntity}
             onUpdate={(entity) => updateEntity(selectedEntity, entity)}
             entity={entity}

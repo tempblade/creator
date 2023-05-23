@@ -9,11 +9,13 @@ use crate::animation::{
     timeline::Timeline,
 };
 
-use super::common::{Animateable, AnimationData, Drawable, Entity};
+use super::common::{Animateable, AnimationData, Cache, Drawable, Entity};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct AnimatedEllipseEntity {
     pub paint: Paint,
+    pub id: String,
+    pub cache: Cache,
     pub radius: AnimatedFloatVec2,
     pub origin: AnimatedFloatVec2,
     pub position: AnimatedFloatVec2,
@@ -24,6 +26,8 @@ pub struct AnimatedEllipseEntity {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct EllipseEntity {
     pub radius: (f32, f32),
+    pub cache: Cache,
+    pub id: String,
     pub position: (f32, f32),
     pub origin: (f32, f32),
     pub paint: Paint,
@@ -62,9 +66,11 @@ impl Animateable for AnimatedEllipseEntity {
             };
 
             Some(Entity::Ellipse(EllipseEntity {
+                id: self.id.clone(),
                 radius,
                 position,
                 origin,
+                cache: self.cache.clone(),
                 paint: self.paint.clone(),
                 transform,
             }))

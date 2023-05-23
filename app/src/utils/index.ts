@@ -29,13 +29,28 @@ export function flattenedKeyframesByEntity(
     case "Text":
       keyframes.push(...flattenAnimatedVec2Keyframes(entity.origin));
       break;
-    case "Box":
+    case "Rect":
       keyframes.push(...flattenAnimatedVec2Keyframes(entity.position));
       keyframes.push(...flattenAnimatedVec2Keyframes(entity.size));
       break;
     case "Ellipse":
       keyframes.push(...flattenAnimatedVec2Keyframes(entity.position));
       keyframes.push(...flattenAnimatedVec2Keyframes(entity.radius));
+      break;
+    case "StaggeredText":
+      keyframes.push(
+        ...flattenAnimatedVec2Keyframes(entity.letter.transform.rotate)
+      );
+      keyframes.push(
+        ...flattenAnimatedVec2Keyframes(entity.letter.transform.translate)
+      );
+      keyframes.push(
+        ...flattenAnimatedVec2Keyframes(entity.letter.transform.skew)
+      );
+      keyframes.push(
+        ...flattenAnimatedVec2Keyframes(entity.letter.transform.scale)
+      );
+      keyframes.push(...flattenAnimatedVec2Keyframes(entity.origin));
       break;
     default:
       break;

@@ -9,10 +9,12 @@ use crate::animation::{
     timeline::Timeline,
 };
 
-use super::common::{Animateable, AnimationData, Drawable, Entity};
+use super::common::{Animateable, AnimationData, Cache, Drawable, Entity};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct AnimatedRectEntity {
+    pub id: String,
+    pub cache: Cache,
     pub position: AnimatedFloatVec2,
     pub size: AnimatedFloatVec2,
     pub origin: AnimatedFloatVec2,
@@ -23,6 +25,8 @@ pub struct AnimatedRectEntity {
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RectEntity {
+    pub id: String,
+    pub cache: Cache,
     pub position: (f32, f32),
     pub size: (f32, f32),
     pub origin: (f32, f32),
@@ -71,6 +75,8 @@ impl Animateable for AnimatedRectEntity {
             };
 
             Some(Entity::Rect(RectEntity {
+                id: self.id.clone(),
+                cache: self.cache.clone(),
                 position,
                 size,
                 origin,

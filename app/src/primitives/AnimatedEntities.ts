@@ -1,5 +1,11 @@
 import { z } from "zod";
-import { EllipseEntity, EntityType, RectEntity, TextEntity } from "./Entities";
+import {
+  BaseEntity,
+  EllipseEntity,
+  EntityType,
+  RectEntity,
+  TextEntity,
+} from "./Entities";
 import { AnimatedVec2 } from "./Values";
 import { TextPaint } from "./Paint";
 
@@ -20,7 +26,7 @@ export const AnimatedTransform = z.object({
   scale: AnimatedVec2,
 });
 
-export const AnimatedStaggeredText = z.object({
+export const AnimatedStaggeredTextEntity = BaseEntity.extend({
   /** Transform applied to the whole layer. */
   transform: AnimatedTransform,
   /** The staggered delay that is applied for each letter. Gets multiplied by the index of the letter. */
@@ -31,6 +37,7 @@ export const AnimatedStaggeredText = z.object({
     paint: TextPaint,
   }),
   text: z.string(),
+  origin: AnimatedVec2,
   animation_data: AnimationData,
   type: z.literal(EntityType.Enum.StaggeredText),
 });
@@ -60,7 +67,7 @@ export const AnimatedEllipseEntity = EllipseEntity.extend({
 export const AnimatedEntity = z.discriminatedUnion("type", [
   AnimatedRectEntity,
   AnimatedTextEntity,
-  AnimatedStaggeredText,
+  AnimatedStaggeredTextEntity,
   AnimatedEllipseEntity,
 ]);
 

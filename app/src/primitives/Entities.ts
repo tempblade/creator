@@ -6,10 +6,6 @@ const EntityTypeOptions = ["Text", "Ellipse", "Rect", "StaggeredText"] as const;
 
 export const EntityType = z.enum(EntityTypeOptions);
 
-export const GeometryEntity = z.object({
-  paint: Paint,
-});
-
 export const Transform = z.object({
   skew: Vec2,
   rotate: Vec2,
@@ -17,12 +13,25 @@ export const Transform = z.object({
   scale: Vec2,
 });
 
-export const StaggeredText = z.object({
+export const Cache = z.object({
+  valid: z.boolean().optional().default(false),
+});
+
+export const BaseEntity = z.object({
+  id: z.string(),
+  cache: Cache,
+});
+
+export const GeometryEntity = BaseEntity.extend({
+  paint: Paint,
+});
+
+export const StaggeredText = BaseEntity.extend({
   letter: z.object({
-    position: Vec2,
-    transform: Transform,
+    transform: z.array(Transform).optional(),
     paint: TextPaint,
   }),
+  origin: Vec2,
   text: z.string(),
   type: z.literal(EntityType.Enum.StaggeredText),
 });
@@ -43,7 +52,7 @@ export const EllipseEntity = GeometryEntity.extend({
   transform: z.nullable(Transform),
 });
 
-export const TextEntity = z.object({
+export const TextEntity = BaseEntity.extend({
   type: z.literal(EntityType.Enum.Text),
   paint: TextPaint,
   origin: Vec2,
@@ -55,6 +64,7 @@ export const Entity = z.discriminatedUnion("type", [
   RectEntity,
   EllipseEntity,
   TextEntity,
+  StaggeredText,
 ]);
 
 export const Entities = z.array(Entity);

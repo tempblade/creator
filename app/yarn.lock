@@ -1266,6 +1266,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/uuid@npm:^9":
+  version: 9.0.1
+  resolution: "@types/uuid@npm:9.0.1"
+  checksum: ca96225b4d47b8146380c0f60921b2a0b62acf3a8def03e8e7b369ed3b0180989c12f8305eb71ffc0cecb944102e18eec1260a3e84040d9a48de987d3aa00148
+  languageName: node
+  linkType: hard
+
 "@unom/style@npm:^0.2.14":
   version: 0.2.14
   resolution: "@unom/style@npm:0.2.14"
@@ -1379,6 +1386,7 @@ __metadata:
     "@types/node": "npm:^18.7.10"
     "@types/react": "npm:^18.0.15"
     "@types/react-dom": "npm:^18.0.6"
+    "@types/uuid": "npm:^9"
     "@unom/style": "npm:^0.2.14"
     "@vitejs/plugin-react": "npm:^3.0.0"
     autoprefixer: "npm:^10.4.14"
@@ -1390,6 +1398,7 @@ __metadata:
     react-dom: "npm:^18.2.0"
     tailwindcss: "npm:^3.3.2"
     typescript: "npm:^4.9.5"
+    uuid: "npm:^9.0.0"
     vite: "npm:^4.2.1"
     vite-tsconfig-paths: "npm:^4.2.0"
     zod: "npm:^3.21.4"
@@ -3375,6 +3384,15 @@ __metadata:
   version: 1.0.2
   resolution: "util-deprecate@npm:1.0.2"
   checksum: 6a88ed8344d07f2324b304ee36def365d967953b5a9c15baa3213eb3909e86a7da1ee70a4c2133e80c23d6c1987590e9c3c57d874e20a124f9e41620b462fa57
+  languageName: node
+  linkType: hard
+
+"uuid@npm:^9.0.0":
+  version: 9.0.0
+  resolution: "uuid@npm:9.0.0"
+  bin:
+    uuid: dist/bin/uuid
+  checksum: e1f76aff372e430bb129157360fd4cd3b393411b245604ea78e178a822ab7874ec2ebecec03ce94422b0b80bbd24733c6fa1df166c9cbad5086ef4b4843140bb
   languageName: node
   linkType: hard
 

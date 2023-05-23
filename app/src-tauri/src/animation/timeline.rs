@@ -1,3 +1,5 @@
+use std::str::FromStr;
+
 use crate::animation::primitives::{
     interpolations::{EasingFunction, InterpolationType, SpringProperties},
     keyframe::{Keyframe, Keyframes},
@@ -7,7 +9,7 @@ use serde::{Deserialize, Serialize};
 
 use super::primitives::{
     entities::{
-        common::{AnimatedEntity, AnimationData, Entity},
+        common::{AnimatedEntity, AnimationData, Cache, Entity},
         rect::AnimatedRectEntity,
         text::AnimatedTextEntity,
     },
@@ -52,12 +54,14 @@ impl Timeline {
 
 fn build_bg(offset: f32, paint: Paint, size: (i32, i32)) -> AnimatedRectEntity {
     let bg_box = AnimatedRectEntity {
+        id: String::from_str("1").unwrap(),
         paint,
         animation_data: AnimationData {
             offset: 0.0 + offset,
             duration: 5.0,
             visible: true,
         },
+        cache: Cache { valid: false },
         transform: None,
         origin: AnimatedFloatVec2::new(1280.0 / 2.0, 720.0 / 2.0),
         position: AnimatedFloatVec2 {
@@ -171,7 +175,9 @@ pub fn test_timeline_entities_at_frame(
             AnimatedEntity::Rect(build_bg(0.5, rect2_paint, size)),
             AnimatedEntity::Rect(build_bg(1.0, rect3_paint, size)),
             AnimatedEntity::Text(AnimatedTextEntity {
+                id: String::from_str("2").unwrap(),
                 paint: title_paint,
+                cache: Cache { valid: false },
                 text: input.title,
                 animation_data: AnimationData {
                     offset: 0.0,
@@ -216,8 +222,10 @@ pub fn test_timeline_entities_at_frame(
                 },
             }),
             AnimatedEntity::Text(AnimatedTextEntity {
+                id: String::from_str("3").unwrap(),
                 paint: sub_title_paint,
                 text: input.sub_title,
+                cache: Cache { valid: false },
                 animation_data: AnimationData {
                     offset: 0.5,
                     duration: 6.0,

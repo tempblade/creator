@@ -37,6 +37,11 @@ pub trait Animateable {
     fn calculate(&mut self, timeline: &Timeline) -> Option<Entity>;
 }
 
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct Cache {
+    pub valid: bool,
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(tag = "type")]
 pub enum AnimatedEntity {
