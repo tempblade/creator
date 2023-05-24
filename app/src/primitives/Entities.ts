@@ -14,7 +14,7 @@ export const Transform = z.object({
 });
 
 export const Cache = z.object({
-  valid: z.boolean().optional().default(false),
+  valid: z.boolean().optional().default(true),
 });
 
 export const BaseEntity = z.object({

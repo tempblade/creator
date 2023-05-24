@@ -10,6 +10,7 @@ import {
 import { StaggeredText } from "primitives/Entities";
 import { z } from "zod";
 import { buildPaintStyle } from "./paint";
+import { EntityCache } from "./cache";
 
 export type StaggeredTextCache = {
   letterMeasures: Array<LetterMeasures>;
@@ -18,6 +19,8 @@ export type StaggeredTextCache = {
   font: Font;
   glyphs: MallocObj;
 };
+
+export type StaggeredTextEntityCache = EntityCache<StaggeredTextCache>;
 
 function getUniqueCharacters(str: string): string {
   const uniqueCharacters: string[] = [];
@@ -55,12 +58,9 @@ function measureLetters(
       currentWidth = 0;
     }
 
-    const glyph = glyphArr.subarray(i, i + 1) as unknown as MallocObj;
-
     measuredLetters.push({
       bounds: nextGlyph,
       line: currentLine,
-      glyph,
       offset: {
         x: currentWidth - nextGlyphWidth,
       },
@@ -89,7 +89,6 @@ type LetterMeasures = {
     x: number;
   };
   line: number;
-  glyph: MallocObj;
   bounds: LetterBounds;
 };
 
@@ -98,8 +97,6 @@ export function calculateLetters(
   entity: z.output<typeof StaggeredText>,
   fontData: ArrayBuffer
 ): StaggeredTextCache {
-  console.log("Called");
-
   const typeface = CanvasKit.Typeface.MakeFreeTypeFaceFromData(
     fontData
   ) as Typeface;
@@ -110,7 +107,7 @@ export function calculateLetters(
 
   const glyphIDs = font.getGlyphIDs(entity.text);
 
-  font.setLinearMetrics(true);
+  // font.setLinearMetrics(true);
   font.setSubpixel(true);
   font.setHinting(CanvasKit.FontHinting.None);
 
@@ -193,11 +190,11 @@ export default function drawStaggeredText(
   CanvasKit: CanvasKit,
   canvas: Canvas,
   entity: z.output<typeof StaggeredText>,
-  font: Font,
-  measuredLetters: Array<LetterMeasures>,
-  metrics: FontMetrics
+  cache: StaggeredTextCache
 ) {
   const paint = new CanvasKit.Paint();
+
+  const { letterMeasures: measuredLetters, font, glyphs, metrics } = cache;
 
   buildPaintStyle(CanvasKit, paint, entity.letter.paint);
 
@@ -205,8 +202,10 @@ export default function drawStaggeredText(
   for (let i = 0; i < measuredLetters.length; i++) {
     const measuredLetter = measuredLetters[i];
 
+    const glyph = glyphs.subarray(i, i + 1);
+
     const blob = CanvasKit.TextBlob.MakeFromGlyphs(
-      measuredLetters[i].glyph as unknown as Array<number>,
+      glyph as unknown as Array<number>,
       font
     );
     if (blob) {
@@ -273,6 +272,8 @@ export default function drawStaggeredText(
       canvas.drawTextBlob(blob, entityOrigin[0], entityOrigin[1], paint);
 
       canvas.restore();
+
+      blob.delete();
     }
   }
 }

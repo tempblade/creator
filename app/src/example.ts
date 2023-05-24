@@ -186,7 +186,7 @@ function buildStaggeredText(
   return {
     type: "StaggeredText",
     text,
-    cache: {},
+    cache: { valid: false },
     id: uuid(),
     origin: staticAnimatedVec2(1280 / 2, 720 / 2),
     transform: {
@@ -273,7 +273,7 @@ export const EXAMPLE_ANIMATED_ENTITIES: Array<z.input<typeof AnimatedEntity>> =
     buildStaggeredText("Ehrenmann?", 2.0, {
       value: [255, 255, 255, 1.0],
     }),
-    buildText("Wie gehts?", 2.5, 40, 40, { value: [200, 200, 200, 1.0] }),
+    // buildText("Wie gehts?", 2.5, 40, 40, { value: [200, 200, 200, 1.0] }),
     buildRect(0.6, { value: [30, 30, 30, 1.0] }),
     buildRect(0.4, { value: [20, 20, 20, 1.0] }),
     buildRect(0.2, { value: [10, 10, 10, 1.0] }),
@@ -286,7 +286,7 @@ export const EXAMPLE_ANIMATED_ENTITIES_2: Array<
   buildText("Kleine Dumpfkopf!", 1.0, 80, -30, {
     value: [255, 255, 255, 1.0],
   }),
-  buildText("Wie gehts?", 1.5, 40, 30, { value: [255, 255, 255, 1.0] }),
+  // buildText("Wie gehts?", 1.5, 40, 30, { value: [255, 255, 255, 1.0] }),
   buildRect(0.8, { value: [40, 40, 40, 1.0] }),
   buildRect(0.6, { value: [30, 30, 30, 1.0] }),
   buildRect(0.4, { value: [20, 20, 20, 1.0] }),

@@ -1,7 +1,14 @@
-import { Canvas, CanvasKit } from "canvaskit-wasm";
+import { Canvas, CanvasKit, Font } from "canvaskit-wasm";
 import { TextEntity } from "primitives/Entities";
 import { convertToFloat } from "@tempblade/common";
 import { z } from "zod";
+import { EntityCache } from "./cache";
+
+export type TextCache = {
+  font: Font;
+};
+
+export type TextEntityCache = EntityCache<TextCache>;
 
 export default function drawText(
   CanvasKit: CanvasKit,
