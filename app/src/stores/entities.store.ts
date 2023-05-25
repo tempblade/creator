@@ -9,6 +9,7 @@ interface EntitiesStore {
   selectedEntity: number | undefined;
   selectEntity: (index: number) => void;
   deselectEntity: () => void;
+  setEntities: (entities: z.input<typeof AnimatedEntities>) => void;
   updateEntity: (
     index: number,
     entity: Partial<z.input<typeof AnimatedEntity>>
@@ -24,6 +25,7 @@ const useEntitiesStore = create<EntitiesStore>((set) => ({
   selectEntity: (index) => set(() => ({ selectedEntity: index })),
   deselectEntity: () => set(() => ({ selectedEntity: undefined })),
   selectedEntity: undefined,
+  setEntities: (entities) => set({ entities }),
   updateEntityById: (id, entity) =>
     set(({ entities }) => {
       const nextEntities = produce(entities, (draft) => {

@@ -1,20 +1,23 @@
 import { FC } from "react";
 import * as Slider from "@radix-ui/react-slider";
 import { useRenderStateStore } from "stores/render-state.store";
+import { TIMELINE_SCALE } from "./Timeline";
+import { useTimelineStore } from "stores/timeline.store";
 
 export type TimePickerProps = {};
 
 const TimePicker: FC<TimePickerProps> = () => {
   const { renderState, setCurrentFrame } = useRenderStateStore();
+  const timeline = useTimelineStore();
 
   return (
     <Slider.Root
       className="relative flex select-none h-5 w-full items-center"
       defaultValue={[50]}
-      style={{ width: 100 * 10 }}
+      style={{ width: TIMELINE_SCALE * timeline.duration }}
       value={[renderState.curr_frame]}
       onValueChange={(val) => setCurrentFrame(val[0])}
-      max={60 * 10}
+      max={timeline.fps * timeline.duration}
       step={1}
       aria-label="Current Frame"
     >

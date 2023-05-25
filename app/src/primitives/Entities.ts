@@ -26,7 +26,7 @@ export const GeometryEntity = BaseEntity.extend({
   paint: Paint,
 });
 
-export const StaggeredText = BaseEntity.extend({
+export const StaggeredTextEntity = BaseEntity.extend({
   letter: z.object({
     transform: z.array(Transform).optional(),
     paint: TextPaint,
@@ -64,7 +64,7 @@ export const Entity = z.discriminatedUnion("type", [
   RectEntity,
   EllipseEntity,
   TextEntity,
-  StaggeredText,
+  StaggeredTextEntity,
 ]);
 
 export const Entities = z.array(Entity);

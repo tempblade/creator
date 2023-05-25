@@ -7,10 +7,11 @@ import {
   TypedArray,
   Typeface,
 } from "canvaskit-wasm";
-import { StaggeredText } from "primitives/Entities";
+import { StaggeredTextEntity } from "primitives/Entities";
 import { z } from "zod";
 import { buildPaintStyle } from "./paint";
 import { EntityCache } from "./cache";
+import { Dependencies } from "services/dependencies.service";
 
 export type StaggeredTextCache = {
   letterMeasures: Array<LetterMeasures>;
@@ -94,9 +95,13 @@ type LetterMeasures = {
 
 export function calculateLetters(
   CanvasKit: CanvasKit,
-  entity: z.output<typeof StaggeredText>,
-  fontData: ArrayBuffer
+  entity: z.output<typeof StaggeredTextEntity>,
+  dependencies: Dependencies
 ): StaggeredTextCache {
+  const fontData = dependencies.fonts.get(
+    entity.letter.paint.fontName
+  ) as ArrayBuffer;
+
   const typeface = CanvasKit.Typeface.MakeFreeTypeFaceFromData(
     fontData
   ) as Typeface;
@@ -189,7 +194,7 @@ export function calculateLetters(
 export default function drawStaggeredText(
   CanvasKit: CanvasKit,
   canvas: Canvas,
-  entity: z.output<typeof StaggeredText>,
+  entity: z.output<typeof StaggeredTextEntity>,
   cache: StaggeredTextCache
 ) {
   const paint = new CanvasKit.Paint();

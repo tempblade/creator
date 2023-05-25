@@ -300,7 +300,7 @@ const ExampleTimeline: z.input<typeof Timeline> = {
   render_state: {
     curr_frame: 20,
   },
-  fps: 60,
+  fps: 120,
   entities: EXAMPLE_ANIMATED_ENTITIES,
 };
 

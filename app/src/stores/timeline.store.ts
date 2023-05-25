@@ -7,8 +7,8 @@ interface TimelineStore {
 }
 
 const useTimelineStore = create<TimelineStore>((set) => ({
-  fps: 60,
-  size: [1920, 1080],
+  fps: 120,
+  size: [1280, 720],
   duration: 10.0,
 }));
 

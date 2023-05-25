@@ -1,7 +1,12 @@
 import { invoke } from "@tauri-apps/api";
 import InitCanvasKit, { Canvas, CanvasKit, Surface } from "canvaskit-wasm";
 import { AnimatedEntities } from "primitives/AnimatedEntities";
-import { Entities, EntityType, StaggeredText } from "primitives/Entities";
+import {
+  Entities,
+  EntityType,
+  StaggeredTextEntity,
+  TextEntity,
+} from "primitives/Entities";
 import { useRenderStateStore } from "stores/render-state.store";
 import { useTimelineStore } from "stores/timeline.store";
 import { z } from "zod";
@@ -10,18 +15,13 @@ import drawStaggeredText, {
   StaggeredTextEntityCache,
   calculateLetters,
 } from "./staggered-text";
-import drawText from "./text";
+import drawText, { TextCache, TextEntityCache, buildTextCache } from "./text";
 import drawEllipse from "./ellipse";
 import drawRect from "./rect";
 import { useEntitiesStore } from "stores/entities.store";
 import { handleEntityCache } from "./cache";
-
-function typedArrayToBuffer(array: Uint8Array): ArrayBuffer {
-  return array.buffer.slice(
-    array.byteOffset,
-    array.byteLength + array.byteOffset
-  );
-}
+import { DependenciesService } from "services/dependencies.service";
+import { RenderState } from "primitives/Timeline";
 
 /**
  *
@@ -32,36 +32,39 @@ export class Drawer {
   private didLoad: boolean;
   private entities: z.output<typeof Entities> | undefined;
   private ckDidLoad: boolean;
-  private dependenciesDidLoad: boolean;
   drawCount: number;
   private CanvasKit: CanvasKit | undefined;
-  cache: { staggeredText: Map<string, StaggeredTextCache> };
+  cache: {
+    staggeredText: Map<string, StaggeredTextCache>;
+    text: Map<string, TextCache>;
+  };
   surface: Surface | undefined;
   fontData: ArrayBuffer | undefined;
   raf: number | undefined;
   isLocked: boolean;
+  dependenciesService: DependenciesService;
 
   constructor() {
     this.entities = undefined;
     this.CanvasKit = undefined;
     this.ckDidLoad = false;
-    this.dependenciesDidLoad = false;
     this.drawCount = 0;
     this.surface = undefined;
     this.fontData = undefined;
     this.cache = {
       staggeredText: new Map(),
+      text: new Map(),
     };
+    this.dependenciesService = new DependenciesService();
     this.isLocked = false;
     this.raf = undefined;
-    this.didLoad = this.ckDidLoad && this.dependenciesDidLoad;
+    this.didLoad = this.ckDidLoad;
   }
 
   async init(canvas: HTMLCanvasElement) {
     await this.loadCanvasKit(canvas);
-    await this.loadDependencies(false);
 
-    this.didLoad = this.ckDidLoad && this.dependenciesDidLoad;
+    this.didLoad = this.ckDidLoad;
   }
 
   async loadCanvasKit(canvas: HTMLCanvasElement) {
@@ -80,66 +83,69 @@ export class Drawer {
     });
   }
 
-  async loadDependencies(remote: boolean) {
-    if (remote) {
-      await fetch(
-        "https://storage.googleapis.com/skia-cdn/misc/Roboto-Regular.ttf"
-      )
-        .then((response) => response.arrayBuffer())
-        .then((arrayBuffer) => {
-          this.fontData = arrayBuffer;
-          this.dependenciesDidLoad = true;
-        });
-    } else {
-      await invoke("get_system_font", { fontName: "Helvetica-Bold" }).then(
-        (data) => {
-          if (Array.isArray(data)) {
-            const u8 = new Uint8Array(data as any);
-            const buffer = typedArrayToBuffer(u8);
-            this.fontData = buffer;
-            this.dependenciesDidLoad = true;
-          }
-        }
+  async calculateAnimatedEntities(
+    animatedEntities: z.input<typeof AnimatedEntities>,
+    renderState: z.output<typeof RenderState>
+  ) {
+    const { fps, size, duration } = useTimelineStore.getState();
+
+    const parsedAnimatedEntities = AnimatedEntities.parse(animatedEntities);
+
+    const data = await invoke("calculate_timeline_entities_at_frame", {
+      timeline: {
+        entities: parsedAnimatedEntities,
+        render_state: renderState,
+        fps,
+        size,
+        duration,
+      },
+    });
+
+    const parsedEntities = Entities.parse(data);
+
+    return parsedEntities;
+  }
+
+  get isCached(): boolean {
+    if (this.entities) {
+      return this.entities.reduce(
+        (prev, curr) => prev && curr.cache.valid,
+        true
       );
+    } else {
+      return false;
     }
   }
 
   /**
    * Updates the entities based on the input
    */
-  update(animatedEntities: z.input<typeof AnimatedEntities>) {
+  update(
+    animatedEntities: z.input<typeof AnimatedEntities>,
+    prepareDependencies: boolean
+  ) {
     console.time("calculate");
 
-    const parsedAnimatedEntities = AnimatedEntities.parse(animatedEntities);
-
     if (this.didLoad) {
-      const render_state = useRenderStateStore.getState().renderState;
-      const { fps, size, duration } = useTimelineStore.getState();
+      const renderState = useRenderStateStore.getState().renderState;
 
-      invoke("calculate_timeline_entities_at_frame", {
-        timeline: {
-          entities: parsedAnimatedEntities,
-          render_state,
-          fps,
-          size,
-          duration,
-        },
-      }).then((data) => {
-        console.timeEnd("calculate");
-        const parsedEntities = Entities.safeParse(data);
-        if (parsedEntities.success) {
-          this.entities = parsedEntities.data;
+      this.calculateAnimatedEntities(animatedEntities, renderState).then(
+        (entities) => {
+          this.entities = entities;
 
-          const isCached = this.entities.reduce(
-            (prev, curr) => prev && curr.cache.valid,
-            true
-          );
-
-          this.requestRedraw(!isCached);
-        } else {
-          console.error(parsedEntities.error);
+          if (prepareDependencies) {
+            this.dependenciesService
+              .prepareForEntities(this.entities)
+              .then(() => {
+                this.requestRedraw(!this.isCached);
+              });
+          } else {
+            this.requestRedraw(!this.isCached);
+          }
         }
-      });
+      );
+    } else {
+      console.timeEnd("calculate");
     }
   }
 
@@ -161,11 +167,10 @@ export class Drawer {
   }
 
   draw(canvas: Canvas) {
-    if (this.CanvasKit && this.entities && this.fontData && !this.isLocked) {
+    if (this.CanvasKit && this.entities && !this.isLocked) {
       this.isLocked = true;
       console.time("draw");
       const CanvasKit = this.CanvasKit;
-      const fontData = this.fontData;
 
       canvas.clear(CanvasKit.WHITE);
 
@@ -180,17 +185,42 @@ export class Drawer {
             drawEllipse(CanvasKit, canvas, entity);
             break;
           case EntityType.Enum.Text:
-            drawText(CanvasKit, canvas, entity, fontData);
+            {
+              const cache = handleEntityCache<
+                z.output<typeof TextEntity>,
+                TextCache,
+                TextEntityCache
+              >(entity, {
+                build: () =>
+                  buildTextCache(
+                    CanvasKit,
+                    entity,
+                    this.dependenciesService.dependencies
+                  ),
+                get: () => this.cache.text.get(entity.id),
+                set: (id, cache) => this.cache.text.set(id, cache),
+                cleanup: (cache) => {
+                  cache.fontManager.delete();
+                },
+              });
+
+              drawText(CanvasKit, canvas, entity, cache);
+            }
+
             break;
           case EntityType.Enum.StaggeredText:
             {
               const cache = handleEntityCache<
-                z.output<typeof StaggeredText>,
+                z.output<typeof StaggeredTextEntity>,
                 StaggeredTextCache,
                 StaggeredTextEntityCache
               >(entity, {
                 build: () => {
-                  const cache = calculateLetters(CanvasKit, entity, fontData);
+                  const cache = calculateLetters(
+                    CanvasKit,
+                    entity,
+                    this.dependenciesService.dependencies
+                  );
                   useEntitiesStore
                     .getState()
                     .updateEntityById(entity.id, { cache: { valid: true } });

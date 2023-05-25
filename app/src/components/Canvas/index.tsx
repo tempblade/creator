@@ -1,51 +1,22 @@
 import { FC, useMemo } from "react";
 import { useEffect, useRef, useState } from "react";
-import { invoke } from "@tauri-apps/api";
 import { useTimelineStore } from "stores/timeline.store";
-import InitCanvasKit, { CanvasKit } from "canvaskit-wasm";
-import { Surface } from "canvaskit-wasm";
-import drawText from "drawers/text";
-import drawRect from "drawers/rect";
-import { Entities, EntityType } from "primitives/Entities";
-import drawEllipse from "drawers/ellipse";
 import { useRenderStateStore } from "stores/render-state.store";
 import { useEntitiesStore } from "stores/entities.store";
-import { AnimatedEntities } from "primitives/AnimatedEntities";
-import drawStaggeredText, {
-  StaggeredTextCache,
-  calculateLetters,
-} from "drawers/staggered-text";
-import useMap from "hooks/useMap";
 import { Drawer } from "drawers/draw";
+import { PlaybackService } from "services/playback.service";
 
 type CanvasProps = {};
-
-function typedArrayToBuffer(array: Uint8Array): ArrayBuffer {
-  return array.buffer.slice(
-    array.byteOffset,
-    array.byteLength + array.byteOffset
-  );
-}
 
 const CanvasComponent: FC<CanvasProps> = () => {
   const canvas = useRef<HTMLCanvasElement>(null);
   const [didInit, setDidInit] = useState(false);
-  const renderState = useRenderStateStore((store) => store.renderState);
-  const { fps, size, duration } = useTimelineStore((store) => ({
-    fps: store.fps,
-    size: store.size,
-    duration: store.duration,
-  }));
-  const { entities, updateEntityById } = useEntitiesStore((store) => ({
-    entities: store.entities,
-    updateEntityById: store.updateEntityById,
-  }));
 
-  const drawer = useMemo(() => new Drawer(), []);
+  const playbackService = useMemo(() => new PlaybackService(), []);
 
   useEffect(() => {
     if (canvas.current && !didInit) {
-      drawer
+      playbackService
         .init(canvas.current)
         .then(() => {
           setDidInit(true);
@@ -53,12 +24,6 @@ const CanvasComponent: FC<CanvasProps> = () => {
         .catch((e) => console.error(e));
     }
   }, []);
-
-  useEffect(() => {
-    if (didInit) {
-      drawer.update(entities);
-    }
-  }, [entities, renderState.curr_frame, didInit]);
 
   return (
     <div>
