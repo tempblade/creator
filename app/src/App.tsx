@@ -20,12 +20,12 @@ export default function App() {
   }, []);
 
   return (
-    <div className="bg-gray-950 h-full w-full flex flex-col">
+    <div className="bg-gray-950 overflow-y-hidden h-full w-full flex flex-col">
       <MenuBar />
       <div className="flex flex-row w-full h-full">
         <ToolBar />
-        <div className="flex flex-col ml-4 w-full h-full">
-          <div className="flex gap-4 flex-row mb-4 justify-center items-center">
+        <div className="flex flex-col ml-4 mr-4 mt-4 w-full h-full overflow-x-hidden">
+          <div className="flex gap-4 flex-col lg:flex-row mb-4 justify-center items-center">
             <Canvas />
             <PropertiesContainer>
               <Properties />

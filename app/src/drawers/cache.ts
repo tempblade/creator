@@ -1,3 +1,4 @@
+import { C } from "@tauri-apps/api/event-30ea0228";
 import { BaseEntity } from "primitives/Entities";
 import { z } from "zod";
 
@@ -20,7 +21,12 @@ export function handleEntityCache<
     if (cached) {
       cache.cleanup(cached);
     }
-    return cache.build();
+
+    const nextCache = cache.build();
+
+    cache.set(entity.id, nextCache);
+
+    return nextCache;
   } else {
     if (!cached) {
       const nextCache = cache.build();

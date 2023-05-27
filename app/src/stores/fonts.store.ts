@@ -7,7 +7,7 @@ interface FontsStore {
 
 const useFontsStore = create<FontsStore>((set) => ({
   fonts: [],
-  setFonts: (fonts) => ({ fonts }),
+  setFonts: (fonts) => set({ fonts }),
 }));
 
 export { useFontsStore };

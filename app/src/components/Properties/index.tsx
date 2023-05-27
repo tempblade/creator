@@ -11,7 +11,7 @@ import {
 
 const PropertiesContainer: FC<{ children: ReactNode }> = ({ children }) => {
   return (
-    <div className="w-full rounded-md h-[500px] overflow-auto border transition-colors focus-within:border-gray-400 border-gray-600 flex flex-col items-start p-4">
+    <div className="w-full rounded-md lg:h-[500px] overflow-auto border transition-colors focus-within:border-gray-400 border-gray-600 flex flex-col items-start p-4">
       {children}
     </div>
   );

@@ -203,82 +203,86 @@ export default function drawStaggeredText(
 
   buildPaintStyle(CanvasKit, paint, entity.letter.paint);
 
-  // Draw all those runs.
-  for (let i = 0; i < measuredLetters.length; i++) {
-    const measuredLetter = measuredLetters[i];
+  if (glyphs) {
+    // Draw all those runs.
+    for (let i = 0; i < measuredLetters.length; i++) {
+      const measuredLetter = measuredLetters[i];
 
-    const glyph = glyphs.subarray(i, i + 1);
+      const glyph = glyphs.subarray(i, i + 1);
 
-    const blob = CanvasKit.TextBlob.MakeFromGlyphs(
-      glyph as unknown as Array<number>,
-      font
-    );
-    if (blob) {
-      canvas.save();
+      const blob = CanvasKit.TextBlob.MakeFromGlyphs(
+        glyph as unknown as Array<number>,
+        font
+      );
+      if (blob) {
+        canvas.save();
 
-      const width = measuredLetters
-        .filter((letter) => letter.line === 0)
-        .reduce((prev, curr) => curr.bounds.x_advance + prev, 0);
+        const width = measuredLetters
+          .filter((letter) => letter.line === 0)
+          .reduce((prev, curr) => curr.bounds.x_advance + prev, 0);
 
-      const lineOffset = (entity.letter.paint.size / 2) * measuredLetter.line;
+        const lineOffset = (entity.letter.paint.size / 2) * measuredLetter.line;
 
-      const entityOrigin = [
-        entity.origin[0] - width / 2,
-        entity.origin[1] + lineOffset,
-      ];
+        const entityOrigin = [
+          entity.origin[0] - width / 2,
+          entity.origin[1] + lineOffset,
+        ];
 
-      const lineCount = measuredLetters
-        .map((e) => e.line)
-        .sort((a, b) => a - b)[measuredLetters.length - 1];
+        const lineCount = measuredLetters
+          .map((e) => e.line)
+          .sort((a, b) => a - b)[measuredLetters.length - 1];
 
-      if (entity.letter.transform && entity.letter.transform[i]) {
-        const letterTransform = entity.letter.transform[i];
-        const letterOrigin = [0, 0];
+        if (entity.letter.transform && entity.letter.transform[i]) {
+          const letterTransform = entity.letter.transform[i];
+          const letterOrigin = [0, 0];
 
-        let origin = letterOrigin.map(
-          (val, index) => val + entityOrigin[index]
-        );
+          let origin = letterOrigin.map(
+            (val, index) => val + entityOrigin[index]
+          );
 
-        // Calculate the spacing
+          // Calculate the spacing
 
-        const spacing =
-          measuredLetter.bounds.x_advance - measuredLetter.bounds.width;
+          const spacing =
+            measuredLetter.bounds.x_advance - measuredLetter.bounds.width;
 
-        //console.log(spacing);
+          //console.log(spacing);
 
-        // Center the origin
+          // Center the origin
 
-        origin[0] =
-          origin[0] + measuredLetter.bounds.width / 2 + measuredLetter.offset.x;
-        origin[1] = origin[1] - metrics.descent + lineOffset;
+          origin[0] =
+            origin[0] +
+            measuredLetter.bounds.width / 2 +
+            measuredLetter.offset.x;
+          origin[1] = origin[1] - metrics.descent + lineOffset;
 
-        //console.log(measuredLetter.bounds);
+          //console.log(measuredLetter.bounds);
 
-        canvas.translate(origin[0], origin[1]);
+          canvas.translate(origin[0], origin[1]);
 
-        canvas.scale(letterTransform.scale[0], letterTransform.scale[1]);
+          canvas.scale(letterTransform.scale[0], letterTransform.scale[1]);
 
-        canvas.translate(
-          -origin[0] + measuredLetter.offset.x,
-          -origin[1] + lineOffset
-        );
+          canvas.translate(
+            -origin[0] + measuredLetter.offset.x,
+            -origin[1] + lineOffset
+          );
 
-        /*  canvas.translate(
+          /*  canvas.translate(
           measuredLetter.offset.x + measuredLetter.bounds.width / 2,
           0
         ); */
-      }
+        }
 
-      /*     canvas.translate(
+        /*     canvas.translate(
         width * -0.5,
         lineCount * (-entity.letter.paint.size / 2)
       ); */
 
-      canvas.drawTextBlob(blob, entityOrigin[0], entityOrigin[1], paint);
+        canvas.drawTextBlob(blob, entityOrigin[0], entityOrigin[1], paint);
 
-      canvas.restore();
+        canvas.restore();
 
-      blob.delete();
+        blob.delete();
+      }
     }
   }
 }

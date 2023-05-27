@@ -11,6 +11,7 @@ import { FC } from "react";
 import { z } from "zod";
 import { AnimatedVec2Properties, ColorProperties } from "./Values";
 import { PropertiesProps } from "./common";
+import { useFontsStore } from "stores/fonts.store";
 
 type TextPropertiesProps = PropertiesProps<z.input<typeof AnimatedTextEntity>>;
 type StaggeredTextPropertiesProps = PropertiesProps<
@@ -66,6 +67,8 @@ export const TextProperties: FC<TextPropertiesProps> = ({
   entity,
   onUpdate,
 }) => {
+  const { fonts } = useFontsStore();
+
   return (
     <motion.div
       variants={{ enter: { opacity: 1, y: 0 }, from: { opacity: 0, y: 50 } }}
@@ -92,6 +95,38 @@ export const TextProperties: FC<TextPropertiesProps> = ({
           }
         ></input>
       </label>
+      <label className="flex flex-col items-start">
+        <span className="label">Font</span>
+        <select
+          onChange={(e) =>
+            onUpdate({
+              ...entity,
+              cache: { valid: false },
+              paint: { ...entity.paint, fontName: e.target.value },
+            })
+          }
+          value={entity.paint.fontName}
+        >
+          {fonts.map((font) => (
+            <option value={font} key={font}>
+              {font}
+            </option>
+          ))}
+        </select>
+      </label>
+      <label>
+        <span className="label">Size</span>
+        <input
+          value={entity.paint.size}
+          onChange={(e) =>
+            onUpdate({
+              ...entity,
+              cache: { valid: false },
+              paint: { ...entity.paint, size: Number(e.target.value) },
+            })
+          }
+        ></input>
+      </label>
       <AnimatedVec2Properties
         onUpdate={(updatedEntity) =>
           onUpdate({ ...entity, origin: updatedEntity })
@@ -107,6 +142,8 @@ export const StaggeredTextProperties: FC<StaggeredTextPropertiesProps> = ({
   entity,
   onUpdate,
 }) => {
+  const { fonts } = useFontsStore();
+
   return (
     <motion.div
       variants={{ enter: { opacity: 1, y: 0 }, from: { opacity: 0, y: 50 } }}
@@ -128,12 +165,35 @@ export const StaggeredTextProperties: FC<StaggeredTextPropertiesProps> = ({
         />
       </label>
       <label className="flex flex-col items-start">
+        <span className="label">Font</span>
+        <select
+          onChange={(e) => {
+            onUpdate({
+              ...entity,
+              cache: { valid: false },
+              letter: {
+                ...entity.letter,
+                paint: { ...entity.letter.paint, fontName: e.target.value },
+              },
+            });
+          }}
+          value={entity.letter.paint.fontName}
+        >
+          {fonts.map((font) => (
+            <option value={font} key={font}>
+              {font}
+            </option>
+          ))}
+        </select>
+      </label>
+      <label className="flex flex-col items-start">
         <span className="label">Size</span>
         <input
           value={entity.letter.paint.size}
           onChange={(e) =>
             onUpdate({
               ...entity,
+              cache: { valid: false },
               letter: {
                 ...entity.letter,
                 paint: {

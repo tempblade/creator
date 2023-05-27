@@ -124,7 +124,7 @@ export class Drawer {
     animatedEntities: z.input<typeof AnimatedEntities>,
     prepareDependencies: boolean
   ) {
-    console.time("calculate");
+    //  console.time("calculate");
 
     if (this.didLoad) {
       const renderState = useRenderStateStore.getState().renderState;
@@ -145,20 +145,20 @@ export class Drawer {
         }
       );
     } else {
-      console.timeEnd("calculate");
+      // console.timeEnd("calculate");
     }
   }
 
   requestRedraw(rebuild: boolean) {
-    if (this.didLoad && this.surface) {
+    if (this.didLoad && this.surface && !this.isLocked) {
       if (rebuild && this.raf !== undefined) {
         cancelAnimationFrame(this.raf);
-        this.surface.flush();
+        // this.surface.flush();
         this.raf = this.surface.requestAnimationFrame((canvas) =>
           this.draw(canvas)
         );
       } else {
-        this.surface.flush();
+        // this.surface.flush();
         this.raf = this.surface.requestAnimationFrame((canvas) =>
           this.draw(canvas)
         );
@@ -169,7 +169,7 @@ export class Drawer {
   draw(canvas: Canvas) {
     if (this.CanvasKit && this.entities && !this.isLocked) {
       this.isLocked = true;
-      console.time("draw");
+      //console.time("draw");
       const CanvasKit = this.CanvasKit;
 
       canvas.clear(CanvasKit.WHITE);
@@ -191,12 +191,19 @@ export class Drawer {
                 TextCache,
                 TextEntityCache
               >(entity, {
-                build: () =>
-                  buildTextCache(
+                build: () => {
+                  const cache = buildTextCache(
                     CanvasKit,
                     entity,
                     this.dependenciesService.dependencies
-                  ),
+                  );
+
+                  useEntitiesStore
+                    .getState()
+                    .updateEntityById(entity.id, { cache: { valid: true } });
+
+                  return cache;
+                },
                 get: () => this.cache.text.get(entity.id),
                 set: (id, cache) => this.cache.text.set(id, cache),
                 cleanup: (cache) => {
@@ -245,7 +252,7 @@ export class Drawer {
         }
       });
       this.isLocked = false;
-      console.timeEnd("draw");
+      //console.timeEnd("draw");
     }
   }
 }

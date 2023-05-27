@@ -28,10 +28,9 @@ export class DependenciesService {
   ) {
     const fontNames = new Set<string>();
 
-    entities.forEach((entity) => {
-      if (entity.type === EntityType.Enum.Text) {
-      }
+    console.log(entities);
 
+    entities.forEach((entity) => {
       switch (entity.type) {
         case EntityType.Enum.Text:
           fontNames.add(entity.paint.fontName);
@@ -62,22 +61,26 @@ export class DependenciesService {
   async loadFonts(fontNames: Set<string>) {
     const resolveFonts: Array<Promise<void>> = [];
 
+    const loadFont = async (fontName: string) => {
+      return invoke("get_system_font", { fontName }).then((data) => {
+        if (Array.isArray(data)) {
+          const u8 = new Uint8Array(data as any);
+          const buffer = typedArrayToBuffer(u8);
+          this.dependencies.fonts.set(fontName, buffer);
+        }
+      });
+    };
+
     fontNames.forEach((fontName) => {
       if (!this.dependencies.fonts.has(fontName)) {
-        resolveFonts.push(
-          invoke("get_system_font", { fontName }).then((data) => {
-            if (Array.isArray(data)) {
-              const u8 = new Uint8Array(data as any);
-              const buffer = typedArrayToBuffer(u8);
-              this.dependencies.fonts.set(fontName, buffer);
-            }
-          })
-        );
+        resolveFonts.push(loadFont(fontName));
       }
     });
 
     await Promise.all(resolveFonts);
 
-    console.log(this.dependencies);
+    console.log(fontNames);
+
+    // console.log(this.dependencies);
   }
 }

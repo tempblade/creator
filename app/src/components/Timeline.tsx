@@ -72,12 +72,12 @@ const Track: FC<TrackProps> = ({
       value={entity}
       dragListener={false}
       dragControls={controls}
-      className="h-8 w-full flex flex-row gap-1 select-none"
+      className="h-8 w-96 flex flex-1 flex-row gap-1 select-none"
     >
       <div
         onMouseDown={(e) => e.preventDefault()}
         onPointerDown={(e) => controls.start(e)}
-        className={`h-full transition-all rounded-sm flex-shrink-0 w-96 p-1 px-2 flex flex-row ${
+        className={`h-full transition-all rounded-sm min-w-[200px] p-1 px-2 flex flex-row ${
           selectedEntity === index ? "bg-gray-800" : "bg-gray-900"
         }`}
       >
@@ -87,7 +87,7 @@ const Track: FC<TrackProps> = ({
               ? deselectEntity()
               : selectEntity(index)
           }
-          className="text-white-800 select-none pointer-events-none"
+          className="text-white-800 select-none cursor-pointer"
         >
           {name}
         </h3>
@@ -230,11 +230,11 @@ const Timeline: FC<TimelineProps> = () => {
       </div>
       <div className="gap-1 flex flex-col overflow-y-hidden">
         <div className="z-20 flex flex-row gap-2">
-          <div className="flex-shrink-0 w-96" />
+          <div className="flex-shrink-0 min-w-[200px]" />
           <TimePicker />
         </div>
         <Reorder.Group
-          className="gap-1 flex flex-col"
+          className="gap-1 flex-1 flex flex-col overflow-scroll"
           values={entities}
           onReorder={setEntities}
         >

@@ -138,6 +138,7 @@ function buildText(
         type: "Fill",
         color,
       },
+      fontName: "Arial",
       size,
       align: "Center",
     },
@@ -202,6 +203,7 @@ function buildStaggeredText(
     stagger: 0.05,
     letter: {
       paint: {
+        fontName: "Arial",
         style: {
           type: "Fill",
           color,

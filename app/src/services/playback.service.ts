@@ -36,6 +36,12 @@ export class PlaybackService {
       }
     });
 
+    useEntitiesStore.subscribe((state) => {
+      if (!this.playing) {
+        this.seek();
+      }
+    });
+
     this.seek();
   }
 
