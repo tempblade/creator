@@ -1,6 +1,6 @@
 use super::{
     entities::common::AnimationData,
-    values::{AnimatedFloatVec2, AnimatedValue},
+    values::{AnimatedFloatVec2, AnimatedFloatVec3, AnimatedValue},
 };
 use crate::animation::timeline::Timeline;
 use serde::{Deserialize, Serialize};
@@ -10,7 +10,7 @@ pub struct AnimatedTransform {
     pub translate: AnimatedFloatVec2,
     pub scale: AnimatedFloatVec2,
     pub skew: AnimatedFloatVec2,
-    pub rotate: AnimatedFloatVec2,
+    pub rotate: AnimatedFloatVec3,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
@@ -18,7 +18,7 @@ pub struct Transform {
     pub translate: (f32, f32),
     pub scale: (f32, f32),
     pub skew: (f32, f32),
-    pub rotate: (f32, f32),
+    pub rotate: (f32, f32, f32),
 }
 
 impl AnimatedTransform {

@@ -1,4 +1,3 @@
-import { C } from "@tauri-apps/api/event-30ea0228";
 import { BaseEntity } from "primitives/Entities";
 import { z } from "zod";
 

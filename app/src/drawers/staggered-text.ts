@@ -99,7 +99,7 @@ export function calculateLetters(
   dependencies: Dependencies
 ): StaggeredTextCache {
   const fontData = dependencies.fonts.get(
-    entity.letter.paint.fontName
+    entity.letter.paint.font_name
   ) as ArrayBuffer;
 
   const typeface = CanvasKit.Typeface.MakeFreeTypeFaceFromData(
@@ -260,6 +260,12 @@ export default function drawStaggeredText(
           canvas.translate(origin[0], origin[1]);
 
           canvas.scale(letterTransform.scale[0], letterTransform.scale[1]);
+
+          canvas.rotate(
+            letterTransform.rotate[0],
+            letterTransform.rotate[1],
+            letterTransform.rotate[2]
+          );
 
           canvas.translate(
             -origin[0] + measuredLetter.offset.x,

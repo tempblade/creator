@@ -1,16 +1,27 @@
 use font_kit::source::SystemSource;
 
-pub struct Font {
-    pub path: String,
-}
-
 #[tauri::command]
 pub fn get_system_fonts() -> Option<Vec<String>> {
     let source = SystemSource::new();
 
-    let found_families = source.all_families();
+    let found_fonts = source.all_fonts();
 
-    found_families.ok()
+    match found_fonts {
+        Ok(found_fonts) => {
+            let font_names: Vec<String> = found_fonts
+                .iter()
+                .map(|f| f.load())
+                .filter(|f| f.is_ok())
+                .map(|f| f.unwrap())
+                .map(|f| f.postscript_name())
+                .filter(|f| f.is_some())
+                .map(|f| f.unwrap())
+                .collect();
+
+            Some(font_names)
+        }
+        Err(_) => None,
+    }
 }
 
 #[tauri::command]

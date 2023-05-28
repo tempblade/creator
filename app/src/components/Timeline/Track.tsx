@@ -1,25 +1,13 @@
-import { FC } from "react";
-import { z } from "zod";
-import { AnimatedEntity, AnimationData } from "primitives/AnimatedEntities";
-import { Reorder, motion, useDragControls } from "framer-motion";
-import TimePicker from "./TimePicker";
-import { shallow } from "zustand/shallow";
-import { useEntitiesStore } from "stores/entities.store";
 import { ease } from "@unom/style";
-import Timestamp from "./Timestamp";
+import { useDragControls, Reorder, motion } from "framer-motion";
+import { AnimationData, AnimatedEntity } from "primitives/AnimatedEntities";
 import { Keyframe } from "primitives/Keyframe";
-import { flattenedKeyframesByEntity } from "utils";
-import { PauseIcon, PlayIcon } from "@radix-ui/react-icons";
-import { useRenderStateStore } from "stores/render-state.store";
-
-export type AnimationEntity = {
-  offset: number;
-  duration: number;
-};
-
-type TimelineProps = {};
-
-export const TIMELINE_SCALE = 50;
+import { FC } from "react";
+import { useEntitiesStore } from "stores/entities.store";
+import { z } from "zod";
+import { shallow } from "zustand/shallow";
+import KeyframeIndicator from "./KeyframeIndicator";
+import { TIMELINE_SCALE, calculateOffset } from "./common";
 
 type TrackProps = {
   animationData: z.input<typeof AnimationData>;
@@ -27,24 +15,6 @@ type TrackProps = {
   index: number;
   entity: z.input<typeof AnimatedEntity>;
   keyframes: Array<z.input<typeof Keyframe>>;
-};
-
-const KeyframeIndicator: FC<{
-  keyframe: z.input<typeof Keyframe>;
-  animationData: z.input<typeof AnimationData>;
-}> = ({ keyframe, animationData }) => {
-  return (
-    <motion.div
-      animate={{
-        x: (animationData.offset + keyframe.offset) * TIMELINE_SCALE + 4,
-      }}
-      transition={ease.quint(0.4).out}
-      style={{
-        clipPath: "polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)",
-      }}
-      className="bg-indigo-300 absolute w-2 h-2 z-30 top-[39%] select-none pointer-events-none"
-    />
-  );
 };
 
 const Track: FC<TrackProps> = ({
@@ -72,7 +42,7 @@ const Track: FC<TrackProps> = ({
       value={entity}
       dragListener={false}
       dragControls={controls}
-      className="h-8 w-96 flex flex-1 flex-row gap-1 select-none"
+      className="h-8 relative flex flex-1 flex-row gap-1 select-none"
     >
       <div
         onMouseDown={(e) => e.preventDefault()}
@@ -94,8 +64,8 @@ const Track: FC<TrackProps> = ({
       </div>
 
       <div
-        style={{ width: "1000px" }}
-        className="flex h-full flex-row relative bg-gray-900 select-none"
+        style={{ width: TIMELINE_SCALE * 10 }}
+        className="flex h-full flex-row relative bg-gray-900 select-none shrink-0"
       >
         {keyframes.map((keyframe, index) => (
           <KeyframeIndicator
@@ -118,11 +88,11 @@ const Track: FC<TrackProps> = ({
           onMouseDown={(e) => e.preventDefault()}
           transition={ease.circ(0.6).out}
           dragElastic={false}
-          dragConstraints={{ left: 0, right: 900 }}
+          dragConstraints={{ left: 0 }}
           onDragEnd={(e, info) => {
             let offset = info.offset.x;
 
-            offset *= 0.01;
+            offset = calculateOffset(offset);
 
             const animationOffset =
               animationData.offset + offset < 0
@@ -156,11 +126,11 @@ const Track: FC<TrackProps> = ({
             scale: 0.9,
           }}
           transition={ease.circ(0.6).out}
-          dragConstraints={{ left: 0, right: 900 }}
+          dragConstraints={{ left: 0 }}
           onDragEnd={(e, info) => {
             let offset = info.offset.x;
 
-            offset *= 0.01;
+            offset = calculateOffset(offset);
 
             const duration = animationData.duration + offset;
 
@@ -183,14 +153,16 @@ const Track: FC<TrackProps> = ({
           whileTap={{ scaleY: 0.9 }}
           dragConstraints={{
             left: 0,
-            right: 900,
           }}
           onMouseDown={(e) => e.preventDefault()}
           transition={ease.circ(0.8).out}
           onDragEnd={(_e, info) => {
             let offset = info.offset.x;
-            offset *= 0.01;
+
+            offset = calculateOffset(offset);
+
             offset += animationData.offset;
+
             updateEntity(index, {
               animation_data: {
                 ...animationData,
@@ -205,53 +177,4 @@ const Track: FC<TrackProps> = ({
   );
 };
 
-const Timeline: FC<TimelineProps> = () => {
-  const { entities, setEntities } = useEntitiesStore((store) => ({
-    entities: store.entities,
-    setEntities: store.setEntities,
-  }));
-
-  const { setPlaying } = useRenderStateStore((store) => ({
-    setPlaying: store.setPlaying,
-  }));
-
-  return (
-    <div className="flex flex-col p-4 w-full border transition-colors focus-within:border-gray-400 border-gray-600 rounded-md">
-      <div className="flex flex-row">
-        <div className="flex flex-row">
-          <button onClick={() => setPlaying(true)} className="w-8 h-8">
-            <PlayIcon color="white" width="100%" height="100%" />
-          </button>
-          <button onClick={() => setPlaying(false)} className="w-8 h-8">
-            <PauseIcon color="white" width="100%" height="100%" />
-          </button>
-        </div>
-        <Timestamp />
-      </div>
-      <div className="gap-1 flex flex-col overflow-y-hidden">
-        <div className="z-20 flex flex-row gap-2">
-          <div className="flex-shrink-0 min-w-[200px]" />
-          <TimePicker />
-        </div>
-        <Reorder.Group
-          className="gap-1 flex-1 flex flex-col overflow-scroll"
-          values={entities}
-          onReorder={setEntities}
-        >
-          {entities.map((entity, index) => (
-            <Track
-              entity={entity}
-              key={entity.id}
-              name={entity.type}
-              index={index}
-              keyframes={flattenedKeyframesByEntity(entity)}
-              animationData={entity.animation_data}
-            />
-          ))}
-        </Reorder.Group>
-      </div>
-    </div>
-  );
-};
-
-export default Timeline;
+export default Track;

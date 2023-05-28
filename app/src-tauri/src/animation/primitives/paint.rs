@@ -30,7 +30,7 @@ pub struct Paint {
 pub struct TextPaint {
     pub style: PaintStyle,
     pub align: TextAlign,
-    pub fontName: String,
+    pub font_name: String,
     pub size: f32,
 }
 

@@ -35,7 +35,7 @@ export const Paint = z.object({
 export const TextPaint = z.object({
   style: PaintStyle,
   align: TextAlign,
-  fontName: z.string(),
+  font_name: z.string(),
   size: z.number().min(0),
 });
 

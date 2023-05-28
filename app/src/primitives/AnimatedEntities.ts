@@ -6,7 +6,7 @@ import {
   RectEntity,
   TextEntity,
 } from "./Entities";
-import { AnimatedVec2 } from "./Values";
+import { AnimatedVec2, AnimatedVec3 } from "./Values";
 import { TextPaint } from "./Paint";
 
 export const AnimationData = z.object({
@@ -21,7 +21,7 @@ export const AnimatedTransform = z.object({
   /** Skews by the given animated vec2 */
   skew: AnimatedVec2,
   /** Rotates by the given animated vec2 */
-  rotate: AnimatedVec2,
+  rotate: AnimatedVec3,
   /** Scales on the x and y axis by the given animated vec2 */
   scale: AnimatedVec2,
 });

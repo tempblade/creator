@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { Vec2 } from "./Values";
+import { Vec2, Vec3 } from "./Values";
 import { Paint, TextPaint } from "./Paint";
 
 const EntityTypeOptions = ["Text", "Ellipse", "Rect", "StaggeredText"] as const;
@@ -8,7 +8,7 @@ export const EntityType = z.enum(EntityTypeOptions);
 
 export const Transform = z.object({
   skew: Vec2,
-  rotate: Vec2,
+  rotate: Vec3,
   translate: Vec2,
   scale: Vec2,
 });

@@ -102,10 +102,10 @@ export const TextProperties: FC<TextPropertiesProps> = ({
             onUpdate({
               ...entity,
               cache: { valid: false },
-              paint: { ...entity.paint, fontName: e.target.value },
+              paint: { ...entity.paint, font_name: e.target.value },
             })
           }
-          value={entity.paint.fontName}
+          value={entity.paint.font_name}
         >
           {fonts.map((font) => (
             <option value={font} key={font}>
@@ -173,11 +173,11 @@ export const StaggeredTextProperties: FC<StaggeredTextPropertiesProps> = ({
               cache: { valid: false },
               letter: {
                 ...entity.letter,
-                paint: { ...entity.letter.paint, fontName: e.target.value },
+                paint: { ...entity.letter.paint, font_name: e.target.value },
               },
             });
           }}
-          value={entity.letter.paint.fontName}
+          value={entity.letter.paint.font_name}
         >
           {fonts.map((font) => (
             <option value={font} key={font}>

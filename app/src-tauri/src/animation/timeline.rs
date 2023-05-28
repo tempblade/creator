@@ -154,7 +154,7 @@ pub fn test_timeline_entities_at_frame(
             color: Color::new(0, 0, 0, 1.0),
             width: 10.0,
         }),
-        fontName: "Arial".to_string(),
+        font_name: "Arial".to_string(),
         align: TextAlign::Center,
         size: 20.0,
     };
@@ -163,7 +163,7 @@ pub fn test_timeline_entities_at_frame(
         style: PaintStyle::Fill(FillStyle {
             color: Color::new(0, 0, 0, 1.0),
         }),
-        fontName: "Arial".to_string(),
+        font_name: "Arial".to_string(),
         align: TextAlign::Center,
         size: 10.0,
     };

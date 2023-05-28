@@ -17,7 +17,9 @@ export function buildTextCache(
   entity: z.output<typeof TextEntity>,
   dependencies: Dependencies
 ): TextCache {
-  const fontData = dependencies.fonts.get(entity.paint.fontName) as ArrayBuffer;
+  const fontData = dependencies.fonts.get(
+    entity.paint.font_name
+  ) as ArrayBuffer;
 
   const fontManager = CanvasKit.FontMgr.FromData(fontData) as FontMgr;
 
@@ -43,7 +45,7 @@ export default function drawText(
   const pStyle = new CanvasKit.ParagraphStyle({
     textStyle: {
       color: color,
-      fontFamilies: [entity.paint.fontName],
+      fontFamilies: [entity.paint.font_name],
       fontSize: entity.paint.size,
     },
     textDirection: CanvasKit.TextDirection.LTR,

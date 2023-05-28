@@ -33,10 +33,10 @@ export class DependenciesService {
     entities.forEach((entity) => {
       switch (entity.type) {
         case EntityType.Enum.Text:
-          fontNames.add(entity.paint.fontName);
+          fontNames.add(entity.paint.font_name);
           break;
         case EntityType.Enum.StaggeredText:
-          fontNames.add(entity.letter.paint.fontName);
+          fontNames.add(entity.letter.paint.font_name);
           break;
         default:
           break;

@@ -1,7 +1,11 @@
 import { AnimatedEntity } from "primitives/AnimatedEntities";
 import { Color } from "primitives/Paint";
 import { Timeline } from "primitives/Timeline";
-import { staticAnimatedNumber, staticAnimatedVec2 } from "primitives/Values";
+import {
+  staticAnimatedNumber,
+  staticAnimatedVec2,
+  staticAnimatedVec3,
+} from "primitives/Values";
 import { z } from "zod";
 import { v4 as uuid } from "uuid";
 
@@ -138,7 +142,7 @@ function buildText(
         type: "Fill",
         color,
       },
-      fontName: "Arial",
+      font_name: "Arial",
       size,
       align: "Center",
     },
@@ -203,7 +207,7 @@ function buildStaggeredText(
     stagger: 0.05,
     letter: {
       paint: {
-        fontName: "Arial",
+        font_name: "Arial",
         style: {
           type: "Fill",
           color,
@@ -213,7 +217,7 @@ function buildStaggeredText(
       },
       transform: {
         translate: staticAnimatedVec2(0, 0),
-        rotate: staticAnimatedVec2(0, 0),
+        rotate: staticAnimatedVec3(0, 0, 45),
         skew: staticAnimatedVec2(0, 0),
         scale: {
           keyframes: [
@@ -227,7 +231,7 @@ function buildStaggeredText(
                       mass: 1,
                       damping: 15,
                     },
-                    value: 0.0,
+                    value: 5.0,
                     offset: 0.0,
                   },
                   {
@@ -246,11 +250,11 @@ function buildStaggeredText(
                   {
                     interpolation: {
                       type: "Spring",
-                      stiffness: 200,
+                      stiffness: 300,
                       mass: 1,
                       damping: 15,
                     },
-                    value: 0.0,
+                    value: -10.0,
                     offset: 0.0,
                   },
                   {
