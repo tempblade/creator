@@ -7,12 +7,15 @@ import ToolBar from "components/ToolBar";
 import { useEffect } from "react";
 import { invoke } from "@tauri-apps/api/tauri";
 import { useFontsStore } from "stores/fonts.store";
+import useKeyControls from "hooks/useKeyControls";
 
 export default function App() {
   const { setFonts } = useFontsStore();
 
+  useKeyControls();
+
   useEffect(() => {
-    invoke("get_system_fonts").then((data) => {
+    invoke("get_system_families").then((data) => {
       if (data && Array.isArray(data)) {
         setFonts(data);
       }

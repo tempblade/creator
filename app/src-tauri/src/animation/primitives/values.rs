@@ -3,6 +3,7 @@ use super::{
     keyframe::{Keyframe, Keyframes},
 };
 use serde::{Deserialize, Serialize};
+use uuid::Uuid;
 
 pub trait AnimatedValue<T> {
     fn sort_keyframes(&mut self);
@@ -28,6 +29,7 @@ impl AnimatedFloat {
         AnimatedFloat {
             keyframes: Keyframes {
                 values: vec![Keyframe {
+                    id: Uuid::new_v4().to_string(),
                     value: val,
                     offset: 0.0,
                     interpolation: None,
@@ -93,7 +95,7 @@ impl AnimatedValue<(f32, f32, f32)> for AnimatedFloatVec3 {
 
         let z = self
             .keyframes
-            .1
+            .2
             .get_value_at_frame(curr_frame, animation_data, fps);
 
         return (x, y, z);

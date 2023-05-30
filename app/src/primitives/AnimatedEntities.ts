@@ -6,24 +6,14 @@ import {
   RectEntity,
   TextEntity,
 } from "./Entities";
-import { AnimatedVec2, AnimatedVec3 } from "./Values";
+import { AnimatedTransform, AnimatedVec2 } from "./Values";
 import { TextPaint } from "./Paint";
+import { AnimatedProperties } from "./AnimatedProperty";
 
 export const AnimationData = z.object({
   offset: z.number(),
   duration: z.number(),
   visible: z.boolean().optional().default(true),
-});
-
-export const AnimatedTransform = z.object({
-  /** Translates by the given animated vec2 */
-  translate: AnimatedVec2,
-  /** Skews by the given animated vec2 */
-  skew: AnimatedVec2,
-  /** Rotates by the given animated vec2 */
-  rotate: AnimatedVec3,
-  /** Scales on the x and y axis by the given animated vec2 */
-  scale: AnimatedVec2,
 });
 
 export const AnimatedStaggeredTextEntity = BaseEntity.extend({
@@ -72,3 +62,133 @@ export const AnimatedEntity = z.discriminatedUnion("type", [
 ]);
 
 export const AnimatedEntities = z.array(AnimatedEntity);
+
+export function animatedTransformToAnimatedProperties(
+  animatedTransform: z.input<typeof AnimatedTransform>,
+  basePath?: string
+): z.input<typeof AnimatedProperties> {
+  return [
+    {
+      animatedValue: animatedTransform.translate,
+      label: "Translation",
+      propertyPath: basePath
+        ? basePath + ".transform.translate"
+        : "transform.translate",
+    },
+    {
+      animatedValue: animatedTransform.rotate,
+      label: "Rotation",
+      propertyPath: basePath
+        ? basePath + ".transform.rotate"
+        : "transform.rotate",
+    },
+    {
+      animatedValue: animatedTransform.scale,
+      label: "Scale",
+      propertyPath: basePath
+        ? basePath + ".transform.scale"
+        : "transform.scale",
+    },
+    {
+      animatedValue: animatedTransform.skew,
+      label: "Skew",
+      propertyPath: basePath ? basePath + ".transform.skew" : "transform.skew",
+    },
+  ];
+}
+
+export function getAnimatedPropertiesByAnimatedEntity(
+  animatedEntity: z.input<typeof AnimatedEntity>
+) {
+  const animatedProperties: z.input<typeof AnimatedProperties> = [];
+
+  switch (animatedEntity.type) {
+    case "Ellipse":
+      animatedProperties.push({
+        propertyPath: "origin",
+        animatedValue: animatedEntity.origin,
+        label: "Origin",
+      });
+      animatedProperties.push({
+        propertyPath: "radius",
+        animatedValue: animatedEntity.radius,
+        label: "Radius",
+      });
+
+      if (animatedEntity.transform) {
+        animatedProperties.push(
+          ...animatedTransformToAnimatedProperties(animatedEntity.transform)
+        );
+      }
+
+      break;
+
+    case "Rect":
+      animatedProperties.push({
+        propertyPath: "origin",
+        animatedValue: animatedEntity.origin,
+        label: "Origin",
+      });
+      animatedProperties.push({
+        propertyPath: "radius",
+        animatedValue: animatedEntity.size,
+        label: "Radius",
+      });
+
+      if (animatedEntity.transform) {
+        animatedProperties.push(
+          ...animatedTransformToAnimatedProperties(animatedEntity.transform)
+        );
+      }
+      break;
+
+    case "StaggeredText":
+      animatedProperties.push({
+        propertyPath: "origin",
+        animatedValue: animatedEntity.origin,
+        label: "Origin",
+      });
+
+      if (animatedEntity.transform) {
+        animatedProperties.push(
+          ...animatedTransformToAnimatedProperties(animatedEntity.transform)
+        );
+      }
+
+      if (animatedEntity.letter.transform) {
+        animatedProperties.push(
+          ...animatedTransformToAnimatedProperties(
+            animatedEntity.letter.transform,
+            "letter"
+          )
+        );
+      }
+      break;
+
+    case "Text":
+      animatedProperties.push({
+        propertyPath: "origin",
+        animatedValue: animatedEntity.origin,
+        label: "Origin",
+      });
+
+      if (animatedEntity.transform) {
+        animatedProperties.push(
+          ...animatedTransformToAnimatedProperties(animatedEntity.transform)
+        );
+      }
+      break;
+  }
+
+  return animatedProperties;
+}
+
+export function getAnimatedPropertiesByAnimatedEnties(
+  animatedEntities: z.input<typeof AnimatedEntities>
+) {
+  const animatedProperties: z.input<typeof AnimatedProperties> = [];
+
+  animatedEntities.forEach((aEnt) => {
+    animatedProperties.push(...getAnimatedPropertiesByAnimatedEntity(aEnt));
+  });
+}

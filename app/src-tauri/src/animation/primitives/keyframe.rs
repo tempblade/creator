@@ -12,6 +12,7 @@ use super::{
 pub struct Keyframe {
     pub value: f32,
     pub offset: f32,
+    pub id: String,
     pub interpolation: Option<InterpolationType>,
 }
 

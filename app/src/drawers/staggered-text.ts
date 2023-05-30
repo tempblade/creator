@@ -108,8 +108,6 @@ export function calculateLetters(
 
   const font = new CanvasKit.Font(typeface, entity.letter.paint.size);
 
-  console.log(font.isDeleted());
-
   const glyphIDs = font.getGlyphIDs(entity.text);
 
   // font.setLinearMetrics(true);
@@ -252,19 +250,29 @@ export default function drawStaggeredText(
           origin[0] =
             origin[0] +
             measuredLetter.bounds.width / 2 +
-            measuredLetter.offset.x;
-          origin[1] = origin[1] - metrics.descent + lineOffset;
+            measuredLetter.offset.x +
+            letterTransform.translate[0];
+          origin[1] =
+            origin[1] -
+            metrics.descent +
+            lineOffset +
+            letterTransform.translate[1];
 
           //console.log(measuredLetter.bounds);
 
           canvas.translate(origin[0], origin[1]);
 
+          canvas.rotate(
+            letterTransform.rotate[2],
+            letterTransform.rotate[0],
+            letterTransform.rotate[1]
+          );
+
           canvas.scale(letterTransform.scale[0], letterTransform.scale[1]);
 
-          canvas.rotate(
-            letterTransform.rotate[0],
-            letterTransform.rotate[1],
-            letterTransform.rotate[2]
+          canvas.translate(
+            letterTransform.translate[0],
+            letterTransform.translate[1]
           );
 
           canvas.translate(

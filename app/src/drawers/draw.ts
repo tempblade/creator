@@ -69,8 +69,7 @@ export class Drawer {
 
   async loadCanvasKit(canvas: HTMLCanvasElement) {
     await InitCanvasKit({
-      locateFile: (file) =>
-        "https://unpkg.com/canvaskit-wasm@latest/bin/" + file,
+      locateFile: (file) => file,
     }).then((CanvasKit) => {
       if (canvas) {
         const CSurface = CanvasKit.MakeWebGLCanvasSurface(canvas);

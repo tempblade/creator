@@ -1,6 +1,6 @@
 import { invoke } from "@tauri-apps/api";
 import { AnimatedEntities } from "primitives/AnimatedEntities";
-import { Entities, Entity, EntityType } from "primitives/Entities";
+import { Entities, EntityType } from "primitives/Entities";
 import { z } from "zod";
 
 function typedArrayToBuffer(array: Uint8Array): ArrayBuffer {
@@ -27,8 +27,6 @@ export class DependenciesService {
     entities: z.output<typeof Entities> | z.output<typeof AnimatedEntities>
   ) {
     const fontNames = new Set<string>();
-
-    console.log(entities);
 
     entities.forEach((entity) => {
       switch (entity.type) {
@@ -78,9 +76,5 @@ export class DependenciesService {
     });
 
     await Promise.all(resolveFonts);
-
-    console.log(fontNames);
-
-    // console.log(this.dependencies);
   }
 }

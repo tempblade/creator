@@ -25,16 +25,19 @@ fn interpolates_the_input() {
     let keyframes1 = Keyframes {
         values: vec![
             Keyframe {
+                id: "1".to_string(),
                 value: 0.0,
                 offset: 0.0,
                 interpolation: None,
             },
             Keyframe {
+                id: "2".to_string(),
                 value: 100.0,
                 offset: 1.0,
                 interpolation: None,
             },
             Keyframe {
+                id: "3".to_string(),
                 value: 300.0,
                 offset: 3.0,
                 interpolation: None,
@@ -45,11 +48,13 @@ fn interpolates_the_input() {
     let keyframes2 = Keyframes {
         values: vec![
             Keyframe {
+                id: "4".to_string(),
                 value: -100.0,
                 offset: 0.0,
                 interpolation: None,
             },
             Keyframe {
+                id: "5".to_string(),
                 value: 0.0,
                 offset: 1.0,
                 interpolation: None,
@@ -145,16 +150,19 @@ fn gets_value_at_frame() {
     let keyframes = Keyframes {
         values: vec![
             Keyframe {
+                id: "1".to_string(),
                 value: 0.0,
                 offset: 0.0,
                 interpolation: None,
             },
             Keyframe {
+                id: "2".to_string(),
                 value: 100.0,
                 offset: 1.0,
                 interpolation: None,
             },
             Keyframe {
+                id: "3".to_string(),
                 value: 300.0,
                 offset: 3.0,
                 interpolation: None,

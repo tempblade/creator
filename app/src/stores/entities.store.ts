@@ -7,6 +7,7 @@ import { create } from "zustand";
 interface EntitiesStore {
   entities: z.input<typeof AnimatedEntities>;
   selectedEntity: number | undefined;
+  selectedKeyframe: string | undefined;
   selectEntity: (index: number) => void;
   deselectEntity: () => void;
   setEntities: (entities: z.input<typeof AnimatedEntities>) => void;
@@ -14,6 +15,8 @@ interface EntitiesStore {
     index: number,
     entity: Partial<z.input<typeof AnimatedEntity>>
   ) => void;
+
+  deleteEntity: (index: number) => void;
   updateEntityById: (
     id: string,
     entity: Partial<z.input<typeof AnimatedEntity>>
@@ -22,6 +25,7 @@ interface EntitiesStore {
 
 const useEntitiesStore = create<EntitiesStore>((set) => ({
   entities: EXAMPLE_ANIMATED_ENTITIES,
+  selectedKeyframe: undefined,
   selectEntity: (index) => set(() => ({ selectedEntity: index })),
   deselectEntity: () => set(() => ({ selectedEntity: undefined })),
   selectedEntity: undefined,
@@ -34,6 +38,14 @@ const useEntitiesStore = create<EntitiesStore>((set) => ({
         draft[index] = { ...draft[index], ...entity } as z.infer<
           typeof AnimatedEntity
         >;
+      });
+
+      return { entities: nextEntities };
+    }),
+  deleteEntity: (index) =>
+    set(({ entities }) => {
+      const nextEntities = produce(entities, (draft) => {
+        draft.splice(index, 1);
       });
 
       return { entities: nextEntities };

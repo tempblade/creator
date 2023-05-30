@@ -3,7 +3,7 @@
 
 use crate::{
     animation::timeline::calculate_timeline_entities_at_frame,
-    fonts::{get_system_font, get_system_fonts},
+    fonts::{get_system_families, get_system_font, get_system_fonts},
 };
 
 pub mod animation;
@@ -14,6 +14,7 @@ fn main() {
         .invoke_handler(tauri::generate_handler![
             calculate_timeline_entities_at_frame,
             get_system_font,
+            get_system_families,
             get_system_fonts
         ])
         .run(tauri::generate_context!())

@@ -5,6 +5,8 @@ import { z } from "zod";
 import { produce } from "immer";
 import { Interpolation } from "primitives/Interpolation";
 import { Color } from "primitives/Paint";
+import { colorToString, parseColor, parseCssColor } from "@tempblade/common";
+import { rgbToHex } from "utils";
 
 const InterpolationProperties: FC<
   PropertiesProps<z.input<typeof Interpolation>>
@@ -76,8 +78,43 @@ const AnimatedNumberProperties: FC<
 export const ColorProperties: FC<
   PropertiesProps<z.input<typeof Color>> & {
     label: string;
+    mode?: "RGB" | "Picker";
   }
-> = ({ entity, onUpdate }) => {
+> = ({ entity, onUpdate, mode = "Picker" }) => {
+  if (mode === "Picker") {
+    return (
+      <label className="flex flex-col items-start">
+        <span className="label">Color</span>
+        <div className="flex flex-row gap-3">
+          <input
+            value={rgbToHex(entity.value[0], entity.value[1], entity.value[2])}
+            type="color"
+            style={{
+              width: 32,
+              height: 32,
+              backgroundColor: rgbToHex(
+                entity.value[0],
+                entity.value[1],
+                entity.value[2]
+              ),
+            }}
+            onChange={(e) =>
+              onUpdate(
+                produce(entity, (draft) => {
+                  const color = parseCssColor(e.target.value);
+
+                  if (color) {
+                    draft.value = [...color, 1.0];
+                  }
+                })
+              )
+            }
+          />
+        </div>
+      </label>
+    );
+  }
+
   return (
     <label className="flex flex-col items-start">
       <span className="label">Color</span>

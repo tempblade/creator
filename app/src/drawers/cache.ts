@@ -16,7 +16,7 @@ export function handleEntityCache<
   const cached = cache.get();
 
   if (!entity.cache.valid) {
-    console.log("Invalid cache");
+    // console.log("Invalid cache");
     if (cached) {
       cache.cleanup(cached);
     }

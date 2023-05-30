@@ -25,11 +25,14 @@ function buildRect1(
       },
     },
     size: {
+      type: "Vec2",
       keyframes: [
         {
+          type: "Number",
           keyframes: {
             values: [
               {
+                id: uuid(),
                 interpolation: {
                   type: "EasingFunction",
                   easing_function: "CircOut",
@@ -38,6 +41,7 @@ function buildRect1(
                 offset: 0.0,
               },
               {
+                id: uuid(),
                 interpolation: {
                   type: "Linear",
                 },
@@ -77,15 +81,20 @@ function buildRect(
     origin: staticAnimatedVec2(0, -720),
     position: staticAnimatedVec2(1280 / 2, 720 / 2),
     transform: {
+      type: "Transform",
       translate: staticAnimatedVec2(0, 0),
-      rotate: staticAnimatedVec2(0, 0),
+      rotate: staticAnimatedVec3(0, 0, 0),
       skew: staticAnimatedVec2(0, 0),
       scale: {
+        type: "Vec2",
         keyframes: [
           {
+            type: "Number",
             keyframes: {
               values: [
                 {
+                  id: uuid(),
+
                   interpolation: {
                     type: "Linear",
                   },
@@ -96,9 +105,12 @@ function buildRect(
             },
           },
           {
+            type: "Number",
             keyframes: {
               values: [
                 {
+                  id: uuid(),
+
                   interpolation: {
                     type: "EasingFunction",
                     easing_function: "CircOut",
@@ -107,6 +119,8 @@ function buildRect(
                   offset: 0.0,
                 },
                 {
+                  id: uuid(),
+
                   interpolation: {
                     type: "Linear",
                   },
@@ -152,21 +166,25 @@ function buildText(
       duration: 5.0,
     },
     origin: {
+      type: "Vec2",
       keyframes: [
         {
+          type: "Number",
           keyframes: {
             values: [
               {
+                id: uuid(),
+
                 interpolation: {
-                  type: "Spring",
-                  mass: 1,
-                  stiffness: 100,
-                  damping: 15,
+                  type: "EasingFunction",
+                  easing_function: "CircOut",
                 },
                 value: (1280 / 2) * -1 - 300,
                 offset: 0.0,
               },
               {
+                id: uuid(),
+
                 interpolation: {
                   type: "EasingFunction",
                   easing_function: "QuartOut",
@@ -195,8 +213,9 @@ function buildStaggeredText(
     id: uuid(),
     origin: staticAnimatedVec2(1280 / 2, 720 / 2),
     transform: {
+      type: "Transform",
       translate: staticAnimatedVec2(0, 0),
-      rotate: staticAnimatedVec2(0, 0),
+      rotate: staticAnimatedVec3(0, 0, 0),
       skew: staticAnimatedVec2(0, 0),
       scale: staticAnimatedVec2(1, 1),
     },
@@ -204,7 +223,7 @@ function buildStaggeredText(
       offset,
       duration: 5.0,
     },
-    stagger: 0.05,
+    stagger: 0.1,
     letter: {
       paint: {
         font_name: "Arial",
@@ -216,53 +235,128 @@ function buildStaggeredText(
         align: "Center",
       },
       transform: {
-        translate: staticAnimatedVec2(0, 0),
-        rotate: staticAnimatedVec3(0, 0, 45),
-        skew: staticAnimatedVec2(0, 0),
-        scale: {
+        type: "Transform",
+        translate: {
+          type: "Vec2",
           keyframes: [
+            staticAnimatedNumber(0),
             {
+              type: "Number",
               keyframes: {
                 values: [
                   {
+                    id: uuid(),
+
                     interpolation: {
                       type: "Spring",
-                      stiffness: 200,
-                      mass: 1,
                       damping: 15,
+                      stiffness: 350,
+                      mass: 1,
                     },
-                    value: 5.0,
+                    value: 200.0,
                     offset: 0.0,
                   },
                   {
+                    id: uuid(),
+
                     interpolation: {
                       type: "Linear",
                     },
-                    value: 1.0,
+                    value: 0.0,
                     offset: 4.0,
                   },
                 ],
               },
             },
+          ],
+        },
+        rotate: {
+          type: "Vec3",
+          keyframes: [
+            staticAnimatedNumber(0),
+            staticAnimatedNumber(0),
             {
+              type: "Number",
               keyframes: {
                 values: [
                   {
+                    id: uuid(),
+
                     interpolation: {
                       type: "Spring",
-                      stiffness: 300,
-                      mass: 1,
                       damping: 15,
+                      stiffness: 150,
+                      mass: 1,
                     },
-                    value: -10.0,
+                    value: -180.0,
                     offset: 0.0,
                   },
                   {
+                    id: uuid(),
+
+                    interpolation: {
+                      type: "Linear",
+                    },
+                    value: 0.0,
+                    offset: 4.0,
+                  },
+                ],
+              },
+            },
+          ],
+        },
+        skew: staticAnimatedVec2(0, 0),
+        scale: {
+          type: "Vec2",
+          keyframes: [
+            {
+              type: "Number",
+              keyframes: {
+                values: [
+                  {
+                    id: uuid(),
+
+                    interpolation: {
+                      type: "EasingFunction",
+                      easing_function: "CircOut",
+                    },
+                    value: 0.0,
+                    offset: 0.0,
+                  },
+                  {
+                    id: uuid(),
+
                     interpolation: {
                       type: "Linear",
                     },
                     value: 1.0,
-                    offset: 4.0,
+                    offset: 2.0,
+                  },
+                ],
+              },
+            },
+            {
+              type: "Number",
+              keyframes: {
+                values: [
+                  {
+                    id: uuid(),
+
+                    interpolation: {
+                      type: "EasingFunction",
+                      easing_function: "CircOut",
+                    },
+                    value: 0.0,
+                    offset: 0.0,
+                  },
+                  {
+                    id: uuid(),
+
+                    interpolation: {
+                      type: "Linear",
+                    },
+                    value: 1.0,
+                    offset: 2.0,
                   },
                 ],
               },

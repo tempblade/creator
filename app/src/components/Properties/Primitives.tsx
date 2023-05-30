@@ -127,13 +127,6 @@ export const TextProperties: FC<TextPropertiesProps> = ({
           }
         ></input>
       </label>
-      <AnimatedVec2Properties
-        onUpdate={(updatedEntity) =>
-          onUpdate({ ...entity, origin: updatedEntity })
-        }
-        label="Origin"
-        entity={entity.origin}
-      />
     </motion.div>
   );
 };
@@ -217,13 +210,6 @@ export const StaggeredTextProperties: FC<StaggeredTextPropertiesProps> = ({
           })
         }
       />
-      <AnimatedVec2Properties
-        onUpdate={(updatedEntity) =>
-          onUpdate({ ...entity, origin: updatedEntity })
-        }
-        label="Origin"
-        entity={entity.origin}
-      />
     </motion.div>
   );
 };
@@ -240,20 +226,6 @@ export const RectProperties: FC<RectPropertiesProps> = ({
           onUpdate({ ...entity, paint: { ...entity.paint, ...paint } })
         }
       />
-      <AnimatedVec2Properties
-        onUpdate={(updatedEntity) =>
-          onUpdate({ ...entity, position: updatedEntity })
-        }
-        label="Position"
-        entity={entity.position}
-      />
-      <AnimatedVec2Properties
-        onUpdate={(updatedEntity) =>
-          onUpdate({ ...entity, size: updatedEntity })
-        }
-        label="Size"
-        entity={entity.size}
-      />
     </div>
   );
 };
@@ -269,20 +241,6 @@ export const EllipseProperties: FC<EllipsePropertiesProps> = ({
         onUpdate={(paint) =>
           onUpdate({ ...entity, paint: { ...entity.paint, ...paint } })
         }
-      />
-      <AnimatedVec2Properties
-        onUpdate={(updatedEntity) =>
-          onUpdate({ ...entity, position: updatedEntity })
-        }
-        label="Position"
-        entity={entity.position}
-      />
-      <AnimatedVec2Properties
-        onUpdate={(updatedEntity) =>
-          onUpdate({ ...entity, radius: updatedEntity })
-        }
-        label="Size"
-        entity={entity.radius}
       />
     </div>
   );

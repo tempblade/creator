@@ -1,4 +1,5 @@
 use font_kit::source::SystemSource;
+use rayon::prelude::*;
 
 #[tauri::command]
 pub fn get_system_fonts() -> Option<Vec<String>> {
@@ -9,7 +10,7 @@ pub fn get_system_fonts() -> Option<Vec<String>> {
     match found_fonts {
         Ok(found_fonts) => {
             let font_names: Vec<String> = found_fonts
-                .iter()
+                .par_iter()
                 .map(|f| f.load())
                 .filter(|f| f.is_ok())
                 .map(|f| f.unwrap())
@@ -22,6 +23,15 @@ pub fn get_system_fonts() -> Option<Vec<String>> {
         }
         Err(_) => None,
     }
+}
+
+#[tauri::command]
+pub fn get_system_families() -> Option<Vec<String>> {
+    let source = SystemSource::new();
+
+    let found_families = source.all_families();
+
+    found_families.ok()
 }
 
 #[tauri::command]
