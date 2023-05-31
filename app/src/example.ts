@@ -246,7 +246,6 @@ function buildStaggeredText(
                 values: [
                   {
                     id: uuid(),
-
                     interpolation: {
                       type: "Spring",
                       damping: 15,
@@ -370,7 +369,7 @@ function buildStaggeredText(
 
 export const EXAMPLE_ANIMATED_ENTITIES: Array<z.input<typeof AnimatedEntity>> =
   [
-    buildStaggeredText("Ehrenmann?", 2.0, {
+    buildStaggeredText("Work in Progress...", 2.0, {
       value: [255, 255, 255, 1.0],
     }),
     // buildText("Wie gehts?", 2.5, 40, 40, { value: [200, 200, 200, 1.0] }),

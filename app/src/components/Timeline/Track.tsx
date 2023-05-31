@@ -6,10 +6,7 @@ import { FC, useState } from "react";
 import { useEntitiesStore } from "stores/entities.store";
 import { z } from "zod";
 import { shallow } from "zustand/shallow";
-import KeyframeIndicator, {
-  AnimatedVec2KeyframeIndicator,
-  AnimatedVec3KeyframeIndicator,
-} from "./KeyframeIndicator";
+import KeyframeIndicator from "./KeyframeIndicator";
 import { TIMELINE_SCALE, calculateOffset } from "./common";
 import { TriangleDownIcon } from "@radix-ui/react-icons";
 import TrackPropertiesEditor from "./TrackPropertiesEditor";
@@ -49,9 +46,14 @@ const Track: FC<TrackProps> = ({
       value={entity}
       dragListener={false}
       dragControls={controls}
+      onMouseDown={(e) => e.preventDefault()}
       className="min-h-8 relative flex flex-1 flex-col gap-1 select-none"
     >
-      <div className="flex flex-row gap-1 select-none">
+      <motion.div
+        layout
+        onMouseDown={(e) => e.preventDefault()}
+        className="flex flex-row gap-1 select-none"
+      >
         <div
           onMouseDown={(e) => e.preventDefault()}
           onPointerDown={(e) => controls.start(e)}
@@ -132,10 +134,10 @@ const Track: FC<TrackProps> = ({
                 },
               });
             }}
-            className="z-10 w-4 bg-slate-500 h-8 absolute rounded-md select-none cursor-w-resize"
+            className="z-10 w-4 bg-slate-500 h-8 top-1 absolute rounded-md select-none cursor-w-resize"
           />
           <motion.div
-            className="z-10 w-4 bg-slate-500 h-8 absolute rounded-md select-none cursor-e-resize"
+            className="z-10 w-4 bg-slate-500 h-8 top-1 absolute rounded-md select-none cursor-e-resize"
             onMouseDown={(e) => e.preventDefault()}
             drag="x"
             animate={{
@@ -194,10 +196,10 @@ const Track: FC<TrackProps> = ({
                 },
               });
             }}
-            className="z-5 h-8 absolute rounded-md transition-colors bg-gray-700 hover:bg-gray-600 select-none cursor-grab"
+            className="z-5 h-8 top-1 absolute rounded-md transition-colors bg-gray-700 hover:bg-gray-600 select-none cursor-grab"
           ></motion.div>
         </div>
-      </div>
+      </motion.div>
       {isExpanded && <TrackPropertiesEditor entity={entity} />}
     </Reorder.Item>
   );

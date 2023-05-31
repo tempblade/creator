@@ -26,7 +26,7 @@ const Timeline: FC<TimelineProps> = () => {
   }));
 
   return (
-    <div className="flex flex-col p-4 w-full border transition-colors focus-within:border-gray-400 border-gray-600 rounded-md">
+    <div className="flex flex-col p-4 border transition-colors focus-within:border-gray-400 border-gray-600 rounded-md">
       <div className="flex flex-row">
         <div className="flex flex-row">
           <button onClick={() => setPlaying(true)} className="w-8 h-8">
@@ -38,13 +38,13 @@ const Timeline: FC<TimelineProps> = () => {
         </div>
         <Timestamp />
       </div>
-      <div className="gap-1 flex flex-col overflow-y-hidden">
+      <div className="gap-1 w-full flex flex-col overflow-x-auto">
         <div className="z-20 flex flex-row gap-2">
           <div className="flex-shrink-0 min-w-[200px]" />
           <TimePicker />
         </div>
         <Reorder.Group
-          className="gap-1 flex-1 flex flex-col"
+          className="gap-1 flex flex-col"
           values={entities}
           onReorder={setEntities}
         >

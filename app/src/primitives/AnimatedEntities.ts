@@ -130,9 +130,9 @@ export function getAnimatedPropertiesByAnimatedEntity(
         label: "Origin",
       });
       animatedProperties.push({
-        propertyPath: "radius",
+        propertyPath: "size",
         animatedValue: animatedEntity.size,
-        label: "Radius",
+        label: "Size",
       });
 
       if (animatedEntity.transform) {

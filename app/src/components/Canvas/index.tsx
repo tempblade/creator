@@ -26,18 +26,17 @@ const CanvasComponent: FC<CanvasProps> = () => {
   }, []);
 
   return (
-    <div>
-      <div
-        className="flex items-center justify-center"
-        style={{ width: "100%", height: "500px" }}
-      >
-        <canvas
-          className="aspect-video h-full"
-          height={720}
-          width={1280}
-          ref={canvas}
-        ></canvas>
-      </div>
+    <div
+      className="flex items-center justify-center"
+      style={{ width: "100%", height: "100%" }}
+    >
+      <canvas
+        style={{ width: "100%", height: "100%" }}
+        className="h-full object-contain"
+        height={720}
+        width={1280}
+        ref={canvas}
+      ></canvas>
     </div>
   );
 };

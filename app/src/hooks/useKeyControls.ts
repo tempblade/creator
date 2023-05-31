@@ -4,13 +4,19 @@ import { useRenderStateStore } from "stores/render-state.store";
 
 export default function useKeyControls() {
   const handleKeyPress = useCallback((e: KeyboardEvent) => {
-    if (e.code === "Space") {
-      useRenderStateStore.getState().togglePlaying();
-    }
-    if (e.code === "Backspace") {
-      const selectedEntity = useEntitiesStore.getState().selectedEntity;
-      if (selectedEntity !== undefined) {
-        useEntitiesStore.getState().deleteEntity(selectedEntity);
+    // Only run shortcuts if no input is focused
+
+    if (document.activeElement?.nodeName !== "INPUT") {
+      if (e.code === "Space") {
+        e.preventDefault();
+        useRenderStateStore.getState().togglePlaying();
+      }
+      if (e.code === "Backspace") {
+        const selectedEntity = useEntitiesStore.getState().selectedEntity;
+
+        if (selectedEntity !== undefined) {
+          useEntitiesStore.getState().deleteEntity(selectedEntity);
+        }
       }
     }
   }, []);

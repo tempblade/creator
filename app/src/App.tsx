@@ -27,8 +27,8 @@ export default function App() {
       <MenuBar />
       <div className="flex flex-row w-full h-full">
         <ToolBar />
-        <div className="flex flex-col ml-4 mr-4 mt-4 w-full h-full overflow-x-hidden">
-          <div className="flex gap-4 flex-col lg:flex-row mb-4 justify-center items-center">
+        <div className="flex flex-col ml-4 mr-4 mt-4 h-full w-full overflow-y-auto">
+          <div className="flex w-full gap-4 flex-col lg:flex-row mb-4 justify-center items-center">
             <Canvas />
             <PropertiesContainer>
               <Properties />
