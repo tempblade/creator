@@ -3,15 +3,96 @@ import { PropertiesProps } from "./common";
 import { FC } from "react";
 import { z } from "zod";
 import { produce } from "immer";
-import { Interpolation } from "primitives/Interpolation";
+import { Interpolation, InterpolationType } from "primitives/Interpolation";
 import { Color } from "primitives/Paint";
-import { colorToString, parseColor, parseCssColor } from "@tempblade/common";
+import { parseCssColor } from "@tempblade/common";
 import { rgbToHex } from "utils";
+import { SpringInterpolation } from "primitives/Interpolation";
+import FloatInput from "components/Inputs/FloatInput";
+import { Keyframe } from "primitives/Keyframe";
 
-const InterpolationProperties: FC<
+const SpringInterpolationProperties: FC<
+  PropertiesProps<z.input<typeof SpringInterpolation>>
+> = ({ entity, onUpdate }) => {
+  return <div></div>;
+};
+
+export const InterpolationProperties: FC<
   PropertiesProps<z.input<typeof Interpolation>>
 > = ({ entity, onUpdate }) => {
-  return <div>Interpolation: {entity.type}</div>;
+  return (
+    <fieldset>
+      <label className="label" htmlFor="interpolation-type">
+        Interpolation Type
+      </label>
+      <select
+        id="interpolation-type"
+        onChange={(e) => {
+          onUpdate({
+            ...entity,
+            type: e.target.value as any,
+          });
+        }}
+        value={entity.type}
+      >
+        {Object.keys(InterpolationType.Values).map((key) => (
+          <option key={key} value={key}>
+            {key}
+          </option>
+        ))}
+      </select>
+    </fieldset>
+  );
+};
+
+export const KeyframeProperties: FC<
+  PropertiesProps<z.input<typeof Keyframe>>
+> = ({ entity, onUpdate }) => {
+  return (
+    <>
+      <fieldset>
+        <label htmlFor="keyframe-offset">Offset</label>
+        <FloatInput
+          value={entity.offset}
+          onChange={(value) =>
+            onUpdate(
+              produce(entity, (draft) => {
+                draft.offset = value;
+              })
+            )
+          }
+          id="keyframe-offset"
+        />
+      </fieldset>
+      <fieldset>
+        <label>Value</label>
+        <FloatInput
+          value={entity.value}
+          onChange={(value) =>
+            onUpdate(
+              produce(entity, (draft) => {
+                draft.value = value;
+              })
+            )
+          }
+          id="keyframe-value"
+        />
+      </fieldset>
+
+      {entity.interpolation && (
+        <InterpolationProperties
+          onUpdate={(updatedEntity) =>
+            onUpdate(
+              produce(entity, (draft) => {
+                draft.interpolation = updatedEntity;
+              })
+            )
+          }
+          entity={entity.interpolation}
+        />
+      )}
+    </>
+  );
 };
 
 const AnimatedNumberProperties: FC<
@@ -23,51 +104,16 @@ const AnimatedNumberProperties: FC<
       {entity.keyframes.values.map((keyframe, index) => {
         return (
           <div key={index}>
-            <div className="flex flex-row gap-3">
-              <label className="flex flex-col items-start w-16">
-                <span className="label text-sm opacity-70">Offset</span>
-                <input
-                  value={keyframe.offset}
-                  onChange={(e) =>
-                    onUpdate(
-                      produce(entity, (draft) => {
-                        draft.keyframes.values[index].offset = Number(
-                          e.target.value
-                        );
-                      })
-                    )
-                  }
-                />
-              </label>
-              <label className="flex flex-col items-start">
-                <span className="label text-sm opacity-70">Value</span>
-                <input
-                  value={keyframe.value}
-                  onChange={(e) =>
-                    onUpdate(
-                      produce(entity, (draft) => {
-                        draft.keyframes.values[index].value = Number(
-                          e.target.value
-                        );
-                      })
-                    )
-                  }
-                />
-              </label>
-            </div>
-            {keyframe.interpolation && (
-              <InterpolationProperties
-                onUpdate={(updatedEntity) =>
-                  onUpdate(
-                    produce(entity, (draft) => {
-                      draft.keyframes.values[index].interpolation =
-                        updatedEntity;
-                    })
-                  )
-                }
-                entity={keyframe.interpolation}
-              />
-            )}
+            <KeyframeProperties
+              entity={keyframe}
+              onUpdate={(nextKeyframe) =>
+                onUpdate(
+                  produce(entity, (draft) => {
+                    draft.keyframes.values[index] = nextKeyframe;
+                  })
+                )
+              }
+            />
           </div>
         );
       })}

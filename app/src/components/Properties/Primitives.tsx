@@ -12,6 +12,13 @@ import { z } from "zod";
 import { AnimatedVec2Properties, ColorProperties } from "./Values";
 import { PropertiesProps } from "./common";
 import { useFontsStore } from "stores/fonts.store";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "components/Inputs/Select";
 
 type TextPropertiesProps = PropertiesProps<z.input<typeof AnimatedTextEntity>>;
 type StaggeredTextPropertiesProps = PropertiesProps<
@@ -29,13 +36,17 @@ export const PaintProperties: FC<PaintPropertiesProps> = ({
 }) => {
   return (
     <div>
-      <label className="flex flex-col items-start">
-        <span className="label">PaintStyle</span>
-        <select
-          value={entity.style.type}
-          onChange={(e) => {
-            if (entity.style.type !== e.target.value) {
-              const paintStyle = { type: e.target.value };
+      <fieldset>
+        <label htmlFor="staggered-text-letter-font">Font</label>
+      </fieldset>
+      <fieldset>
+        <label htmlFor="paint-style-type">PaintStyle</label>
+
+        <Select
+          defaultValue={entity.style.type}
+          onValueChange={(value) => {
+            if (entity.style.type !== value) {
+              const paintStyle = { type: value };
 
               const parsedPaintStyle = PaintStyle.parse(paintStyle);
 
@@ -43,13 +54,16 @@ export const PaintProperties: FC<PaintPropertiesProps> = ({
             }
           }}
         >
-          {Object.keys(PaintStyleType.Values).map((key) => (
-            <option key={key} value={key}>
-              {key}
-            </option>
-          ))}
-        </select>
-      </label>
+          <SelectTrigger>
+            <SelectValue placeholder="Choose a paint style" />
+          </SelectTrigger>
+          <SelectContent className="overflow-hidden">
+            {Object.keys(PaintStyleType.Values).map((paintStyleType) => (
+              <SelectItem value={paintStyleType}>{paintStyleType}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </fieldset>
       {entity.style.color && (
         <ColorProperties
           label="Color"
@@ -76,16 +90,18 @@ export const TextProperties: FC<TextPropertiesProps> = ({
       initial="from"
       transition={ease.quint(0.9).out}
     >
-      <label className="flex flex-col items-start">
-        <span className="label">Text</span>
+      <fieldset>
+        <label htmlFor="text-content">Text</label>
         <input
+          id="text-content"
           value={entity.text}
           onChange={(e) => onUpdate({ ...entity, text: e.target.value })}
         />
-      </label>
-      <label className="flex flex-col items-start">
-        <span className="label">Size</span>
+      </fieldset>
+      <fieldset>
+        <label htmlFor="text-size">Size</label>
         <input
+          id="text-size"
           value={entity.paint.size}
           onChange={(e) =>
             onUpdate({
@@ -93,40 +109,31 @@ export const TextProperties: FC<TextPropertiesProps> = ({
               paint: { ...entity.paint, size: Number(e.target.value) },
             })
           }
-        ></input>
-      </label>
-      <label className="flex flex-col items-start">
-        <span className="label">Font</span>
-        <select
-          onChange={(e) =>
+        />
+      </fieldset>
+      <fieldset>
+        <label htmlFor="text-font">Font</label>
+
+        <Select
+          defaultValue={entity.paint.font_name}
+          onValueChange={(val) => {
             onUpdate({
               ...entity,
               cache: { valid: false },
-              paint: { ...entity.paint, font_name: e.target.value },
-            })
-          }
-          value={entity.paint.font_name}
+              paint: { ...entity.paint, font_name: val },
+            });
+          }}
         >
-          {fonts.map((font) => (
-            <option value={font} key={font}>
-              {font}
-            </option>
-          ))}
-        </select>
-      </label>
-      <label>
-        <span className="label">Size</span>
-        <input
-          value={entity.paint.size}
-          onChange={(e) =>
-            onUpdate({
-              ...entity,
-              cache: { valid: false },
-              paint: { ...entity.paint, size: Number(e.target.value) },
-            })
-          }
-        ></input>
-      </label>
+          <SelectTrigger>
+            <SelectValue placeholder="Choose a font" />
+          </SelectTrigger>
+          <SelectContent>
+            {fonts.map((font) => (
+              <SelectItem value={font}>{font}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </fieldset>
     </motion.div>
   );
 };
@@ -144,9 +151,10 @@ export const StaggeredTextProperties: FC<StaggeredTextPropertiesProps> = ({
       initial="from"
       transition={ease.quint(0.9).out}
     >
-      <label className="flex flex-col items-start">
-        <span className="label">Text</span>
+      <fieldset>
+        <label htmlFor="staggered-text-content">Text</label>
         <input
+          id="staggered-text-content"
           value={entity.text}
           onChange={(e) =>
             onUpdate({
@@ -156,32 +164,36 @@ export const StaggeredTextProperties: FC<StaggeredTextPropertiesProps> = ({
             })
           }
         />
-      </label>
-      <label className="flex flex-col items-start">
-        <span className="label">Font</span>
-        <select
-          onChange={(e) => {
+      </fieldset>
+      <fieldset>
+        <label htmlFor="staggered-text-letter-font">Font</label>
+        <Select
+          defaultValue={entity.letter.paint.font_name}
+          onValueChange={(val) => {
             onUpdate({
               ...entity,
               cache: { valid: false },
               letter: {
                 ...entity.letter,
-                paint: { ...entity.letter.paint, font_name: e.target.value },
+                paint: { ...entity.letter.paint, font_name: val },
               },
             });
           }}
-          value={entity.letter.paint.font_name}
         >
-          {fonts.map((font) => (
-            <option value={font} key={font}>
-              {font}
-            </option>
-          ))}
-        </select>
-      </label>
-      <label className="flex flex-col items-start">
-        <span className="label">Size</span>
+          <SelectTrigger>
+            <SelectValue placeholder="Choose a font" />
+          </SelectTrigger>
+          <SelectContent className="overflow-hidden">
+            {fonts.map((font) => (
+              <SelectItem value={font}>{font}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </fieldset>
+      <fieldset>
+        <label htmlFor="staggered-text-letter-size">Size</label>
         <input
+          id="staggered-text-letter-size"
           value={entity.letter.paint.size}
           onChange={(e) =>
             onUpdate({
@@ -196,8 +208,8 @@ export const StaggeredTextProperties: FC<StaggeredTextPropertiesProps> = ({
               },
             })
           }
-        ></input>
-      </label>
+        />
+      </fieldset>
       <PaintProperties
         entity={entity.letter.paint}
         onUpdate={(paint) =>

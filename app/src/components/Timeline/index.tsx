@@ -3,7 +3,6 @@ import { Reorder } from "framer-motion";
 import TimePicker from "./Timepicker";
 import { useEntitiesStore } from "stores/entities.store";
 import Timestamp from "./Timestamp";
-import { flattenedKeyframesByEntity } from "utils";
 import { PauseIcon, PlayIcon } from "@radix-ui/react-icons";
 import { useRenderStateStore } from "stores/render-state.store";
 import Track from "./Track";
@@ -26,7 +25,7 @@ const Timeline: FC<TimelineProps> = () => {
   }));
 
   return (
-    <div className="flex flex-col p-4 border transition-colors focus-within:border-gray-400 border-gray-600 rounded-md">
+    <div className="flex flex-col grow shrink h-fit p-4 border transition-colors focus-within:border-gray-400 border-gray-600 rounded-md">
       <div className="flex flex-row">
         <div className="flex flex-row">
           <button onClick={() => setPlaying(true)} className="w-8 h-8">
@@ -38,7 +37,7 @@ const Timeline: FC<TimelineProps> = () => {
         </div>
         <Timestamp />
       </div>
-      <div className="gap-1 w-full flex flex-col overflow-x-auto">
+      <div className="gap-1 w-full flex flex-col overflow-x-auto overflow-y-visible">
         <div className="z-20 flex flex-row gap-2">
           <div className="flex-shrink-0 min-w-[200px]" />
           <TimePicker />
@@ -54,7 +53,6 @@ const Timeline: FC<TimelineProps> = () => {
               key={entity.id}
               name={entity.type}
               index={index}
-              keyframes={flattenedKeyframesByEntity(entity)}
               animationData={entity.animation_data}
             />
           ))}

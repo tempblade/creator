@@ -1,8 +1,7 @@
 import { ease } from "@unom/style";
 import { useDragControls, Reorder, motion } from "framer-motion";
 import { AnimationData, AnimatedEntity } from "primitives/AnimatedEntities";
-import { Keyframe } from "primitives/Keyframe";
-import { FC, useState } from "react";
+import { FC, memo, useState, useMemo } from "react";
 import { useEntitiesStore } from "stores/entities.store";
 import { z } from "zod";
 import { shallow } from "zustand/shallow";
@@ -10,23 +9,22 @@ import KeyframeIndicator from "./KeyframeIndicator";
 import { TIMELINE_SCALE, calculateOffset } from "./common";
 import { TriangleDownIcon } from "@radix-ui/react-icons";
 import TrackPropertiesEditor from "./TrackPropertiesEditor";
+import { flattenedKeyframesByEntity } from "utils";
 
 type TrackProps = {
   animationData: z.input<typeof AnimationData>;
   name: string;
   index: number;
   entity: z.input<typeof AnimatedEntity>;
-  keyframes: Array<z.input<typeof Keyframe>>;
 };
 
-const Track: FC<TrackProps> = ({
-  keyframes,
-  animationData,
-  index,
-  name,
-  entity,
-}) => {
+const Track: FC<TrackProps> = ({ animationData, index, name, entity }) => {
   const controls = useDragControls();
+
+  const flattenedKeyframes = useMemo(
+    () => flattenedKeyframesByEntity(entity),
+    [entity]
+  );
 
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -91,7 +89,7 @@ const Track: FC<TrackProps> = ({
           className="flex h-full flex-row relative bg-gray-900 select-none shrink-0"
         >
           {!isExpanded &&
-            keyframes.map((keyframe, index) => (
+            flattenedKeyframes.map((keyframe, index) => (
               <KeyframeIndicator
                 animationData={animationData}
                 keyframe={keyframe}
@@ -205,4 +203,4 @@ const Track: FC<TrackProps> = ({
   );
 };
 
-export default Track;
+export default memo(Track);

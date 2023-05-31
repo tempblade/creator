@@ -13,6 +13,10 @@
     @apply text-lg;
   }
 
+  span {
+    @apply text-white;
+  }
+
   h1,
   h2,
   h3,
@@ -122,12 +126,12 @@
   }
 }
 
-.label {
-  @apply mb-1;
+label {
+  @apply mb-1 text-sm opacity-70;
 }
 
-label {
-  @apply mb-2;
+fieldset {
+  @apply mb-2 flex flex-col items-start w-16;
 }
 
 :root {

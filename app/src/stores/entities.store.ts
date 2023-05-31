@@ -15,7 +15,9 @@ interface EntitiesStore {
     index: number,
     entity: Partial<z.input<typeof AnimatedEntity>>
   ) => void;
-
+  createEntity: (
+    entity: z.input<typeof AnimatedEntity>
+  ) => z.input<typeof AnimatedEntity>;
   deleteEntity: (index: number) => void;
   updateEntityById: (
     id: string,
@@ -23,13 +25,20 @@ interface EntitiesStore {
   ) => void;
 }
 
-const useEntitiesStore = create<EntitiesStore>((set) => ({
+const useEntitiesStore = create<EntitiesStore>((set, get) => ({
   entities: EXAMPLE_ANIMATED_ENTITIES,
   selectedKeyframe: undefined,
   selectEntity: (index) => set(() => ({ selectedEntity: index })),
   deselectEntity: () => set(() => ({ selectedEntity: undefined })),
   selectedEntity: undefined,
-  setEntities: (entities) => set({ entities }),
+  setEntities: (entities) => {
+    console.log("set entities");
+    set({ entities });
+  },
+  createEntity: (entity) => {
+    set({ entities: [...get().entities, entity] });
+    return entity;
+  },
   updateEntityById: (id, entity) =>
     set(({ entities }) => {
       const nextEntities = produce(entities, (draft) => {

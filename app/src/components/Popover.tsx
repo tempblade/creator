@@ -1,10 +1,23 @@
 import * as React from "react";
 import * as PopoverPrimitive from "@radix-ui/react-popover";
 import { cn } from "utils";
+import { Cross2Icon } from "@radix-ui/react-icons";
 
 const Popover = PopoverPrimitive.Root;
 
 const PopoverTrigger = PopoverPrimitive.Trigger;
+
+const PopoverArrow = PopoverPrimitive.Arrow;
+
+const PopoverClose: React.FC<{ onClick?: () => void }> = ({ onClick }) => (
+  <PopoverPrimitive.Close
+    onClick={onClick}
+    className="rounded-full h-[25px] w-[25px] inline-flex items-center justify-center text-white absolute top-[5px] right-[5px] hover:bg-indigo-600 focus:shadow-[0_0_0_2px] focus:shadow-indigo-500 outline-none cursor-default"
+    aria-label="Close"
+  >
+    <Cross2Icon />
+  </PopoverPrimitive.Close>
+);
 
 const PopoverContent = React.forwardRef<
   React.ElementRef<typeof PopoverPrimitive.Content>,
@@ -25,4 +38,4 @@ const PopoverContent = React.forwardRef<
 ));
 PopoverContent.displayName = PopoverPrimitive.Content.displayName;
 
-export { Popover, PopoverTrigger, PopoverContent };
+export { Popover, PopoverTrigger, PopoverClose, PopoverContent, PopoverArrow };

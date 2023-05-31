@@ -9,6 +9,7 @@ import { AnimatedNumber, AnimatedVec2, AnimatedVec3 } from "primitives/Values";
 import { useKeyframeStore } from "stores/keyframe.store";
 import { produce } from "immer";
 import KeyframePopover from "./KeyframePopover";
+import { Popover, PopoverContent, PopoverTrigger } from "components/Popover";
 
 const KeyframeIndicator: FC<{
   keyframe: z.input<typeof Keyframe>;
@@ -51,66 +52,70 @@ const KeyframeIndicator: FC<{
 
   return (
     <>
-      <motion.div
-        drag="x"
-        variants={{
-          enter: {},
-          from: {},
-          exit: {},
-          tap: {},
-          drag: {},
-        }}
-        data-selected={selected}
-        onDragStart={() => setIsDragged(true)}
-        onDragEnd={(e, info) => {
-          e.preventDefault();
-          setIsDragged(false);
-          if (onUpdate) {
-            handleUpdate(info);
-          }
-        }}
-        onMouseDown={(e) => e.preventDefault()}
-        dragConstraints={{ left: 0 }}
-        initial={{
-          x: (animationData.offset + keyframe.offset) * TIMELINE_SCALE + 4,
-          scale: 0,
-        }}
-        whileTap={{
-          scale: 1.6,
-        }}
-        animate={{
-          x: (animationData.offset + keyframe.offset) * TIMELINE_SCALE + 4,
-          scale: 1,
-        }}
-        transition={ease.quint(0.4).out}
-        onClick={() => {
-          if (isDragged) {
-            if (!selected) selectKeyframe(keyframe.id);
-          } else {
-            selected ? deselectKeyframe() : selectKeyframe(keyframe.id);
-          }
-        }}
-        className="h-full absolute z-30 select-none w-3 flex items-center justify-center filter
+      <Popover modal={false} open={selected}>
+        <PopoverTrigger asChild>
+          <motion.div
+            drag="x"
+            variants={{
+              enter: {},
+              from: {},
+              exit: {},
+              tap: {},
+              drag: {},
+            }}
+            data-selected={selected}
+            onDragStart={() => setIsDragged(true)}
+            onDragEnd={(e, info) => {
+              e.preventDefault();
+              setIsDragged(false);
+              if (onUpdate) {
+                handleUpdate(info);
+              }
+            }}
+            dragConstraints={{ left: 0 }}
+            initial={{
+              x: (animationData.offset + keyframe.offset) * TIMELINE_SCALE + 2,
+              scale: 0,
+            }}
+            whileTap={{
+              scale: 1.6,
+            }}
+            animate={{
+              x: (animationData.offset + keyframe.offset) * TIMELINE_SCALE + 2,
+              scale: 1,
+            }}
+            transition={ease.quint(0.4).out}
+            onClick={() => {
+              if (isDragged) {
+                if (!selected) selectKeyframe(keyframe.id);
+              } else {
+                selected ? deselectKeyframe() : selectKeyframe(keyframe.id);
+              }
+            }}
+            className="h-full absolute z-30 select-none w-3 flex items-center justify-center filter
       data-[selected=true]:drop-shadow-[0px_2px_6px_rgba(230,230,255,1)] transition-colors"
-      >
-        <KeyframePopover
-          onUpdate={handleValueUpdate}
-          keyframe={keyframe}
-          open={selected}
-        />
-
-        <motion.span
-          data-selected={selected}
-          className="bg-gray-200 
+          >
+            <motion.span
+              data-selected={selected}
+              className="bg-gray-200 
         data-[selected=true]:bg-indigo-600 
         h-full transition-colors"
-          style={{
-            width: 10,
-            height: 10,
-            clipPath: "polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)",
-          }}
-        />
-      </motion.div>
+              style={{
+                width: 10,
+                height: 10,
+                clipPath: "polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)",
+              }}
+            />
+          </motion.div>
+        </PopoverTrigger>
+        <PopoverContent className="w-80 backdrop-blur-md bg-slate-700/50">
+          <KeyframePopover
+            onClose={() => deselectKeyframe()}
+            onUpdate={handleValueUpdate}
+            keyframe={keyframe}
+          />
+        </PopoverContent>
+      </Popover>
     </>
   );
 };

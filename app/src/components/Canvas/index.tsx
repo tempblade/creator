@@ -1,9 +1,5 @@
 import { FC, useMemo } from "react";
 import { useEffect, useRef, useState } from "react";
-import { useTimelineStore } from "stores/timeline.store";
-import { useRenderStateStore } from "stores/render-state.store";
-import { useEntitiesStore } from "stores/entities.store";
-import { Drawer } from "drawers/draw";
 import { PlaybackService } from "services/playback.service";
 
 type CanvasProps = {};

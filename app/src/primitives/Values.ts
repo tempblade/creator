@@ -87,3 +87,18 @@ export function staticAnimatedVec3(
     ],
   };
 }
+
+export function staticAnimatedTransform(
+  translate: [number, number],
+  scale: [number, number],
+  rotate: [number, number, number],
+  skew: [number, number]
+): z.input<typeof AnimatedTransform> {
+  return {
+    type: "Transform",
+    translate: staticAnimatedVec2(...translate),
+    scale: staticAnimatedVec2(...scale),
+    rotate: staticAnimatedVec3(...rotate),
+    skew: staticAnimatedVec2(...skew),
+  };
+}
