@@ -5,7 +5,7 @@ import {
 } from "primitives/AnimatedEntities";
 import { AnimatedProperty } from "primitives/AnimatedProperty";
 import { AnimatedVec2, ValueType } from "primitives/Values";
-import { FC, useCallback, useMemo, useState } from "react";
+import { FC, memo, useCallback, useMemo, useState } from "react";
 import { z } from "zod";
 import {
   AnimatedNumberKeyframeIndicator,
@@ -84,20 +84,32 @@ const TrackAnimatedProperty: FC<{
         <h4>{animatedProperty.label}</h4>
         <ToggleGroup>
           <ToggleGroupItem
-            onClick={() => setSelectedDimension("x")}
+            onClick={() =>
+              selectedDimension === "x"
+                ? setSelectedDimension(undefined)
+                : setSelectedDimension("x")
+            }
             selected={selectedDimension === "x"}
           >
             X
           </ToggleGroupItem>
           <ToggleGroupItem
-            onClick={() => setSelectedDimension("y")}
+            onClick={() =>
+              selectedDimension === "y"
+                ? setSelectedDimension(undefined)
+                : setSelectedDimension("y")
+            }
             selected={selectedDimension === "y"}
           >
             Y
           </ToggleGroupItem>
           {animatedProperty.animatedValue.type === ValueType.Enum.Vec3 && (
             <ToggleGroupItem
-              onClick={() => setSelectedDimension("z")}
+              onClick={() =>
+                selectedDimension === "z"
+                  ? setSelectedDimension(undefined)
+                  : setSelectedDimension("z")
+              }
               selected={selectedDimension === "z"}
             >
               Z
@@ -141,6 +153,8 @@ const TrackPropertiesEditor: FC<{
 
       const parsedEntity = AnimatedEntity.parse(nextValue);
 
+      console.log("reacreated callback");
+
       entitiesStore.updateEntityById(parsedEntity.id, parsedEntity);
     },
     [entity]
@@ -167,4 +181,4 @@ const TrackPropertiesEditor: FC<{
   );
 };
 
-export default TrackPropertiesEditor;
+export default memo(TrackPropertiesEditor);

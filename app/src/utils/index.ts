@@ -2,6 +2,8 @@ import { AnimatedEntity } from "primitives/AnimatedEntities";
 import { Keyframe } from "primitives/Keyframe";
 import { AnimatedNumber, AnimatedVec2, AnimatedVec3 } from "primitives/Values";
 import { z } from "zod";
+import { ClassValue, clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
 
 export function flattenAnimatedNumberKeyframes(
   aNumber: z.input<typeof AnimatedNumber>
@@ -111,4 +113,8 @@ export function set(object: any, path: string, value: any) {
     ...object,
     [base]: value,
   };
+}
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
 }

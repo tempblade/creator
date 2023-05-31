@@ -2,12 +2,13 @@ import { ease } from "@unom/style";
 import { PanInfo, motion } from "framer-motion";
 import { AnimationData } from "primitives/AnimatedEntities";
 import { Keyframe } from "primitives/Keyframe";
-import { FC, useCallback, useState } from "react";
+import { FC, useCallback, useMemo, useState } from "react";
 import { z } from "zod";
 import { TIMELINE_SCALE, calculateOffset } from "./common";
 import { AnimatedNumber, AnimatedVec2, AnimatedVec3 } from "primitives/Values";
 import { useKeyframeStore } from "stores/keyframe.store";
 import { produce } from "immer";
+import KeyframePopover from "./KeyframePopover";
 
 const KeyframeIndicator: FC<{
   keyframe: z.input<typeof Keyframe>;
@@ -16,8 +17,6 @@ const KeyframeIndicator: FC<{
 }> = ({ keyframe, animationData, onUpdate }) => {
   const { selectedKeyframe, selectKeyframe, deselectKeyframe } =
     useKeyframeStore();
-
-  const selected = selectedKeyframe === keyframe.id;
 
   const handleUpdate = useCallback(
     (info: PanInfo) => {
@@ -34,59 +33,85 @@ const KeyframeIndicator: FC<{
     [onUpdate, animationData, keyframe]
   );
 
+  const handleValueUpdate = useCallback(
+    (keyframe: z.input<typeof Keyframe>) => {
+      if (onUpdate) {
+        onUpdate(keyframe);
+      }
+    },
+    [onUpdate]
+  );
+
+  const selected = useMemo(
+    () => selectedKeyframe === keyframe.id,
+    [keyframe.id, selectedKeyframe]
+  );
+
   const [isDragged, setIsDragged] = useState(false);
 
   return (
-    <motion.div
-      drag="x"
-      variants={{
-        enter: {},
-        from: {},
-        exit: {},
-        tap: {},
-        drag: {},
-      }}
-      data-selected={selected}
-      onDragStart={() => setIsDragged(true)}
-      onDragEnd={(e, info) => {
-        e.preventDefault();
-        setIsDragged(false);
-        if (onUpdate) {
-          handleUpdate(info);
-        }
-      }}
-      onMouseDown={(e) => e.preventDefault()}
-      dragConstraints={{ left: 0 }}
-      initial={{
-        x: (animationData.offset + keyframe.offset) * TIMELINE_SCALE + 4,
-        scale: 0,
-      }}
-      whileTap={{ scale: 1.1 }}
-      animate={{
-        x: (animationData.offset + keyframe.offset) * TIMELINE_SCALE + 4,
-        scale: 1,
-      }}
-      transition={ease.quint(0.4).out}
-      onClick={() => {
-        if (!isDragged) {
-          selected ? deselectKeyframe() : selectKeyframe(keyframe.id);
-        }
-      }}
-      className="h-full absolute z-30 select-none w-3 flex items-center justify-center filter
-      data-[selected=true]:drop-shadow-[0px_2px_6px_rgba(255,255,255,1)] transition-colors"
-    >
-      <span
+    <>
+      <motion.div
+        drag="x"
+        variants={{
+          enter: {},
+          from: {},
+          exit: {},
+          tap: {},
+          drag: {},
+        }}
         data-selected={selected}
-        className="bg-gray-200 
+        onDragStart={() => setIsDragged(true)}
+        onDragEnd={(e, info) => {
+          e.preventDefault();
+          setIsDragged(false);
+          if (onUpdate) {
+            handleUpdate(info);
+          }
+        }}
+        onMouseDown={(e) => e.preventDefault()}
+        dragConstraints={{ left: 0 }}
+        initial={{
+          x: (animationData.offset + keyframe.offset) * TIMELINE_SCALE + 4,
+          scale: 0,
+        }}
+        whileTap={{
+          scale: 1.6,
+        }}
+        animate={{
+          x: (animationData.offset + keyframe.offset) * TIMELINE_SCALE + 4,
+          scale: 1,
+        }}
+        transition={ease.quint(0.4).out}
+        onClick={() => {
+          if (isDragged) {
+            if (!selected) selectKeyframe(keyframe.id);
+          } else {
+            selected ? deselectKeyframe() : selectKeyframe(keyframe.id);
+          }
+        }}
+        className="h-full absolute z-30 select-none w-3 flex items-center justify-center filter
+      data-[selected=true]:drop-shadow-[0px_2px_6px_rgba(230,230,255,1)] transition-colors"
+      >
+        <KeyframePopover
+          onUpdate={handleValueUpdate}
+          keyframe={keyframe}
+          open={selected}
+        />
+
+        <motion.span
+          data-selected={selected}
+          className="bg-gray-200 
         data-[selected=true]:bg-indigo-600 
         h-full transition-colors"
-        style={{
-          width: 10,
-          height: 10,
-          clipPath: "polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)",
-        }}
-      />
-    </motion.div>
+          style={{
+            width: 10,
+            height: 10,
+            clipPath: "polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)",
+          }}
+        />
+      </motion.div>
+    </>
   );
 };
 
