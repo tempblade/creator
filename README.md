@@ -6,6 +6,11 @@ tempblade creator is a motion design application, build with typescript, skia, r
 Its currently in an early alpha stage, and there may be larger design changes to the overall structuring
 of the project.
 
+## Why?
+
+Currently there isn't really an open source 2D motion design tool, and there is no tool that runs on linux, even if you're willing
+to pay monthly. You could use blender, but its really not optimized for this use case (source: i've tried).
+
 ## How does it work?
 
 Currently rust is used for things like keyframe interpolation and overall timeline calculation which then gets passed
@@ -21,6 +26,10 @@ to the frontend in javascript/typescript. This happens using tauris IPC.
 - Fully typed
 - Multithreaded timeline/keyframe interpolation calculation using rayon
 - Runtime typesafety thanks to zod in typescript
+- Easy theming thanks to tailwindcss
+- Cross platform font discovery and loading in rust thanks to FontKit
+- Caching of skia entity instances like fonts etc.
+- Pretty fast (if compared to After Effects)
 
 ### Features currently w.i.p
 
