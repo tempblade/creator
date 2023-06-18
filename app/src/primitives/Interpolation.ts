@@ -36,13 +36,13 @@ export const LinearInterpolation = z.object({
 
 export const EasingFunctionInterpolation = z.object({
   type: z.literal(InterpolationType.Enum.EasingFunction),
-  easing_function: EasingFunction,
+  easing_function: EasingFunction.default("CircOut"),
 });
 
 export const SpringInterpolation = z.object({
-  mass: z.number(),
-  damping: z.number(),
-  stiffness: z.number(),
+  mass: z.number().default(1),
+  damping: z.number().default(15),
+  stiffness: z.number().default(200),
   type: z.literal(InterpolationType.Enum.Spring),
 });
 

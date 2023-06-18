@@ -9,7 +9,7 @@ import {
 import { Paint, PaintStyle, PaintStyleType } from "primitives/Paint";
 import { FC } from "react";
 import { z } from "zod";
-import { AnimatedVec2Properties, ColorProperties } from "./Values";
+import { ColorProperties } from "./Values";
 import { PropertiesProps } from "./common";
 import { useFontsStore } from "stores/fonts.store";
 import {
@@ -57,7 +57,7 @@ export const PaintProperties: FC<PaintPropertiesProps> = ({
           <SelectTrigger>
             <SelectValue placeholder="Choose a paint style" />
           </SelectTrigger>
-          <SelectContent className="overflow-hidden">
+          <SelectContent id="paint-style-type" className="overflow-hidden">
             {Object.keys(PaintStyleType.Values).map((paintStyleType) => (
               <SelectItem value={paintStyleType}>{paintStyleType}</SelectItem>
             ))}

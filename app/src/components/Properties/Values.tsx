@@ -4,12 +4,19 @@ import { FC } from "react";
 import { z } from "zod";
 import { produce } from "immer";
 import { Interpolation, InterpolationType } from "primitives/Interpolation";
-import { Color } from "primitives/Paint";
+import { Color, PaintStyle, PaintStyleType } from "primitives/Paint";
 import { parseCssColor } from "@tempblade/common";
 import { rgbToHex } from "utils";
 import { SpringInterpolation } from "primitives/Interpolation";
 import FloatInput from "components/Inputs/FloatInput";
 import { Keyframe } from "primitives/Keyframe";
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "components/Inputs/Select";
 
 const SpringInterpolationProperties: FC<
   PropertiesProps<z.input<typeof SpringInterpolation>>
@@ -25,22 +32,29 @@ export const InterpolationProperties: FC<
       <label className="label" htmlFor="interpolation-type">
         Interpolation Type
       </label>
-      <select
-        id="interpolation-type"
-        onChange={(e) => {
-          onUpdate({
-            ...entity,
-            type: e.target.value as any,
-          });
+      <Select
+        defaultValue={entity.type}
+        onValueChange={(value) => {
+          if (entity.type !== value) {
+            const interpolation = { type: value };
+
+            const parsedInterpolation = Interpolation.parse(interpolation);
+
+            onUpdate(parsedInterpolation);
+          }
         }}
-        value={entity.type}
       >
-        {Object.keys(InterpolationType.Values).map((key) => (
-          <option key={key} value={key}>
-            {key}
-          </option>
-        ))}
-      </select>
+        <SelectTrigger>
+          <SelectValue placeholder="Choose an interpolation type" />
+        </SelectTrigger>
+        <SelectContent id="interpolation-type" className="overflow-hidden">
+          {Object.keys(InterpolationType.Values).map((interpolationType) => (
+            <SelectItem key={interpolationType} value={interpolationType}>
+              {interpolationType}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
     </fieldset>
   );
 };
@@ -129,35 +143,35 @@ export const ColorProperties: FC<
 > = ({ entity, onUpdate, mode = "Picker" }) => {
   if (mode === "Picker") {
     return (
-      <label className="flex flex-col items-start">
-        <span className="label">Color</span>
-        <div className="flex flex-row gap-3">
-          <input
-            value={rgbToHex(entity.value[0], entity.value[1], entity.value[2])}
-            type="color"
-            style={{
-              width: 32,
-              height: 32,
-              backgroundColor: rgbToHex(
-                entity.value[0],
-                entity.value[1],
-                entity.value[2]
-              ),
-            }}
-            onChange={(e) =>
-              onUpdate(
-                produce(entity, (draft) => {
-                  const color = parseCssColor(e.target.value);
+      <fieldset>
+        <label htmlFor="color">Color</label>
+        <input
+          id="color"
+          value={rgbToHex(entity.value[0], entity.value[1], entity.value[2])}
+          type="color"
+          style={{
+            border: "none",
+            width: 32,
+            height: 32,
+            backgroundColor: rgbToHex(
+              entity.value[0],
+              entity.value[1],
+              entity.value[2]
+            ),
+          }}
+          onChange={(e) =>
+            onUpdate(
+              produce(entity, (draft) => {
+                const color = parseCssColor(e.target.value);
 
-                  if (color) {
-                    draft.value = [...color, 1.0];
-                  }
-                })
-              )
-            }
-          />
-        </div>
-      </label>
+                if (color) {
+                  draft.value = [...color, 1.0];
+                }
+              })
+            )
+          }
+        />
+      </fieldset>
     );
   }
 

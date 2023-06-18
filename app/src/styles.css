@@ -131,7 +131,7 @@ label {
 }
 
 fieldset {
-  @apply mb-2 flex flex-col items-start w-16;
+  @apply mb-2 flex flex-col items-start;
 }
 
 :root {
