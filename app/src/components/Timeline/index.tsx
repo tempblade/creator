@@ -6,6 +6,8 @@ import Timestamp from "./Timestamp";
 import { PauseIcon, PlayIcon } from "@radix-ui/react-icons";
 import { useRenderStateStore } from "stores/render-state.store";
 import Track from "./Track";
+import * as ScrollArea from "@radix-ui/react-scroll-area";
+import ScrollBar from "components/ScrollArea";
 
 export type AnimationEntity = {
   offset: number;
@@ -37,27 +39,34 @@ const Timeline: FC<TimelineProps> = () => {
         </div>
         <Timestamp />
       </div>
-      <div className="gap-1 w-full flex flex-col overflow-x-auto overflow-y-visible">
-        <div className="z-20 flex flex-row gap-2">
-          <div className="flex-shrink-0 min-w-[200px]" />
-          <TimePicker />
+      <ScrollArea.Root>
+        <ScrollArea.Viewport className="w-full h-full">
+          <div className="gap-1 w-full flex flex-col">
+            <div className="z-20 flex flex-row gap-1">
+              <div className="flex-shrink-0 min-w-[200px]" />
+              <TimePicker />
+            </div>
+            <Reorder.Group
+              className="gap-1 flex flex-col"
+              values={entities}
+              onReorder={setEntities}
+            >
+              {entities.map((entity, index) => (
+                <Track
+                  entity={entity}
+                  key={entity.id}
+                  name={entity.type}
+                  index={index}
+                  animationData={entity.animation_data}
+                />
+              ))}
+            </Reorder.Group>
+          </div>
+        </ScrollArea.Viewport>
+        <div className="h-4 sticky bottom-0">
+          <ScrollBar orientation="horizontal" />
         </div>
-        <Reorder.Group
-          className="gap-1 flex flex-col"
-          values={entities}
-          onReorder={setEntities}
-        >
-          {entities.map((entity, index) => (
-            <Track
-              entity={entity}
-              key={entity.id}
-              name={entity.type}
-              index={index}
-              animationData={entity.animation_data}
-            />
-          ))}
-        </Reorder.Group>
-      </div>
+      </ScrollArea.Root>
     </div>
   );
 };

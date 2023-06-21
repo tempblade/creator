@@ -1,4 +1,4 @@
-use std::cmp::Ordering;
+use std::{cmp::Ordering, sync::Arc};
 
 use serde::{Deserialize, Serialize};
 
@@ -12,8 +12,24 @@ use super::{
 pub struct Keyframe {
     pub value: f32,
     pub offset: f32,
-    pub id: String,
+    pub id: Arc<str>,
     pub interpolation: Option<InterpolationType>,
+}
+
+impl Keyframe {
+    pub fn new(
+        value: f32,
+        offset: f32,
+        id: Arc<str>,
+        interpolation: Option<InterpolationType>,
+    ) -> Self {
+        Keyframe {
+            value,
+            offset,
+            id,
+            interpolation,
+        }
+    }
 }
 
 #[derive(Debug, Clone)]

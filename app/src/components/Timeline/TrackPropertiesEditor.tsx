@@ -78,10 +78,10 @@ const TrackAnimatedProperty: FC<{
     <motion.div
       transition={ease.quint(0.8).out}
       variants={{ enter: { y: 0, opacity: 1 }, from: { y: -10, opacity: 0 } }}
-      className="flex flex-row bg-slate-900 ml-2 align-center"
+      className="flex flex-row bg-neutral-accent ml-2 align-center"
     >
       <div className="min-w-[195px] flex flex-row justify-between px-2">
-        <h4>{animatedProperty.label}</h4>
+        <h4 className="text-main/70">{animatedProperty.label}</h4>
         <ToggleGroup>
           <ToggleGroupItem
             onClick={() =>

@@ -29,7 +29,7 @@ impl AnimatedFloat {
         AnimatedFloat {
             keyframes: Keyframes {
                 values: vec![Keyframe {
-                    id: Uuid::new_v4().to_string(),
+                    id: Uuid::new_v4().to_string().into(),
                     value: val,
                     offset: 0.0,
                     interpolation: None,

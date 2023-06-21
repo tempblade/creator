@@ -17,32 +17,21 @@
     @apply text-white;
   }
 
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6,
-  a,
-  label {
-    @apply dark:text-white;
-  }
-
   a {
     @apply text-blue-600 underline;
   }
 
   select,
   input {
-    @apply box-border bg-gray-900 shadow-indigo-100 hover:shadow-indigo-400 
-    focus:shadow-indigo-600 selection:bg-indigo-400 selection:text-black 
+    @apply box-border bg-transparent shadow-main/10 hover:shadow-primary/50
+    focus:ring-primary focus:ring-2 focus:ring-offset-2
+    focus:shadow-primary selection:bg-secondary selection:text-black 
     outline-none px-3 py-2 rounded-md shadow-[0_0_0_1px];
   }
 
   input {
     @apply appearance-none items-center justify-center 
-     w-full  text-base leading-none
-   text-white transition-all;
+     w-full  text-base leading-none transition-all;
   }
 
   select {
@@ -50,78 +39,39 @@
   }
 
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 47.4% 11.2%;
+    --color-main: 0 0% 0%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --color-secondary: 0 0% 10%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 47.4% 11.2%;
+    --color-neutral: 0 0% 100%;
+    --color-neutral-accent: 0 0% 90%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 47.4% 11.2%;
+    --color-highlight: 0 0% 0%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-
-    --destructive: 0 100% 50%;
-    --destructive-foreground: 210 40% 98%;
-
-    --ring: 215 20.2% 65.1%;
-
-    --radius: 0.5rem;
+    --color-primary: 222.2 47.4% 11.2%;
   }
 
-  .dark {
-    --background: 224 71% 4%;
-    --foreground: 213 31% 91%;
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --color-main: 0 0% 100%;
 
-    --muted: 223 47% 11%;
-    --muted-foreground: 215.4 16.3% 56.9%;
+      --color-primary: 260 80% 50%;
+      --color-secondary: 260 50% 70%;
 
-    --popover: 224 71% 4%;
-    --popover-foreground: 215 20.2% 65.1%;
+      --color-neutral: 250 30% 8%;
+      --color-neutral-accent: 250 40% 12%;
 
-    --card: 224 71% 4%;
-    --card-foreground: 213 31% 91%;
-
-    --border: 216 34% 17%;
-    --input: 216 34% 17%;
-
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 1.2%;
-
-    --secondary: 222.2 47.4% 11.2%;
-    --secondary-foreground: 210 40% 98%;
-
-    --accent: 216 34% 17%;
-    --accent-foreground: 210 40% 98%;
-
-    --destructive: 0 63% 31%;
-    --destructive-foreground: 210 40% 98%;
-
-    --ring: 216 34% 17%;
-
-    --radius: 0.5rem;
+      --color-highlight: 250 20% 15%;
+    }
   }
 }
 
 @layer base {
   * {
-    @apply border-border;
+    @apply border-highlight;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-neutral text-main;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
 }

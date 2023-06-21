@@ -45,7 +45,7 @@ const Track: FC<TrackProps> = ({ animationData, index, name, entity }) => {
       dragListener={false}
       dragControls={controls}
       onMouseDown={(e) => e.preventDefault()}
-      className="min-h-8 relative flex flex-1 flex-col gap-1 select-none"
+      className="h-6 relative flex flex-1 flex-col gap-1 select-none"
     >
       <motion.div
         layout
@@ -56,7 +56,7 @@ const Track: FC<TrackProps> = ({ animationData, index, name, entity }) => {
           onMouseDown={(e) => e.preventDefault()}
           onPointerDown={(e) => controls.start(e)}
           className={`h-full transition-all rounded-sm min-w-[200px] p-1 px-2 flex flex-col ${
-            selectedEntity === index ? "bg-gray-800" : "bg-gray-900"
+            selectedEntity === index ? "bg-highlight" : "bg-neutral-accent"
           }`}
         >
           <div className="flex flex-row">
@@ -77,17 +77,18 @@ const Track: FC<TrackProps> = ({ animationData, index, name, entity }) => {
                   ? deselectEntity()
                   : selectEntity(index)
               }
-              className="text-white-800 select-none cursor-pointer"
+              className="text-white-800 h-2 text-base leading-loose font-semibold select-none cursor-pointer"
             >
               {name}
             </h3>
           </div>
         </div>
 
-        <div
-          style={{ width: TIMELINE_SCALE * 10 }}
-          className="flex h-full flex-row relative bg-gray-900 select-none shrink-0"
-        >
+        <div className="flex h-full w-full flex-row relative rounded-sm bg-neutral-accent/50 select-none shrink-0">
+          <div
+            className="absolute top-0 h-full bg-neutral-accent"
+            style={{ width: TIMELINE_SCALE * 10 }}
+          />
           {!isExpanded &&
             flattenedKeyframes.map((keyframe, index) => (
               <KeyframeIndicator
@@ -132,10 +133,10 @@ const Track: FC<TrackProps> = ({ animationData, index, name, entity }) => {
                 },
               });
             }}
-            className="z-10 w-4 bg-slate-500 h-8 top-1 absolute rounded-md select-none cursor-w-resize"
+            className="z-10 w-4 bg-primary/80 h-full top-0 absolute rounded-md select-none cursor-w-resize"
           />
           <motion.div
-            className="z-10 w-4 bg-slate-500 h-8 top-1 absolute rounded-md select-none cursor-e-resize"
+            className="z-10 w-4 bg-primary/80 h-full top-0 absolute rounded-md select-none cursor-e-resize"
             onMouseDown={(e) => e.preventDefault()}
             drag="x"
             animate={{
@@ -194,7 +195,7 @@ const Track: FC<TrackProps> = ({ animationData, index, name, entity }) => {
                 },
               });
             }}
-            className="z-5 h-8 top-1 absolute rounded-md transition-colors bg-gray-700 hover:bg-gray-600 select-none cursor-grab"
+            className="z-5 h-full top-0 absolute rounded-md transition-colors bg-primary/30 hover:bg-primary/50 select-none cursor-grab"
           ></motion.div>
         </div>
       </motion.div>

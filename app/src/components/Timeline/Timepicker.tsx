@@ -21,11 +21,11 @@ const TimePicker: FC<TimePickerProps> = () => {
       step={1}
       aria-label="Current Frame"
     >
-      <Slider.Track className="bg-blackA10 relative grow rounded-full h-[3px]">
-        <Slider.Range className="absolute bg-white rounded-full h-full" />
+      <Slider.Track className="bg-neutral-accent relative grow rounded-full h-[3px]">
+        <Slider.Range className="absolute bg-main rounded-full h-full" />
       </Slider.Track>
       <Slider.Thumb
-        className="block w-5 h-5 bg-white shadow-[0_2px_10px] shadow-blackA7 rounded-[10px] hover:bg-violet3 focus:outline-none focus:shadow-[0_0_0_5px] focus:shadow-blackA8"
+        className="transition-colors block w-4 h-4 bg-main shadow-[0_2px_10px] shadow-main/20 rounded-[10px] hover:bg-secondary focus:outline-none focus:shadow-[0_0_0_2px] focus:shadow-main"
         aria-label="Volume"
       />
     </Slider.Root>

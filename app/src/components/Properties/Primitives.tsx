@@ -37,11 +37,7 @@ export const PaintProperties: FC<PaintPropertiesProps> = ({
   return (
     <div>
       <fieldset>
-        <label htmlFor="staggered-text-letter-font">Font</label>
-      </fieldset>
-      <fieldset>
         <label htmlFor="paint-style-type">PaintStyle</label>
-
         <Select
           defaultValue={entity.style.type}
           onValueChange={(value) => {

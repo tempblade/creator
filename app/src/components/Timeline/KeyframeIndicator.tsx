@@ -79,6 +79,14 @@ const KeyframeIndicator: FC<{
             }}
             whileTap={{
               scale: 1.6,
+              transition: {
+                scale: {
+                  type: "spring",
+                  stiffness: 200,
+                  damping: 10,
+                  mass: 1,
+                },
+              },
             }}
             animate={{
               x: (animationData.offset + keyframe.offset) * TIMELINE_SCALE + 2,
@@ -97,8 +105,8 @@ const KeyframeIndicator: FC<{
           >
             <motion.span
               data-selected={selected}
-              className="bg-gray-200 
-        data-[selected=true]:bg-indigo-600 
+              className="bg-secondary 
+        data-[selected=true]:bg-secondary
         h-full transition-colors"
               style={{
                 width: 10,
@@ -108,7 +116,7 @@ const KeyframeIndicator: FC<{
             />
           </motion.div>
         </PopoverTrigger>
-        <PopoverContent className="w-80 backdrop-blur-md bg-slate-700/50">
+        <PopoverContent className="w-80 backdrop-blur-md bg-neutral/50">
           <KeyframePopover
             onClose={() => deselectKeyframe()}
             onUpdate={handleValueUpdate}

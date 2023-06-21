@@ -70,7 +70,7 @@ fn build_bg(offset: f32, paint: Paint, size: (i32, i32)) -> AnimatedRectEntity {
                     keyframes: Keyframes {
                         values: vec![
                             Keyframe {
-                                id: "1".to_string(),
+                                id: "1".into(),
                                 value: (size.0 * -1) as f32,
                                 offset: 0.0,
                                 interpolation: Some(InterpolationType::EasingFunction(
@@ -78,7 +78,7 @@ fn build_bg(offset: f32, paint: Paint, size: (i32, i32)) -> AnimatedRectEntity {
                                 )),
                             },
                             Keyframe {
-                                id: "2".to_string(),
+                                id: "2".into(),
                                 value: 0.0,
                                 offset: 5.0,
                                 interpolation: None,
@@ -89,7 +89,7 @@ fn build_bg(offset: f32, paint: Paint, size: (i32, i32)) -> AnimatedRectEntity {
                 AnimatedFloat {
                     keyframes: Keyframes {
                         values: vec![Keyframe {
-                            id: "3".to_string(),
+                            id: "3".into(),
                             value: 0.0,
                             offset: 0.0,
                             interpolation: None,
@@ -103,7 +103,7 @@ fn build_bg(offset: f32, paint: Paint, size: (i32, i32)) -> AnimatedRectEntity {
                 AnimatedFloat {
                     keyframes: Keyframes {
                         values: vec![Keyframe {
-                            id: "4".to_string(),
+                            id: "4".into(),
                             interpolation: None,
                             value: size.0 as f32,
                             offset: 0.0,
@@ -113,7 +113,7 @@ fn build_bg(offset: f32, paint: Paint, size: (i32, i32)) -> AnimatedRectEntity {
                 AnimatedFloat {
                     keyframes: Keyframes {
                         values: vec![Keyframe {
-                            id: "5".to_string(),
+                            id: "5".into(),
                             value: size.1 as f32,
                             offset: 0.0,
                             interpolation: None,
@@ -159,7 +159,7 @@ pub fn test_timeline_entities_at_frame(
             color: Color::new(0, 0, 0, 1.0),
             width: 10.0,
         }),
-        font_name: "Arial".to_string(),
+        font_name: "Arial".into(),
         align: TextAlign::Center,
         size: 20.0,
     };
@@ -168,7 +168,7 @@ pub fn test_timeline_entities_at_frame(
         style: PaintStyle::Fill(FillStyle {
             color: Color::new(0, 0, 0, 1.0),
         }),
-        font_name: "Arial".to_string(),
+        font_name: "Arial".into(),
         align: TextAlign::Center,
         size: 10.0,
     };
@@ -198,7 +198,7 @@ pub fn test_timeline_entities_at_frame(
                             keyframes: Keyframes {
                                 values: vec![
                                     Keyframe {
-                                        id: "1".to_string(),
+                                        id: "1".into(),
                                         value: 0.0,
                                         offset: 0.0,
                                         interpolation: Some(InterpolationType::Spring(
@@ -210,7 +210,7 @@ pub fn test_timeline_entities_at_frame(
                                         )),
                                     },
                                     Keyframe {
-                                        id: "2".to_string(),
+                                        id: "2".into(),
                                         value: (size.0 / 2) as f32,
                                         offset: 2.0,
                                         interpolation: None,
@@ -221,7 +221,7 @@ pub fn test_timeline_entities_at_frame(
                         AnimatedFloat {
                             keyframes: Keyframes {
                                 values: vec![Keyframe {
-                                    id: "3".to_string(),
+                                    id: "3".into(),
                                     value: (size.1 / 2) as f32,
                                     offset: 0.0,
                                     interpolation: None,
@@ -248,7 +248,7 @@ pub fn test_timeline_entities_at_frame(
                             keyframes: Keyframes {
                                 values: vec![
                                     Keyframe {
-                                        id: "5".to_string(),
+                                        id: "5".into(),
                                         value: 0.0,
                                         offset: 0.0,
                                         interpolation: Some(InterpolationType::Spring(
@@ -260,7 +260,7 @@ pub fn test_timeline_entities_at_frame(
                                         )),
                                     },
                                     Keyframe {
-                                        id: "6".to_string(),
+                                        id: "6".into(),
 
                                         value: (size.0 / 2) as f32,
                                         offset: 2.0,
@@ -272,7 +272,7 @@ pub fn test_timeline_entities_at_frame(
                         AnimatedFloat {
                             keyframes: Keyframes {
                                 values: vec![Keyframe {
-                                    id: "7".to_string(),
+                                    id: "7".into(),
                                     value: ((size.1 / 2) as f32) + 80.0,
                                     offset: 0.0,
                                     interpolation: None,
