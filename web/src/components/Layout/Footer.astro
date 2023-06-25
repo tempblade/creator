@@ -1,13 +1,25 @@
 ---
 import Section from "../Section.astro";
 
-type NavigationItem = {
-  path: string;
-  label: string;
-};
+enum NavigationItemType {
+  Link,
+  Text,
+}
+
+type NavigationItem =
+  | {
+      path: string;
+      label: string;
+      type: NavigationItemType.Link;
+    }
+  | {
+      type: NavigationItemType.Text;
+      content: string;
+    };
 
 type NavigationGroup = {
   title: string;
+  class?: string;
   items: Array<NavigationItem>;
 };
 
@@ -17,36 +29,60 @@ const tree: Array<NavigationGroup> = [
     items: [
       {
         path: "/",
+        type: NavigationItemType.Link,
         label: "Landing",
       },
       {
         path: "https://github.com/tempblade/creator",
+        type: NavigationItemType.Link,
         label: "GitHub",
       },
       {
         path: "https://tempblade.com",
+        type: NavigationItemType.Link,
         label: "tempblade",
       },
     ],
   },
   {
     title: "Legal",
-    items: [{ path: "/legal/imprint", label: "Imprint" }],
+    items: [
+      {
+        path: "/legal/imprint",
+        label: "Imprint",
+        type: NavigationItemType.Link,
+      },
+    ],
+  },
+  {
+    title: "",
+    class: "ml-auto mr-0 self-end",
+    items: [
+      {
+        type: NavigationItemType.Text,
+        content: "Made with ❤️ in Rottweil",
+      },
+    ],
   },
 ];
 ---
 
 <footer class="bg-neutral-accent">
   <Section>
-    <div class="flex flex-row flex-wrap gap-12">
+    <div class="flex flex-row flex-wrap gap-12 w-full pb-8">
       {
         tree.map((group) => (
-          <div>
-            <h3 class="mb-2">{group.title}</h3>
+          <div class={group.class}>
+            {group.title && <h3 class="mb-2">{group.title}</h3>}
             <div class="flex flex-col">
-              {group.items.map((item) => (
-                <a href={item.path}>{item.label}</a>
-              ))}
+              {group.items.map((item) => {
+                switch (item.type) {
+                  case NavigationItemType.Link:
+                    return <a href={item.path}>{item.label}</a>;
+                  case NavigationItemType.Text:
+                    return <p>{item.content}</p>;
+                }
+              })}
             </div>
           </div>
         ))

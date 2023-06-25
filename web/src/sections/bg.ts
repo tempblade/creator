@@ -10,7 +10,7 @@ const canvas = document.getElementById("landing-bg") as HTMLCanvasElement;
 const initialPoints: Array<Point> = [{
     x: 500,
     y: 400,
-    color: "#8AFFAD",
+    color: "purple",
     radius: Math.random() * 200
 },
 {
@@ -95,7 +95,7 @@ export class GradientBackground {
             const y = offsetY + point.y;
 
             // Create the gradient
-            const gradient = this.context.createRadialGradient(x, y, 0, x, y, 700);
+            const gradient = this.context.createRadialGradient(x, y, 0, x, y, 500);
 
             gradient.addColorStop(0, color);
             gradient.addColorStop(1, "rgba(0,0,0,0)");
