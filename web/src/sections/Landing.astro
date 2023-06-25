@@ -2,15 +2,15 @@
 import Button from "@/components/Button.astro";
 ---
 
-<div class="h-[80vh] relative">
-    <div
+<div class="h-[80vh] relative w-full overflow-x-hidden">
+    <aside
         style="filter:blur(50px);"
         class="z-0 absolute top-0 flex items-center w-full h-full justify-center object-center object-contain"
         id="landing-bg-container"
     >
         <canvas width="1920" height="1080" class="w-[800px]" id="landing-bg"
         ></canvas>
-    </div>
+    </aside>
     <div
         class="z-10 relative w-full h-full flex items-center flex-col justify-center"
     >
@@ -21,7 +21,6 @@ import Button from "@/components/Button.astro";
             <h2 class="text-center dark:text-neutral text-xl font-normal">
                 Rust Based Open Source Motion Design Editor & Toolkit
             </h2>
-            <Button>Explore now!</Button>
         </div>
     </div>
 </div>

@@ -30,8 +30,12 @@ const features: Array<Feature> = [
 ---
 
 <div>
-    <Heading>Core Features & Values</Heading>
-    <div class="flex flex-row gap-card">
+    <div class="p-main py-0">
+        <Heading>Core Features & Values</Heading>
+    </div>
+    <div
+        class="flex flex-row flex-nowrap overflow-x-auto snap-x snap-mandatory gap-card overflow-y-clip p-main snap-center"
+    >
         {
             features.map((feature) => (
                 <CardFeature

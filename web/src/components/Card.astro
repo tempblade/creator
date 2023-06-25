@@ -3,7 +3,7 @@ import type { HTMLAttributes } from "astro/types";
 import { VariantProps, cva } from "class-variance-authority";
 
 const card = cva(
-    "rounded-card transition-colors bg-neutral-accent ring-2 ring-main/10 flex-1",
+    "rounded-card transition-colors bg-neutral-accent ring-2 ring-main/10",
     {
         variants: {
             interactable: {
@@ -23,9 +23,14 @@ export interface Props
     extends HTMLAttributes<"div">,
         VariantProps<typeof card> {}
 
-const { interactable = false, padding = true, ...props } = Astro.props;
+const {
+    interactable = false,
+    padding = true,
+    class: _class,
+    ...props
+} = Astro.props;
 ---
 
-<div {...props} class={card({ interactable, padding })}>
+<div {...props} class={card({ interactable, padding, class: _class })}>
     <slot />
 </div>

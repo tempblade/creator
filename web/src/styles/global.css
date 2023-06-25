@@ -27,9 +27,9 @@
   :root {
     --color-main: 0 0% 100%;
     --color-secondary: 0 0% 80%;
-    --color-primary: 0 0% 0%;
-    --color-neutral: 264 100% 6%;
-    --color-neutral-accent: 271 100% 10%;
+    --color-primary: 280 90% 60%;
+    --color-neutral: 240 100% 4%;
+    --color-neutral-accent: 250 70% 6%;
     --color-highlight: 336 100% 60%;
     --color-success: 132 100% 78%;
     --color-error: 335 100% 62%;

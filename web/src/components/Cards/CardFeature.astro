@@ -11,8 +11,8 @@ export interface Props {
 const { title, description, iconName } = Astro.props;
 ---
 
-<Card>
-    <div class="text-main w-12 mb-4">
+<Card class="w-[300px] shrink-0 grow">
+    <div class="text-primary w-12 mb-4">
         <Icon name={iconName} />
     </div>
     <h4 class="text-lg font-bold">
