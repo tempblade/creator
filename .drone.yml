@@ -1,0 +1,17 @@
+kind: pipeline
+name: web
+type: docker
+
+steps:
+  - name: deploy web
+    image: node:alpine
+    environment:
+      IS_PROD: true
+      TOKEN:
+        from_secret: VERCEL_TOKEN
+    when:
+      branch:
+        - main
+    commands:
+      - npm install -g vercel@latest
+      - /bin/sh ./web/deploy.sh
