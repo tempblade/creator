@@ -79,10 +79,26 @@ h4 {
   @apply text-lg;
 }
 
-p {
-  @apply max-w-[600px] text-secondary;
-}
+
 
 [astro-icon] {
   fill: currentColor;
+}
+
+article {
+
+  & h1, h2, h3, h4, h5 {
+    @apply mt-6;
+  }
+
+  & h1, h2, h3, h4, h5, p, ol, ul {
+    @apply mb-4;
+  }
+
+}
+
+p,
+li {
+  @apply max-w-[600px] mb-6 whitespace-pre-line text-base text-secondary;
+  line-height: 1.5;
 }
