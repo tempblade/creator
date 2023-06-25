@@ -99,6 +99,6 @@ article {
 
 p,
 li {
-  @apply max-w-[600px] mb-6 whitespace-pre-line text-base text-secondary;
+  @apply max-w-[600px] whitespace-pre-line text-base text-secondary;
   line-height: 1.5;
 }
