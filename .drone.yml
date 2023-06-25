@@ -14,4 +14,5 @@ steps:
         - main
     commands:
       - npm install -g vercel@latest
-      - /bin/sh ./web/deploy.sh
+      - cd web
+      - /bin/sh deploy.sh
