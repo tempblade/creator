@@ -1,0 +1,80 @@
+@import "./breakpoints.css";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-main: 0 0% 0%;
+  --color-primary: 0 0% 0%;
+  --color-neutral: 0 0% 100%;
+  --color-neutral-accent: 0 0% 93%;
+  --color-highlight: 264 100% 50%;
+  --color-success: 132 100% 78%;
+  --color-error: 335 100% 62%;
+
+  --padding-main: 25px 25px;
+  --padding-card: 1.25rem 1.25rem;
+
+  --spacing-main: 20px;
+
+  --max-width-section: 100%;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-main: 0 0% 100%;
+    --color-primary: 0 0% 0%;
+    --color-neutral: 264 100% 6%;
+    --color-neutral-accent: 271 100% 10%;
+    --color-highlight: 336 100% 60%;
+    --color-success: 132 100% 78%;
+    --color-error: 335 100% 62%;
+  }
+}
+
+html {
+  @apply bg-neutral text-main;
+  font-family: system-ui, sans-serif;
+}
+code {
+  font-family: Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono,
+    Bitstream Vera Sans Mono, Courier New, monospace;
+}
+
+h1 {
+  @apply text-main;
+}
+
+@media (--lg-viewport) {
+  :root {
+    --max-width-section: 1000px;
+  }
+}
+
+@media (--xl-viewport) {
+  :root {
+    --max-width-section: 1550px;
+
+    --padding-main: 45px 100px;
+  }
+}
+
+h1 {
+  @apply text-3xl font-bold;
+}
+
+h2 {
+  @apply text-2xl font-semibold;
+}
+
+h3 {
+  @apply text-xl font-medium;
+}
+
+h4 {
+  @apply text-lg;
+}
+
+p {
+  @apply max-w-[600px];
+}

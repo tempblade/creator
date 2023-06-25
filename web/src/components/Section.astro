@@ -1,0 +1,27 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { cva, type VariantProps } from "class-variance-authority";
+
+const section = cva("relative w-full", {
+    variants: {
+        padding: {
+            true: "p-main",
+            false: "p-0",
+        },
+        maxWidth: {
+            true: "max-w-section mx-auto",
+            false: "",
+        },
+    },
+});
+
+export interface Props
+    extends HTMLAttributes<"section">,
+        VariantProps<typeof section> {}
+
+const { padding = true, maxWidth = true, ...props } = Astro.props;
+---
+
+<section {...props} class={section({ padding, maxWidth })}>
+    <slot />
+</section>

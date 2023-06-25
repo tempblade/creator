@@ -1,4 +1,6 @@
 ---
+import Section from "../Section.astro";
+
 type NavigationItem = {
   path: string;
   label: string;
@@ -40,31 +42,21 @@ const tree: Array<NavigationGroup> = [
 ];
 ---
 
-<footer class="py-4">
-  <div class="m-auto flex flex-row flex-wrap gap-12 inner-container">
-    {
-      tree.map((group) => (
-        <div>
-          <h3 class="mb-2">{group.title}</h3>
-          <div class="flex flex-col">
-            {group.items.map((item) => (
-              <a href={item.path}>{item.label}</a>
-            ))}
+<footer class="bg-neutral-accent">
+  <Section>
+    <div class="flex flex-row flex-wrap gap-12">
+      {
+        tree.map((group) => (
+          <div>
+            <h3 class="mb-2">{group.title}</h3>
+            <div class="flex flex-col">
+              {group.items.map((item) => (
+                <a href={item.path}>{item.label}</a>
+              ))}
+            </div>
           </div>
-        </div>
-      ))
-    }
-  </div>
+        ))
+      }
+    </div>
+  </Section>
 </footer>
-
-<style>
-  footer {
-    background-color: var(--color-neutral-accent);
-
-    & .inner-container {
-      max-width: var(--content-max-width);
-      margin: auto;
-      padding: var(--padding-main);
-    }
-  }
-</style>

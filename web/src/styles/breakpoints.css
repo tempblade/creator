@@ -1,0 +1,5 @@
+@custom-media --sm-viewport screen and (min-width: 640px);
+@custom-media --md-viewport screen and (min-width: 768px);
+@custom-media --lg-viewport screen and (min-width: 1024px);
+@custom-media --xl-viewport screen and (min-width: 1280px);
+@custom-media --2xl-viewport screen and (min-width: 1536px);

@@ -1,0 +1,50 @@
+---
+import Button from "@/components/Button.astro";
+---
+
+<div class="h-[80vh] relative">
+    <div
+        class="z-0 absolute top-0 flex items-center w-full h-full justify-center object-center object-contain"
+        id="landing-bg-container"
+    >
+        <canvas
+            width="1920"
+            height="1080"
+            style="filter:blur(100px)"
+            class="w-[800px]"
+            id="landing-bg"></canvas>
+    </div>
+    <div
+        class="z-10 relative w-full h-full flex items-center flex-col justify-center"
+    >
+        <div class="flex flex-col justify-center items-center gap-2">
+            <h1 class="text-5xl text-center font-black">tempblade Creator</h1>
+            <h2 class="text-center text-xl font-normal">
+                Rust Based Open Source Motion Design Editor & Toolkit
+            </h2>
+            <Button>Explore now!</Button>
+        </div>
+    </div>
+</div>
+
+<script>
+    import { animate, inView } from "motion";
+    import { ease } from "@unom/style";
+
+    const landingBgContainer = document.getElementById("landing-bg");
+
+    if (landingBgContainer) {
+        inView(landingBgContainer, () => {
+            animate(
+                landingBgContainer,
+                {
+                    scale: [0.7, 1],
+                    opacity: [0, 1],
+                },
+                { ...ease.quint(2).out }
+            );
+        });
+    }
+</script>
+
+<script src="./bg.ts"></script>

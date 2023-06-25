@@ -1,0 +1,31 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { VariantProps, cva } from "class-variance-authority";
+
+const card = cva(
+    "rounded-card transition-colors bg-neutral-accent ring-2 ring-main/10",
+    {
+        variants: {
+            interactable: {
+                false: "transition-shadow focus-within:shadow-lg ring-2 ring-neutral",
+                true: "cursor-pointer shadow-sm hocus:bg-neutral-accent/50 \
+        hocus:shadow-lg hocus:ring-2 hocus:outline-none",
+            },
+            padding: {
+                true: "p-card",
+                false: "p-0",
+            },
+        },
+    }
+);
+
+export interface Props
+    extends HTMLAttributes<"div">,
+        VariantProps<typeof card> {}
+
+const { interactable = false, padding = true, ...props } = Astro.props;
+---
+
+<div {...props} class={card({ interactable, padding })}>
+    <slot />
+</div>

@@ -2,8 +2,7 @@
 
 # tempblade Creator
 
-tempblade creator is a motion design application, build with typescript, skia, rust using tauri.
-Its currently in an early alpha stage, and there may be larger design changes to the overall structuring
+tempblade creator is a motion design application, built on top of rust and skia. Its main goal is to be a flexible motion design toolkit, to be used in different environments. Right now it consists of an Editor/UI built with tauri where the ui uses react/typescript and the interpolation/timeline calculations are done in rust. It should also easily possible to run completly in the browser thanks to wasm. The project is currently in an early alpha stage, and there may be larger design changes to the overall structuring
 of the project.
 
 ## Why?
@@ -31,6 +30,12 @@ to the frontend in javascript/typescript. This happens using tauris IPC.
 - Caching of skia entity instances like fonts etc.
 - Pretty fast (if compared to After Effects)
 
+### Possible use cases
+
+- Typical motion design creation
+- Data driven motion design -> craft your animation and automate the rendering/data population thanks to the soon coming typescript library
+- Creation of generative art
+
 ### Features currently w.i.p
 
 - Effects system for skias built in image filters like blurring
@@ -39,5 +44,7 @@ to the frontend in javascript/typescript. This happens using tauris IPC.
 
 - Integration with OpenFX inside rust
 - Standalone rust rust rendering using vulkan and or metal by using rust-skia
-- Standalone package for drawing (currently the logic is already decoupled from ui)
+- Standalone ts package for drawing (currently the logic is already decoupled from ui)
+- Standalone ts package for populating & rendering project files for enabling data driven integrations
 - Caching system for the rendered keyframes (currently interpolation calculation happens during playback, this could easily be cached)
+- Full pipeline automation with integrations for blender, houdini in more (Already working on this)

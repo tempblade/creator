@@ -1,0 +1,26 @@
+---
+import CardFeature from "@/components/Cards/CardFeature.astro";
+type Feature = {
+    title: string;
+    description: string;
+};
+
+const features: Array<Feature> = [
+    {
+        title: "Fast",
+        description:
+            "Thanks to rust with multithreading and skia we're really fast!",
+    },
+];
+---
+
+<div class="flex flex-row">
+    {
+        features.map((feature) => (
+            <CardFeature
+                title={feature.title}
+                description={feature.description}
+            />
+        ))
+    }
+</div>
