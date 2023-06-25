@@ -4,22 +4,21 @@ import Button from "@/components/Button.astro";
 
 <div class="h-[80vh] relative">
     <div
+        style="filter:blur(50px);"
         class="z-0 absolute top-0 flex items-center w-full h-full justify-center object-center object-contain"
         id="landing-bg-container"
     >
-        <canvas
-            width="1920"
-            height="1080"
-            style="filter:blur(100px)"
-            class="w-[800px]"
-            id="landing-bg"></canvas>
+        <canvas width="1920" height="1080" class="w-[800px]" id="landing-bg"
+        ></canvas>
     </div>
     <div
         class="z-10 relative w-full h-full flex items-center flex-col justify-center"
     >
         <div class="flex flex-col justify-center items-center gap-2">
-            <h1 class="text-5xl text-center font-black">tempblade Creator</h1>
-            <h2 class="text-center text-xl font-normal">
+            <h1 class="text-5xl dark:text-neutral text-center font-black">
+                tempblade Creator
+            </h1>
+            <h2 class="text-center dark:text-neutral text-xl font-normal">
                 Rust Based Open Source Motion Design Editor & Toolkit
             </h2>
             <Button>Explore now!</Button>

@@ -1,0 +1,52 @@
+---
+import { cn } from "@/lib/utils";
+import type { HTMLAttributes } from "astro/types";
+import { VariantProps, cva } from "class-variance-authority";
+
+const heading = cva("max-w-3xl m-[var(--section-heading-margin)]", {
+    variants: {
+        main: {
+            true: "font-bold",
+            false: "font-semibold",
+        },
+        padding: {
+            true: "py-4",
+            false: "p-0",
+        },
+    },
+});
+
+export interface Props
+    extends HTMLAttributes<"h1" | "h2">,
+        VariantProps<typeof heading> {
+    subtitle?: string;
+}
+
+const { main = false, padding = true, subtitle } = Astro.props;
+
+const titleClass = cn(
+    heading({ main, padding }),
+    subtitle ? "mb-[calc(var(--section_heading-margin-bottom)_/_2)]" : ""
+);
+---
+
+<div class="z-0 relative">
+    {
+        main ? (
+            <h1 class={titleClass}>
+                <slot />
+            </h1>
+        ) : (
+            <h2 class={titleClass}>
+                <slot />
+            </h2>
+        )
+    }
+    {
+        subtitle && (
+            <h3 class="font-normal m-[var(--section-heading-margin)] max-w-3xl">
+                {subtitle}
+            </h3>
+        )
+    }
+</div>

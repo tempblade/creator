@@ -1,26 +1,45 @@
 ---
 import CardFeature from "@/components/Cards/CardFeature.astro";
+import Heading from "@/components/Heading.astro";
 type Feature = {
     title: string;
+    iconName: string;
     description: string;
 };
 
 const features: Array<Feature> = [
     {
         title: "Fast",
+        iconName: "Fast",
         description:
             "Thanks to rust with multithreading and skia we're really fast!",
+    },
+    {
+        title: "Extensible",
+        iconName: "Extensible",
+        description:
+            "Modular structured and thanks to our dual language approach you even decide in which language you want to extend!",
+    },
+    {
+        title: "Community driven & Free",
+        iconName: "Open",
+        description:
+            "The project is MIT licensed and we're open to new ideas for further development. Also since this product is not profit driven we won't screw you over!",
     },
 ];
 ---
 
-<div class="flex flex-row">
-    {
-        features.map((feature) => (
-            <CardFeature
-                title={feature.title}
-                description={feature.description}
-            />
-        ))
-    }
+<div>
+    <Heading>Core Features & Values</Heading>
+    <div class="flex flex-row gap-card">
+        {
+            features.map((feature) => (
+                <CardFeature
+                    iconName={feature.iconName}
+                    title={feature.title}
+                    description={feature.description}
+                />
+            ))
+        }
+    </div>
 </div>

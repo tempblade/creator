@@ -5,6 +5,7 @@
 
 :root {
   --color-main: 0 0% 0%;
+  --color-main: 0 0% 10%;
   --color-primary: 0 0% 0%;
   --color-neutral: 0 0% 100%;
   --color-neutral-accent: 0 0% 93%;
@@ -17,12 +18,15 @@
 
   --spacing-main: 20px;
 
+  --gap-card: 1rem;
+
   --max-width-section: 100%;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --color-main: 0 0% 100%;
+    --color-secondary: 0 0% 80%;
     --color-primary: 0 0% 0%;
     --color-neutral: 264 100% 6%;
     --color-neutral-accent: 271 100% 10%;
@@ -76,5 +80,9 @@ h4 {
 }
 
 p {
-  @apply max-w-[600px];
+  @apply max-w-[600px] text-secondary;
+}
+
+[astro-icon] {
+  fill: currentColor;
 }

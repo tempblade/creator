@@ -1,18 +1,24 @@
 ---
 import Card from "../Card.astro";
+import { Icon } from "astro-icon";
+
 export interface Props {
     title: string;
+    iconName: string;
     description: string;
 }
 
-const { title, description } = Astro.props;
+const { title, description, iconName } = Astro.props;
 ---
 
 <Card>
-    <h4>
+    <div class="text-main w-12 mb-4">
+        <Icon name={iconName} />
+    </div>
+    <h4 class="text-lg font-bold">
         {title}
     </h4>
-    <p>
+    <p class="text-secondary">
         {description}
     </p>
 </Card>
