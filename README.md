@@ -2,7 +2,7 @@
 
 # tempblade Creator
 
-tempblade creator is a motion design application, built on top of rust and skia. Its main goal is to be a flexible motion design toolkit, to be used in different environments. Right now it consists of an Editor/UI built with tauri where the ui uses react/typescript and the interpolation/timeline calculations are done in rust. It should also easily possible to run completly in the browser thanks to wasm. The project is currently in an early alpha stage, and there may be larger design changes to the overall structuring
+tempblade creator is a motion design application, built on top of rust and skia. Its main goal is to be a flexible motion design toolkit, to be used in different environments. Right now it consists of an editor/ui built with tauri where the ui uses react/typescript and the interpolation/timeline calculations are done in rust. It should also easily be possible to run it completly in the browser thanks to wasm and skia canvaskit. The project is currently in an early alpha stage, and there may be larger design changes to the overall structuring
 of the project.
 
 ## Why?
