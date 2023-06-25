@@ -3,7 +3,7 @@ import type { HTMLAttributes } from "astro/types";
 import { VariantProps, cva } from "class-variance-authority";
 
 const card = cva(
-    "rounded-card transition-colors bg-neutral-accent ring-2 ring-main/10",
+    "card rounded-card transition-colors bg-neutral-accent ring-2 ring-main/10",
     {
         variants: {
             interactable: {
@@ -12,7 +12,7 @@ const card = cva(
         hocus:shadow-lg hocus:ring-2 hocus:outline-none",
             },
             padding: {
-                true: "p-card",
+                true: "py-6 px-8",
                 false: "p-0",
             },
         },

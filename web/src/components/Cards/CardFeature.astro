@@ -12,7 +12,9 @@ const { title, description, iconName } = Astro.props;
 ---
 
 <Card class="w-[300px] shrink-0 grow">
-    <div class="text-primary w-12 mb-4">
+    <div
+        class="text-primary w-12 mb-4 shadow-current drop-shadow-[0px_0px_10px_hsl(var(--color-primary)_/_0.5)]"
+    >
         <Icon name={iconName} />
     </div>
     <h4 class="text-lg font-bold">
