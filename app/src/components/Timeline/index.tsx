@@ -31,10 +31,10 @@ const Timeline: FC<TimelineProps> = () => {
       <div className="flex flex-row">
         <div className="flex flex-row">
           <button onClick={() => setPlaying(true)} className="w-8 h-8">
-            <PlayIcon color="white" width="100%" height="100%" />
+            <PlayIcon className="text-main" width="100%" height="100%" />
           </button>
           <button onClick={() => setPlaying(false)} className="w-8 h-8">
-            <PauseIcon color="white" width="100%" height="100%" />
+            <PauseIcon className="text-main" width="100%" height="100%" />
           </button>
         </div>
         <Timestamp />

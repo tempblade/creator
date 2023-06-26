@@ -68,7 +68,7 @@ const Track: FC<TrackProps> = ({ animationData, index, name, entity }) => {
               <TriangleDownIcon
                 width="32px"
                 height="32px"
-                className="text-white"
+                className="text-main"
               />
             </motion.div>
             <h3
@@ -133,10 +133,10 @@ const Track: FC<TrackProps> = ({ animationData, index, name, entity }) => {
                 },
               });
             }}
-            className="z-10 w-4 bg-primary/80 h-full top-0 absolute rounded-md select-none cursor-w-resize"
+            className="z-10 w-4 bg-primary/50 h-full top-0 absolute rounded-md select-none cursor-w-resize"
           />
           <motion.div
-            className="z-10 w-4 bg-primary/80 h-full top-0 absolute rounded-md select-none cursor-e-resize"
+            className="z-10 w-4 bg-primary/50 h-full top-0 absolute rounded-md select-none cursor-e-resize"
             onMouseDown={(e) => e.preventDefault()}
             drag="x"
             animate={{
