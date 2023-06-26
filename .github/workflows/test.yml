@@ -10,6 +10,8 @@ jobs:
 
     runs-on: ${{ matrix.platform }}
 
+    env:
+
     defaults:
       run:
         working-directory: app
@@ -36,3 +38,4 @@ jobs:
       - uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          UNOM_PACKAGES_TOKEN: ${{ secrets.UNOM_PACKAGES_TOKEN }}
