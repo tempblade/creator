@@ -13,24 +13,16 @@
     @apply text-lg;
   }
 
-  span {
-    @apply text-white;
-  }
-
   a {
     @apply text-blue-600 underline;
   }
 
-  select,
   input {
     @apply box-border bg-transparent shadow-main/10 hover:shadow-primary/50
-    focus:ring-primary focus:ring-2 focus:ring-offset-2
+    focus:ring-primary focus:ring-2 focus:ring-offset-1
     focus:shadow-primary selection:bg-secondary selection:text-black 
-    outline-none px-3 py-2 rounded-md shadow-[0_0_0_1px];
-  }
-
-  input {
-    @apply appearance-none items-center justify-center 
+    outline-none px-3 py-2 rounded-md shadow-[0_0_0_1px]
+    appearance-none items-center justify-center 
      w-full  text-base leading-none transition-all;
   }
 

@@ -11,15 +11,22 @@ import {
   AnimatedNumberKeyframeIndicator,
   AnimatedVec2KeyframeIndicator,
   AnimatedVec3KeyframeIndicator,
-} from "./KeyframeIndicator";
+} from "../KeyframeIndicator";
 import { ToggleGroup, ToggleGroupItem } from "components/ToggleGroup";
 import { produce } from "immer";
 import set from "lodash.set";
 import { useEntitiesStore } from "stores/entities.store";
-import { shallow } from "zustand/shallow";
 import { AnimatedValue } from "primitives/Values";
 import { motion } from "framer-motion";
 import { ease } from "@unom/style";
+import { TrackDisplayType } from "../Track";
+import TrackPropertyGraph from "./TrackPropertyGraph";
+import { LineChart } from "lucide-react";
+
+type DisplayState = {
+  type: z.input<typeof TrackDisplayType>;
+  selectedAnimatedProperties: Array<number>;
+};
 
 const TrackAnimatedPropertyKeyframes: FC<{
   animatedProperty: z.input<typeof AnimatedProperty>;
@@ -70,12 +77,23 @@ const TrackAnimatedPropertyKeyframes: FC<{
 const TrackAnimatedProperty: FC<{
   animatedProperty: z.input<typeof AnimatedProperty>;
   animationData: z.input<typeof AnimationData>;
+  displayState: DisplayState;
+  index: number;
+  onDisplayStateUpdate: (s: DisplayState) => void;
   onUpdate: (e: z.input<typeof AnimatedProperty>) => void;
-}> = ({ animatedProperty, animationData, onUpdate }) => {
+}> = ({
+  animatedProperty,
+  animationData,
+  onUpdate,
+  displayState,
+  index,
+  onDisplayStateUpdate,
+}) => {
   const [selectedDimension, setSelectedDimension] = useState<"x" | "y" | "z">();
 
   return (
     <motion.div
+      layout
       transition={ease.quint(0.8).out}
       variants={{ enter: { y: 0, opacity: 1 }, from: { y: -10, opacity: 0 } }}
       className="flex flex-row bg-neutral-accent ml-2 align-center"
@@ -115,8 +133,33 @@ const TrackAnimatedProperty: FC<{
               Z
             </ToggleGroupItem>
           )}
+          <ToggleGroupItem
+            selected={displayState.selectedAnimatedProperties.includes(index)}
+            onClick={() => {
+              if (displayState.selectedAnimatedProperties.includes(index)) {
+                onDisplayStateUpdate({
+                  ...displayState,
+                  selectedAnimatedProperties:
+                    displayState.selectedAnimatedProperties.filter(
+                      (index) => index !== index
+                    ),
+                });
+              } else {
+                onDisplayStateUpdate({
+                  ...displayState,
+                  selectedAnimatedProperties: [
+                    ...displayState.selectedAnimatedProperties,
+                    index,
+                  ],
+                });
+              }
+            }}
+          >
+            <LineChart />
+          </ToggleGroupItem>
         </ToggleGroup>
       </div>
+
       <div className="relative">
         <TrackAnimatedPropertyKeyframes
           selectedDimension={
@@ -153,30 +196,45 @@ const TrackPropertiesEditor: FC<{
 
       const parsedEntity = AnimatedEntity.parse(nextValue);
 
-      console.log("reacreated callback");
-
       entitiesStore.updateEntityById(parsedEntity.id, parsedEntity);
     },
     [entity]
   );
 
+  const [displayState, setDisplayState] = useState<DisplayState>({
+    type: TrackDisplayType.Enum.Default,
+    selectedAnimatedProperties: [],
+  });
+
   return (
-    <motion.div
-      animate="enter"
-      initial="from"
-      variants={{ enter: {}, from: {} }}
-      transition={{ staggerChildren: 0.05 }}
-      layout
-      className="flex flex-col gap-1"
-    >
-      {animatedProperties.map((animatedProperty, index) => (
-        <TrackAnimatedProperty
-          onUpdate={handleUpdate}
+    <motion.div layout className="flex flex-row">
+      <motion.div
+        animate="enter"
+        initial="from"
+        variants={{ enter: {}, from: {} }}
+        transition={{ staggerChildren: 0.05 }}
+        className="flex flex-col gap-1"
+      >
+        {animatedProperties.map((animatedProperty, index) => (
+          <TrackAnimatedProperty
+            index={index}
+            onDisplayStateUpdate={setDisplayState}
+            displayState={displayState}
+            onUpdate={handleUpdate}
+            animationData={entity.animation_data}
+            key={index}
+            animatedProperty={animatedProperty}
+          />
+        ))}
+      </motion.div>
+      {displayState.selectedAnimatedProperties.length > 0 && (
+        <TrackPropertyGraph
           animationData={entity.animation_data}
-          key={index}
-          animatedProperty={animatedProperty}
+          animatedProperties={displayState.selectedAnimatedProperties.map(
+            (index) => animatedProperties[index]
+          )}
         />
-      ))}
+      )}
     </motion.div>
   );
 };

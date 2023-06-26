@@ -8,8 +8,8 @@ import { shallow } from "zustand/shallow";
 import KeyframeIndicator from "./KeyframeIndicator";
 import { TIMELINE_SCALE, calculateOffset } from "./common";
 import { TriangleDownIcon } from "@radix-ui/react-icons";
-import TrackPropertiesEditor from "./TrackPropertiesEditor";
-import { flattenedKeyframesByEntity } from "utils";
+import TrackPropertiesEditor from "./TrackDisplay/TrackPropertiesEditor";
+import { cn, flattenedKeyframesByEntity } from "utils";
 
 type TrackProps = {
   animationData: z.input<typeof AnimationData>;
@@ -17,6 +17,10 @@ type TrackProps = {
   index: number;
   entity: z.input<typeof AnimatedEntity>;
 };
+
+const TrackDisplayTypeOptions = ["Default", "Graph"] as const;
+
+export const TrackDisplayType = z.enum(TrackDisplayTypeOptions);
 
 const Track: FC<TrackProps> = ({ animationData, index, name, entity }) => {
   const controls = useDragControls();
@@ -56,20 +60,18 @@ const Track: FC<TrackProps> = ({ animationData, index, name, entity }) => {
           onMouseDown={(e) => e.preventDefault()}
           onPointerDown={(e) => controls.start(e)}
           className={`h-full transition-all rounded-sm min-w-[200px] p-1 px-2 flex flex-col ${
-            selectedEntity === index ? "bg-highlight" : "bg-neutral-accent"
+            selectedEntity === index
+              ? "bg-highlight text-neutral dark:text-main"
+              : "bg-neutral-accent text-main"
           }`}
         >
           <div className="flex flex-row">
             <motion.div
               onClick={() => setIsExpanded(!isExpanded)}
-              className="will-change-transform"
+              className={cn("will-change-transform")}
               animate={{ rotate: isExpanded ? 0 : -90 }}
             >
-              <TriangleDownIcon
-                width="32px"
-                height="32px"
-                className="text-main"
-              />
+              <TriangleDownIcon width="32px" height="32px" />
             </motion.div>
             <h3
               onClick={() =>
@@ -77,7 +79,7 @@ const Track: FC<TrackProps> = ({ animationData, index, name, entity }) => {
                   ? deselectEntity()
                   : selectEntity(index)
               }
-              className="text-white-800 h-2 text-base leading-loose font-semibold select-none cursor-pointer"
+              className="h-2 text-base leading-loose font-semibold select-none cursor-pointer"
             >
               {name}
             </h3>

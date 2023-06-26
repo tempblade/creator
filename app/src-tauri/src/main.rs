@@ -2,7 +2,14 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 use crate::{
-    animation::timeline::calculate_timeline_entities_at_frame,
+    animation::{
+        primitives::values::{
+            get_values_at_frame_range_from_animated_float,
+            get_values_at_frame_range_from_animated_float_vec2,
+            get_values_at_frame_range_from_animated_float_vec3,
+        },
+        timeline::calculate_timeline_entities_at_frame,
+    },
     fonts::{get_system_families, get_system_font, get_system_fonts},
 };
 
@@ -15,7 +22,10 @@ fn main() {
             calculate_timeline_entities_at_frame,
             get_system_font,
             get_system_families,
-            get_system_fonts
+            get_system_fonts,
+            get_values_at_frame_range_from_animated_float,
+            get_values_at_frame_range_from_animated_float_vec2,
+            get_values_at_frame_range_from_animated_float_vec3
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

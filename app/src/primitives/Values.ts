@@ -5,6 +5,8 @@ import { v4 as uuid } from "uuid";
 export const Vec2 = z.array(z.number()).length(2);
 export const Vec3 = z.array(z.number()).length(3);
 
+
+
 const ValueTypeOptions = ["Vec2", "Vec3", "Number"] as const;
 
 export const ValueType = z.enum(ValueTypeOptions);
