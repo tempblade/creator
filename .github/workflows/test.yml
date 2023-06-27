@@ -10,8 +10,6 @@ jobs:
 
     runs-on: ${{ matrix.platform }}
 
-    env:
-
     defaults:
       run:
         working-directory: app

@@ -1,0 +1,31 @@
+[package]
+name = "creator_rs"
+version = "0.1.0"
+edition = "2021"
+authors = ["Enrico Bühler <buehler@unom.io>"]
+description = "Motion Design toolkit with spring, eased and linear based value interpolation, timeline functionality and more"
+license = "MIT"
+repository = "https://github.com/tempblade/creator"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+rayon = { version = "1.7", optional = true }
+font-kit = { version = "0.11", optional = true }
+serde = { version = "1.0", features = ["derive", "rc"] }
+serde_json = "1.0"
+simple-easing = "1.0"
+tauri = { version = "1.4", optional = true, features = [
+    "dialog-open",
+    "dialog-save",
+    "shell-open",
+] }
+uuid = { version = "1.3", features = ["v4", "macro-diagnostics", "js"] }
+wasm-bindgen = "0.2"
+
+
+[features]
+tauri = ["dep:tauri"]
+parallelization = ["dep:rayon"]
+fonts = ["dep:font-kit"]
