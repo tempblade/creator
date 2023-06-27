@@ -971,6 +971,11 @@
   resolved "https://packages.unom.io/@tempblade%2fcommon/-/common-2.0.1.tgz"
   integrity sha512-8uCqsfu2tcQq4O4XODS7Hn7Mj9hZh+Rh+Y0Fsej9Bbemn/WwlIT0WrUSzWGMZLcTspvgl6kz/ljBzCqLAa3Yyw==
 
+"@types/d3-array@^3.0.5":
+  version "3.0.5"
+  resolved "https://registry.yarnpkg.com/@types/d3-array/-/d3-array-3.0.5.tgz#857c1afffd3f51319bbc5b301956aca68acaa7b8"
+  integrity sha512-Qk7fpJ6qFp+26VeQ47WY0mkwXaiq8+76RJcncDEfMc2ocRzXLO67bLFRNI4OX1aGBoPzsM5Y2T+/m1pldOgD+A==
+
 "@types/d3-color@*":
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/@types/d3-color/-/d3-color-3.1.0.tgz#6594da178ded6c7c3842f3cc0ac84b156f12f2d4"

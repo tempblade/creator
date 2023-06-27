@@ -90,7 +90,7 @@ export class Drawer {
 
     const parsedAnimatedEntities = AnimatedEntities.parse(animatedEntities);
 
-    const data = await invoke("calculate_timeline_entities_at_frame", {
+    const data = await invoke("calculate_timeline_at_curr_frame", {
       timeline: {
         entities: parsedAnimatedEntities,
         render_state: renderState,
