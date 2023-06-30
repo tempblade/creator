@@ -2,7 +2,7 @@
 import Heading from "@/components/Heading.astro";
 ---
 
-<div class="flex flex-col gap-4">
+<div id="introduction-content-container" class="flex flex-col gap-4">
     <Heading>
         The Next Generation Motion Design Tool - Free & Open Source
     </Heading>
@@ -28,3 +28,26 @@ import Heading from "@/components/Heading.astro";
         patreon!
     </p>
 </div>
+
+<script>
+    import { ease } from "@unom/style";
+    import { animate, inView, stagger } from "motion";
+
+    const contentContainer = document.getElementById(
+        "introduction-content-container"
+    );
+
+    const children = document.querySelectorAll(
+        "#introduction-content-container *"
+    );
+
+    if (contentContainer) {
+        inView(contentContainer, () => {
+            animate(
+                children,
+                { y: [20, 0], opacity: [0, 1] },
+                { ...ease.quint(0.8).out, delay: stagger(0.1) }
+            );
+        });
+    }
+</script>

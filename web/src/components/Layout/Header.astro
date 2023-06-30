@@ -1,0 +1,18 @@
+---
+import Button, { button } from "../Button.astro";
+import TempbladeLogo from "components/Logo/tempblade.astro";
+---
+
+<header class="fixed top-0 w-full h-16 z-50">
+    <div
+        class="flex flex-row justify-between h-full w-full max-w-section m-auto p-main"
+    >
+        <div class="w-16 h-8 flex">
+            <TempbladeLogo />
+        </div>
+        <a
+            class={button({ variant: "primary", size: "default" })}
+            href="https://github.com/tempblade/creator/releases">Download</a
+        >
+    </div>
+</header>

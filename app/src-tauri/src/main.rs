@@ -13,7 +13,6 @@ use creator_core::{
             get_values_at_frame_range_from_animated_float_vec3,
         },
         timeline::calculate_timeline_at_curr_frame,
-        *,
     },
     fonts::fonts::{get_system_families, get_system_font, get_system_fonts},
 };

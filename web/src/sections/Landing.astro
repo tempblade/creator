@@ -1,5 +1,5 @@
 ---
-import Button from "@/components/Button.astro";
+import TempbladeLogo from "@/components/Logo/tempblade.astro";
 ---
 
 <div class="h-[80vh] relative w-full overflow-x-hidden">
@@ -8,28 +8,46 @@ import Button from "@/components/Button.astro";
         class="z-0 absolute top-0 flex items-center w-full h-full justify-center object-center object-contain"
         id="landing-bg-container"
     >
-        <canvas width="1920" height="1080" class="w-[800px]" id="landing-bg"
+        <canvas width="1920" height="1080" class="w-[900px]" id="landing-bg"
         ></canvas>
     </aside>
     <div
         class="z-10 relative w-full h-full flex items-center flex-col justify-center"
     >
-        <div class="flex flex-col justify-center items-center gap-2">
-            <h1 class="text-5xl dark:text-neutral text-center font-black">
-                tempblade Creator
+        <div
+            id="landing-content-container"
+            class="flex flex-col justify-center items-center gap-2 p-main dark:text-neutral"
+        >
+            <!--     <div data-animate class="w-12 h-12">
+                <TempbladeLogo />
+            </div> -->
+            <h1
+                data-animate
+                class="text-6xl lg:text-8xl text-center font-black text-current"
+            >
+                Creator
             </h1>
-            <h2 class="text-center dark:text-neutral text-xl font-normal">
-                Rust Based Open Source Motion Design Editor & Toolkit
+            <h2 class="text-center text-xl font-normal max-w-xs">
+                <span class="inline-block" data-animate>
+                    Rust Based Open Source</span
+                ><br />
+                <span class="inline-block" data-animate>
+                    Motion Design Editor & Toolkit</span
+                >
             </h2>
         </div>
     </div>
 </div>
 
 <script>
-    import { animate, inView } from "motion";
+    import { animate, inView, stagger } from "motion";
     import { ease } from "@unom/style";
 
     const landingBgContainer = document.getElementById("landing-bg");
+
+    const children = document.querySelectorAll(
+        "#landing-content-container [data-animate]"
+    );
 
     if (landingBgContainer) {
         inView(landingBgContainer, () => {
@@ -40,6 +58,17 @@ import Button from "@/components/Button.astro";
                     opacity: [0, 1],
                 },
                 { ...ease.quint(2).out }
+            );
+            animate(
+                children,
+                { y: [50, 0], opacity: [0, 1] },
+                {
+                    opacity: {
+                        easing: "linear",
+                    },
+                    ...ease.quint(0.8).out,
+                    delay: stagger(0.1),
+                }
             );
         });
     }
