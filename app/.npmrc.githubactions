@@ -1,4 +1,0 @@
-//packages.unom.io/:_authToken=${UNOM_PACKAGES_TOKEN}
-registry=https://registry.npmjs.org/
-@tempblade:registry=https://packages.unom.io
-@unom:registry=https://packages.unom.io
