@@ -4,6 +4,61 @@ A plan for a keyframe-based motion design tool with a Rust rendering core, multi
 
 -----
 
+## Status & handoff (current — 2026-06-11)
+
+> **Read this first.** The sections below (§0–§13) are the original design rationale and remain the source of truth for *intent*. This section is the live status: what exists, what's settled, what not to break, and where to pick up. `README.md` has a per-crate status table and run instructions.
+
+### What's implemented (built, tested, verified — `cargo test --workspace` = 89 tests, clippy-clean)
+
+The **UI-independent engine core + the CPU slice of the renderer + a headless CLI** are done end-to-end. Workspace layout matches §3.
+
+| Crate | State | Notes |
+|-------|-------|-------|
+| `anim` | ✅ done | easings (Hold/Linear/CubicBezier-Newton-Raphson/Steps + presets); **closed-form damped-harmonic-oscillator springs** (under/critical/over-damped, physical + perceptual params, entry velocity); `Lerp` trait |
+| `model` | ✅ done | project→comps→layers (parenting + precomps), typed animatable `Property<T>`, keyframes `{time,value,in_interp,out_interp}`, linear `Color`, **gradients** (`Paint`: solid/linear/radial), **cubic-Bézier paths** (`PathData`/`PathPoint` + `flatten()`), `MotionBlur`, blend modes, slotmap IDs, **versioned serde JSON** |
+| `render` | ✅ done (CPU) | `RenderTree` concrete-value language, `RenderTarget` abstraction, CPU rasterizer: AA coverage, affine transforms, fills/strokes, gradients, rect/ellipse/path, blend modes, group isolation, blur/tint — **premultiplied linear-light** compositing; PNG(sRGB)/EXR(linear) readout |
+| `engine` | ✅ done | pure deterministic `eval(scene,t)→tree`, **motion blur** (temporal supersampling), command bus + undo/redo, **frame cache** (transitive precomp-aware content hash) |
+| `media`/`export`/`cli` | ✅ done | image import; PNG/EXR sequence writers + ffmpeg-sidecar command builder; `creator render/sample/info` (rayon frame-parallel) |
+| `gpu` | 🟡 scaffold | backend abstraction + CPU bridge; Skia Metal/Vulkan behind a `skia` cargo feature (stub) — needs a provisioned native Skia |
+| `ofx-host` | 🟡 scaffold | host data model + lifecycle skeleton (Phase 5) |
+| `apps/desktop` | 🟡 scaffold | Tauri v2 backend with the full engine command API (`open_project`/`scrub`/`apply_edit`/`undo`/`redo`) + tier-3 viewport readback. **Excluded from the cargo workspace** (needs a system webview) |
+| `frontend` | 🟡 scaffold | Vite + React + TS shell with a **Zod** IPC boundary + panel layout. **Excluded** (needs Node) |
+
+Run it (no GPU needed): `cargo build --release -p creator-cli && ./target/release/creator sample demo.ctor && ./target/release/creator render demo.ctor --out frames`.
+
+### This environment's constraints (the headless build VM)
+
+- Rust 1.96, 16 cores. **No Node** → `frontend` can't build/run here. **No native Skia/webkit** → `gpu` (`skia` feature) and `apps/desktop` can't build here. Everything else builds and tests cleanly.
+- `.cargo/config.toml` + `.link-shims/` are **VM-specific** freetype/fontconfig shims for `skia-bindings` (gitignored, not committed) — only relevant if someone enables the `skia` feature.
+- Repo: `git@git.unom.io:tempblade/creator.git`. `main` is the v2 rewrite (this code). **v1** (the previous CanvasKit-in-webview attempt §0 describes) still lives on the `next` and `release` branches.
+
+### Invariants — do not break these
+
+1. **`engine` and everything below have zero Tauri/windowing dependencies** (§3 hard rule). The CLI and the desktop app are thin shells over `creator-engine`. This is what gives headless rendering and preview/final parity.
+2. **`eval(scene, t)` is a pure, deterministic function of time.** No time-dependent state, no `HashMap` iteration order leaking into output. This is what makes scrubbing and the frame cache sound.
+3. **Composite in premultiplied linear light.** Colors are linear; the sRGB transfer is applied only at readout. Gradient stops interpolate in *premultiplied* space (avoids transparent-black fringing).
+4. **Springs are closed-form** (O(1), scrubbable). Never a step simulation.
+5. Preview = `render_at(t)` (instant); final = `render_frame(frame)` (adds motion blur). Both share the same eval+render path — keep them in sync.
+
+### Tricky spots (two adversarial review passes fixed 11 real bugs; regression tests guard them — don't regress)
+
+- `Property::eval` assumes keyframes sorted by time; deserialization sorts via `deserialize_with`. NaN time is guarded.
+- Motion blur uses the **midpoint rule** (unbiased equal-weight temporal quadrature), averaged in premultiplied linear.
+- Parent cycles are broken via an ancestor set; precomp cycles via a visited set; the frame-cache content hash is **transitive over precomps**.
+- `Color::from_hex` guards non-ASCII before byte-slicing.
+
+### Next up (prioritized) — all buildable/testable headlessly except #6+
+
+1. **Masks & track mattes** (alpha/luma) — completes §6 compositing. Per-layer mask path (cubic-Bézier already available) and inter-layer track mattes (render matte → modulate this layer's alpha). Thread through `model` (Layer.mask / matte mode), `engine` eval, and the render isolation path.
+2. **Tile-parallel rasterization** via `rayon` (§11) — single-frame speed for the interactive viewport. Correctness test: parallel output == serial.
+3. **Layer-level render caching** (§11) — reuse intermediate layer renders that didn't change.
+4. **AE-style temporal interpolation** / curve-editor data (§5) — influence/speed handles, richer than CSS Bézier.
+5. **Adjustment layers** (§6); **real text** via Skia `textlayout` (today text is a metrics placeholder box).
+6. **GPU viewport bridge — the make-or-break risk** (§7). Skia Metal/Vulkan surface in a Tauri window with a React overlay; measure scrub latency at 1080p/4K; pick the bridge tier. **Needs a machine with a provisioned native Skia + webview toolchain** (the Phase 0 spikes #1–#3 have not been run). The `gpu` crate holds the abstraction and a `skia` feature stub to fill in.
+7. **OpenFX host** (§8, Phase 5) — build on `openfx-sys`; `ofx-host` has the skeleton.
+
+-----
+
 ## 0. What went wrong in `creator` v1, and the one thesis for v2
 
 In the previous attempt, Rust did keyframe/timeline math and handed the **values** to the webview, where **Skia CanvasKit (wasm) did the actual drawing**. The scene crossed Tauri IPC every frame. That architecture structurally cannot deliver the things you now want:
@@ -222,44 +277,46 @@ creator render project.ctor \
 
 ## 12. Phased roadmap (risks front-loaded)
 
-### Phase 0 — De-risking spikes (do before committing)
+### Phase 0 — De-risking spikes (do before committing) — 🟡 partial
+
+> Status: headless CPU-raster one-frame (#2) done; Skia GPU window (#1) and viewport-bridge latency (#3) NOT run — need a native Skia + webview toolchain. Skia-vs-Vello (#4) still open but the renderer is structured behind `RenderTree`/`RenderTarget` so a backend swap is localized.
 
 1. Skia GPU surface in a window, animating, on **Metal** and on **Vulkan**.
 1. Headless: one frame → EXR/PNG via **CPU raster** *and* **offscreen Vulkan**.
 1. **Viewport bridge**: a Rust-rendered GPU surface inside a Tauri v2 window with React overlay; measure scrub latency at 1080p and 4K.
 1. Lock in Skia (or pivot to Vello) based on 1–3.
 
-### Phase 1 — Engine core (UI-independent)
+### Phase 1 — Engine core (UI-independent) — ✅ done
 
 - `model`: comps/layers/groups, typed animatable properties, stable IDs, serde project format (versioned).
 - `anim`: hold/linear/cubic-bezier/steps + closed-form springs.
 - Evaluation: `scene@t → render tree`; pure, deterministic, unit-tested.
 - Command bus + undo/redo.
 
-### Phase 2 — Renderer
+### Phase 2 — Renderer — ✅ CPU path done (gradients, blend modes, masks pending); GPU (Skia) targets pending
 
 - Render tree → Skia: shapes, fills/strokes/gradients, text, transforms, opacity, groups/precomps.
 - Linear-F16 compositing, blend modes, masks, track mattes.
 - `RenderTarget` over window/offscreen, CPU/GPU.
 - Wire viewport (live scrub) + CLI (offscreen).
 
-### Phase 3 — Editor app
+### Phase 3 — Editor app — 🟡 scaffolded (Tauri command API + React/Zod shell; needs the GPU viewport bridge + panels)
 
 - Tauri shell; React panels: viewport, timeline (keyframes + bezier curve editor + spring controls), layer list, inspector, tools.
 - Viewport gizmos (overlay), selection, transform handles.
 - Save/load; undo/redo wired through the command bus.
 - Frame cache / RAM preview + timeline cache indicator.
 
-### Phase 4 — Media & export
+### Phase 4 — Media & export — ✅ done (image import; PNG/EXR sequences; ffmpeg-sidecar builder; CLI backend flag)
 
 - Image import; export image sequences → then video via ffmpeg sidecar.
 - CLI parity pass; backend selection.
 
-### Phase 5 — OpenFX host
+### Phase 5 — OpenFX host — 🟡 scaffolded (host skeleton in `ofx-host`)
 
 - Build on `openfx-sys` (or wrap C++ HostSupport); implement core suites; plugin discovery/lifecycle; param + clip mapping; GPU↔CPU bridging; validate against open-source plugins.
 
-### Phase 6 — Performance, color, polish
+### Phase 6 — Performance, color, polish — ⬜ not started (motion blur landed early; tile parallelism, layer caching, OCIO next)
 
 - Multi-threaded render queue; smarter cache invalidation.
 - OCIO color management.
@@ -267,11 +324,13 @@ creator render project.ctor \
 
 -----
 
-## 13. Open decisions to settle early
+## 13. Open decisions — resolutions
 
-1. **Viewport bridge tier** (native zero-copy vs child window vs readback) — decided by Phase 0 latency numbers and how much Linux you need.
-1. **Spring boundary semantics** — independent segments vs pre-baked continuous velocities.
-1. **Curve model** — CSS-style cubic-bezier only, or AE-style influence/speed handles in the editor.
-1. **OFX host route** — reimplement suites in Rust vs wrap C++ HostSupport.
-1. **2D vs 2.5D** transforms for v1 scope.
-1. **Web-player target** — is the embeddable wasm/CanvasKit player in scope, or native app + CLI only?
+Settled with the conservative MVP defaults; the still-open ones are flagged.
+
+1. **Viewport bridge tier** — ⏳ **still open.** Tier-3 readback is scaffolded; tiers 1–2 (native zero-copy / child window) decided by the Phase 0 #3 latency numbers, which haven't been run (needs the native toolchain).
+1. **Spring boundary semantics** — ✅ **independent segments with a defined entry velocity** (fully closed-form). Revisit pre-baked continuous velocities if chained springs need to feel continuous.
+1. **Curve model** — ✅ **CSS-style cubic-Bézier** (`Easing::CubicBezier`). `Keyframe` keeps `in_interp`/`out_interp` so AE-style influence/speed handles can be added later without a format change.
+1. **OFX host route** — ⏳ **still open.** `ofx-host` captures both routes (reimplement suites in Rust vs wrap C++ HostSupport); decide at Phase 5.
+1. **2D vs 2.5D** transforms — ✅ **2D for v1** (`Transform` = anchor/position/scale/rotation/skew). 2.5D is an additive later step.
+1. **Web-player target** — ✅ **out of scope for now** (native app + CLI). The engine's UI-independence keeps a future wasm player open; note the `creator-gpu` `skia` feature and a wasm/CanvasKit target would be separate work.
