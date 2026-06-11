@@ -1,0 +1,129 @@
+:root {
+  color-scheme: dark;
+  --bg: #14161c;
+  --panel: #1b1e27;
+  --line: #2a2e3a;
+  --text: #eceff4;
+  --accent: #4c8bf5;
+}
+
+* {
+  box-sizing: border-box;
+}
+body,
+html,
+#root {
+  margin: 0;
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font: 13px/1.4 system-ui, sans-serif;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--line);
+}
+.toolbar .title {
+  margin-left: 8px;
+  opacity: 0.8;
+}
+.toolbar .badge {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  background: #233054;
+  color: #9db9ff;
+  letter-spacing: 0.04em;
+}
+.toolbar .error {
+  margin-left: auto;
+  color: #ff6b6b;
+}
+
+.body {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 220px 1fr 260px;
+  min-height: 0;
+}
+
+.layers,
+.inspector {
+  background: var(--panel);
+  border-right: 1px solid var(--line);
+  padding: 10px;
+  overflow: auto;
+}
+.inspector {
+  border-right: none;
+  border-left: 1px solid var(--line);
+}
+.layers h2,
+.inspector h2 {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.6;
+}
+.layers ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.layers li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 6px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.layers li.selected {
+  background: var(--accent);
+}
+
+.viewport {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #0d0f14
+    repeating-conic-gradient(#1a1d25 0% 25%, #15171e 0% 50%) 50% / 24px 24px;
+  overflow: auto;
+}
+.viewport img {
+  max-width: 100%;
+  max-height: 100%;
+  box-shadow: 0 0 0 1px var(--line);
+}
+.placeholder {
+  opacity: 0.5;
+}
+
+.inspector label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 12px;
+}
+
+.timeline {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-top: 1px solid var(--line);
+  background: var(--panel);
+}
+.timeline input[type="range"] {
+  flex: 1;
+}

@@ -1,0 +1,10 @@
+[package]
+name = "creator-ofx-host"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+description = "OpenFX host skeleton (deferred — Phase 5)."
+
+[dependencies]
+creator-render.workspace = true

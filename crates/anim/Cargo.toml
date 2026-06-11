@@ -1,0 +1,14 @@
+[package]
+name = "creator-anim"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+description = "Pure, deterministic interpolation: easings, closed-form springs, Lerp."
+
+[dependencies]
+glam.workspace = true
+serde.workspace = true
+
+[dev-dependencies]
+serde_json.workspace = true

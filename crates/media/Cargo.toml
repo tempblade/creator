@@ -1,0 +1,13 @@
+[package]
+name = "creator-media"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+description = "Media import: images now (image crate); video decode later (ffmpeg-next)."
+
+[dependencies]
+creator-render.workspace = true
+creator-model.workspace = true
+image.workspace = true
+thiserror.workspace = true

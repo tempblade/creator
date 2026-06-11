@@ -1,0 +1,17 @@
+[package]
+name = "creator-render"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+description = "Render tree + RenderTarget abstraction + CPU rasterizer (linear light)."
+
+[dependencies]
+creator-model.workspace = true
+creator-anim.workspace = true
+glam.workspace = true
+serde.workspace = true
+rayon.workspace = true
+
+[dev-dependencies]
+serde_json.workspace = true

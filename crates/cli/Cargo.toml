@@ -1,0 +1,29 @@
+[package]
+name = "creator-cli"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+description = "Headless renderer: load project -> eval@t -> render -> encode."
+
+[[bin]]
+name = "creator"
+path = "src/main.rs"
+
+[dependencies]
+creator-model.workspace = true
+creator-anim.workspace = true
+creator-render.workspace = true
+creator-engine.workspace = true
+creator-export.workspace = true
+creator-media.workspace = true
+creator-gpu = { workspace = true, optional = true }
+clap.workspace = true
+rayon.workspace = true
+serde_json.workspace = true
+anyhow.workspace = true
+
+[features]
+default = []
+# Enables `--backend vulkan` (Skia GPU rendering; needs Vulkan at runtime).
+gpu = ["dep:creator-gpu", "creator-gpu/skia"]

@@ -1,0 +1,52 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/anim",
+    "crates/model",
+    "crates/render",
+    "crates/engine",
+    "crates/gpu",
+    "crates/ofx-host",
+    "crates/media",
+    "crates/export",
+    "crates/cli",
+]
+# apps/desktop (Tauri) and frontend (Vite+React) are intentionally NOT workspace
+# members: they require a webview/native toolchain (and Node) that is provisioned
+# separately. See apps/desktop/README.md and frontend/README.md.
+exclude = ["apps/desktop", "frontend"]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+license = "MIT OR Apache-2.0"
+repository = "https://example.com/creator"
+rust-version = "1.80"
+
+[workspace.dependencies]
+# --- internal crates ---
+creator-anim = { path = "crates/anim" }
+creator-model = { path = "crates/model" }
+creator-render = { path = "crates/render" }
+creator-engine = { path = "crates/engine" }
+creator-gpu = { path = "crates/gpu" }
+creator-ofx-host = { path = "crates/ofx-host" }
+creator-media = { path = "crates/media" }
+creator-export = { path = "crates/export" }
+
+# --- third-party (pure-Rust, build in headless/CI without native GPU libs) ---
+glam = { version = "0.29", features = ["serde"] }
+slotmap = { version = "1", features = ["serde"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+rayon = "1"
+clap = { version = "4", features = ["derive"] }
+image = { version = "0.25", default-features = false, features = ["png", "jpeg"] }
+exr = "1"
+half = { version = "2", features = ["serde"] }
+thiserror = "2"
+anyhow = "1"
+
+[profile.release]
+opt-level = 3
+lto = "thin"

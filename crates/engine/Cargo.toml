@@ -1,0 +1,16 @@
+[package]
+name = "creator-engine"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+description = "Engine: eval(scene,t) -> render tree, command bus + undo/redo, frame cache."
+
+[dependencies]
+creator-model.workspace = true
+creator-anim.workspace = true
+creator-render.workspace = true
+glam.workspace = true
+rayon.workspace = true
+serde.workspace = true
+serde_json.workspace = true

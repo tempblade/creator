@@ -1,0 +1,14 @@
+[package]
+name = "creator-model"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+description = "Document model: comps, layers, typed animatable properties, serde."
+
+[dependencies]
+creator-anim.workspace = true
+glam.workspace = true
+slotmap.workspace = true
+serde.workspace = true
+serde_json.workspace = true

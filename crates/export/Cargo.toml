@@ -1,0 +1,14 @@
+[package]
+name = "creator-export"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+description = "Encode image sequences (PNG/EXR) and drive an ffmpeg sidecar for video."
+
+[dependencies]
+creator-render.workspace = true
+image.workspace = true
+exr.workspace = true
+half.workspace = true
+thiserror.workspace = true

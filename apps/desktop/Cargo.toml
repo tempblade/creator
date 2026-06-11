@@ -1,0 +1,32 @@
+# Tauri v2 desktop backend. NOT a member of the root cargo workspace (it needs a
+# system webview — WebKitGTK/WebView2/WKWebView — provisioned separately). Build
+# with the Tauri toolchain: `cd apps/desktop && cargo tauri dev`.
+[package]
+name = "creator-desktop"
+version = "0.1.0"
+edition = "2021"
+description = "Tauri v2 desktop shell driving creator-engine in-process."
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+# Same engine as the CLI — in-process, no extra FFI/IPC layer (PLAN.md §1).
+creator-engine = { path = "../../crates/engine" }
+creator-model = { path = "../../crates/model" }
+creator-render = { path = "../../crates/render" }
+creator-export = { path = "../../crates/export" }
+creator-gpu = { path = "../../crates/gpu", optional = true }
+glam = "0.29"
+tauri = { version = "2", features = [] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+base64 = "0.22"
+
+[features]
+default = ["gpu"]
+# Viewport renders on Skia/Vulkan when available (runtime CPU fallback).
+# Disable for machines without a Vulkan toolchain: --no-default-features.
+gpu = ["dep:creator-gpu", "creator-gpu/skia"]
+# Forwarded to Tauri for production builds.
+custom-protocol = ["tauri/custom-protocol"]

@@ -1,0 +1,23 @@
+[package]
+name = "creator-gpu"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+description = "GPU surface/context management per backend (Metal/Vulkan/CPU). Skia-backed (deferred)."
+
+[dependencies]
+creator-render.workspace = true
+
+# NOTE: the real GPU backends are built on `skia-safe` with the `metal`/`vulkan`
+# feature flags. Those pull a native Skia build/binary, so they live behind the
+# `skia` feature and are NOT in the default build (CI images without GPU
+# toolchains still build the workspace). Enable with:
+#   cargo build -p creator-gpu --features skia
+skia-safe = { version = "0.97", features = ["vulkan"], optional = true }
+ash = { version = "0.38", optional = true }
+glam = { workspace = true, optional = true }
+
+[features]
+default = []
+skia = ["dep:skia-safe", "dep:ash", "dep:glam"]

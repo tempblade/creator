@@ -1,0 +1,25 @@
+# Rust
+/target
+**/*.rs.bk
+# Cargo.lock IS committed (this workspace builds the `creator` binary).
+
+# Environment-specific build shims (VM-only, absolute paths) — never commit.
+/.cargo
+/.link-shims
+
+# Node / frontend
+node_modules
+frontend/dist
+
+# Tauri
+apps/desktop/gen
+apps/desktop/target
+
+# Editor / OS
+.DS_Store
+*.swp
+
+# Local render output
+/frames
+/out
+*.ctor.bak
